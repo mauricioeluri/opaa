@@ -1,0 +1,16 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[astro]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.rulers": [80, 120],
+  "editor.wordWrap": "on",
+  "files.eol": "\n",
+  "eslint.validate": ["javascript", "typescript", "astro"],
+  "files.exclude": {
+    "**/node_modules": true,
+    ".astro": true,
+    "dist": true,
+    ".wrangler": true
+  }
+}
