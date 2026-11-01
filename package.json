@@ -9,13 +9,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "check-types": "astro check",
-    "check-all": "pnpm format:check && pnpm check-types && pnpm lint"
+    "lint": "eslint . --fix",
+    "check-all": "pnpm lint && pnpm format && astro check"
   },
   "dependencies": {
     "astro": "^7.4.4"
