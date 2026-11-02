@@ -1,5 +1,6 @@
 ---
 import SEO from '../components/SEO.astro'
+import Topbar from '../components/Topbar.astro'
 
 interface Props {
   title?: string
@@ -20,6 +21,7 @@ interface Props {
     <SEO {...Astro.props} />
   </head>
   <body>
+    <Topbar />
     <slot />
   </body>
 </html>
@@ -30,5 +32,16 @@ interface Props {
     margin: 0;
     width: 100%;
     min-height: 100%;
+  }
+
+  body {
+    box-sizing: border-box;
+    padding-top: 120px;
+  }
+
+  @media (max-width: 47.999rem) {
+    body {
+      padding-top: 64px;
+    }
   }
 </style>

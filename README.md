@@ -21,6 +21,7 @@ repositório, sem banco de dados, API ou painel administrativo nesta etapa.
 | JavaScript e TypeScript | Implementam comportamento e dados; TypeScript ajuda a identificar erros de tipos. |
 | Node.js | Executa as ferramentas de desenvolvimento no computador. |
 | pnpm | Instala dependências e executa os comandos do projeto. |
+| Lucide (`@lucide/astro`) | Ícones SVG usados na interface. |
 | Prettier e ESLint | Padronizam a formatação e identificam problemas no código. |
 | GitHub e Cloudflare | Guardam o código e publicam o site, respectivamente. |
 
