@@ -12,5 +12,11 @@
   "endOfLine": "lf",
   "bracketSameLine": false,
   "plugins": ["prettier-plugin-astro"],
-  "overrides": [{ "files": "*.astro", "options": { "parser": "astro" } }]
+  "overrides": [
+    { "files": "*.astro", "options": { "parser": "astro" } },
+    {
+      "files": "*.jsonc",
+      "options": { "parser": "jsonc", "trailingComma": "none" }
+    }
+  ]
 }
