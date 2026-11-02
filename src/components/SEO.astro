@@ -38,7 +38,7 @@ const schema = {
   location: {
     '@type': 'Place',
     address: { '@type': 'PostalAddress', ...site.address },
-    openingHoursSpecification: organization.openingHours.map((hours) => ({
+    openingHoursSpecification: site.openingHours.map((hours) => ({
       '@type': 'OpeningHoursSpecification',
       ...hours,
     })),

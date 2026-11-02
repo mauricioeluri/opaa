@@ -103,9 +103,9 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
 - Usar links para navegação e botões para ações. Não criar links sem destino,
   controles sem função ou mensagens de sucesso sem uma ação concluída.
 - Usar `organization` em `src/data/api.json`, via `getOrganization()`, como única
-  fonte de telefone, e-mail, horários, redes sociais e chave Pix. `phone` é o
+  fonte de telefone, e-mail, redes sociais e chave Pix. `phone` é o
   número internacional usado para chamadas e WhatsApp; URLs são montadas pelo site.
-  Manter nome, descrição de SEO, endereço, título e slogan em
+  Manter nome, descrição de SEO, endereço, horários, título e slogan em
   `src/config/site.ts`, sem cópias na API. Referenciar logos e ícones diretamente
   nos componentes; não criar configuração para caminhos de arquivos estáticos. Não incluir
   mensalidade ou QR Code Pix na API. Novos campos exigem necessidade concreta.

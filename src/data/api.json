@@ -1,25 +1,6 @@
 {
   "organization": {
     "email": "alegreteongopaa@gmail.com",
-    "openingHours": [
-      {
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday"
-        ],
-        "opens": "13:30",
-        "closes": "18:00"
-      },
-      {
-        "dayOfWeek": [
-          "Saturday",
-          "Sunday"
-        ]
-      }
-    ],
     "sameAs": [
       "https://www.facebook.com/ONG.OPAA",
       "https://www.instagram.com/ong.opaa"

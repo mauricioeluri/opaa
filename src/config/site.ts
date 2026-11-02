@@ -8,6 +8,14 @@ export const site = {
     addressRegion: 'RS',
     addressCountry: 'BR',
   },
+  openingHours: [
+    {
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '13:30',
+      closes: '18:00',
+    },
+    { dayOfWeek: ['Saturday', 'Sunday'] },
+  ],
   title: 'OPAA Alegrete | Proteção animal em Alegrete, RS',
   slogan: 'Juntos pela proteção animal.',
 }

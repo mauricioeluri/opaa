@@ -6,7 +6,7 @@ Para instalar o projeto e configurar as variáveis de ambiente, consulte o
 ## Onde alterar
 
 - `src/config/site.ts`: nome, descrição de SEO, endereço, título e slogan.
-- `src/data/api.json`, objeto `organization`: telefone, e-mail, horários, redes
+- `src/data/api.json`, objeto `organization`: telefone, e-mail, redes
   sociais e chave Pix. O SEO consulta os campos relevantes por `getOrganization()`
   durante o build, nunca a cada pesquisa no Google.
 - `src/config/seo.ts`: ativação da indexação e lista de páginas do sitemap.
@@ -44,8 +44,8 @@ restringe acesso nem torna o site privado.
 
 ## Pronto no projeto
 
-Nome, descrição e endereço estão em `src/config/site.ts`; contatos, perfis
-e horários vêm de `src/data/api.json`. Cada dado tem uma única fonte.
+Nome, descrição, endereço e horários estão em `src/config/site.ts`; contatos
+e perfis vêm de `src/data/api.json`. Cada dado tem uma única fonte.
 Não é necessário digitá-los novamente na publicação.
 
 A imagem `public/branding/opaa-social.png` (1200 × 630) já usa o logo definitivo
