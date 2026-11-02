@@ -1,0 +1,96 @@
+---
+import { organization, indexingEnabled } from '../config/seo'
+
+interface Props {
+  title?: string
+  description?: string
+  noindex?: boolean
+}
+const {
+  title = organization.title,
+  description = organization.description,
+  noindex = false,
+} = Astro.props
+if (indexingEnabled && !Astro.site)
+  throw new Error('Configure SITE_URL antes de ativar a indexação.')
+const canonical = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site).href
+  : undefined
+const image = Astro.site
+  ? new URL(organization.socialImage, Astro.site).href
+  : undefined
+const indexable = indexingEnabled && !!Astro.site && !noindex
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'NGO',
+  name: organization.name,
+  legalName: organization.legalName,
+  description: organization.description,
+  telephone: organization.telephone,
+  email: organization.email,
+  address: {
+    '@type': 'PostalAddress',
+    ...organization.address,
+  },
+  location: {
+    '@type': 'Place',
+    address: { '@type': 'PostalAddress', ...organization.address },
+    openingHoursSpecification: organization.openingHours.map((hours) => ({
+      '@type': 'OpeningHoursSpecification',
+      ...hours,
+    })),
+  },
+  areaServed: {
+    '@type': 'City',
+    name: 'Alegrete',
+    containedInPlace: { '@type': 'State', name: 'Rio Grande do Sul' },
+  },
+  ...(Astro.site
+    ? {
+        '@id': new URL('/#organization', Astro.site).href,
+        url: Astro.site.href,
+        logo: new URL('/branding/opaa-logo.svg', Astro.site).href,
+      }
+    : {}),
+  ...(organization.sameAs.length ? { sameAs: organization.sameAs } : {}),
+}
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta
+  name="robots"
+  content={
+    indexable ? 'index, follow, max-image-preview:large' : 'noindex, follow'
+  }
+/>
+{canonical && <link rel="canonical" href={canonical} />}
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="pt_BR" />
+<meta property="og:site_name" content={organization.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+{canonical && <meta property="og:url" content={canonical} />}
+{image && <meta property="og:image" content={image} />}
+{image && <meta property="og:image:alt" content="OPAA Alegrete — juntos pela proteção animal" />}
+{image && <meta property="og:image:width" content="1200" />}
+{image && <meta property="og:image:height" content="630" />}
+{image && <meta property="og:image:type" content="image/png" />}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{image && <meta name="twitter:image" content={image} />}
+{image && <meta name="twitter:image:alt" content="OPAA Alegrete — juntos pela proteção animal" />}
+{import.meta.env.GOOGLE_SITE_VERIFICATION && (
+  <meta
+    name="google-site-verification"
+    content={import.meta.env.GOOGLE_SITE_VERIFICATION}
+  />
+)}
+{import.meta.env.BING_SITE_VERIFICATION && (
+  <meta name="msvalidate.01" content={import.meta.env.BING_SITE_VERIFICATION} />
+)}
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(schema).replace(/</g, '\\u003c')}
+/>
