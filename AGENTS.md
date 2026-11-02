@@ -96,6 +96,20 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
 
 ## Interface
 
+- Seguir obrigatoriamente o [kit de marca](docs/brand-guide.md) em toda criação
+  ou alteração visual, sem exigir que o usuário repita essas orientações.
+  Consultar o guia e `src/styles/global.css` antes de editar a interface.
+- Reutilizar as variáveis de cor de `src/styles/global.css`. Não introduzir novas
+  cores, repetir valores hexadecimais nos componentes ou substituir a paleta sem
+  solicitação explícita. Ícones devem herdar a cor do texto por `currentColor`.
+- Usar Lilita One no peso original 400 para h1/h2 e Nunito Sans para textos,
+  navegação, botões e contatos (400), com bold 700 nos destaques e h3. Herdar as
+  fontes globais; não adicionar famílias ou negrito artificial à Lilita One.
+- Usar Lucide nos ícones de interface e os SVGs locais de `public/icons/` nas
+  marcas sociais. Preservar os logos aprovados de `public/branding/` e manter
+  espaçamentos consistentes, conforme o guia. O PDF é a versão para compartilhar;
+  o guia em Markdown é a referência de implementação e deve acompanhar mudanças
+  de identidade solicitadas pelo usuário.
 - Manter responsividade, HTML semântico, navegação por teclado, foco visível, links
   descritivos e textos alternativos relevantes nas imagens.
 - Preservar proporções de imagens e informar dimensões quando conhecidas para

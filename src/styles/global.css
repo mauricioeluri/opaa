@@ -1,0 +1,45 @@
+@import '@fontsource/nunito-sans/latin-400.css';
+@import '@fontsource/nunito-sans/latin-700.css';
+@import '@fontsource/lilita-one/latin-400.css';
+
+:root {
+  --color-primary: #176b42;
+  --color-primary-hover: #105333;
+  --color-soft: #edf4ee;
+  --color-background: #fafaf7;
+  --color-surface: #ffffff;
+  --color-text: #292929;
+  --color-muted: #626962;
+  --color-border: color-mix(
+    in srgb,
+    var(--color-primary) 25%,
+    var(--color-background)
+  );
+}
+
+body {
+  font-family: 'Nunito Sans', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-background);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+h1,
+h2 {
+  font-family: 'Lilita One', 'Nunito Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+h3 {
+  font-weight: 700;
+  line-height: 1.2;
+}

@@ -103,9 +103,8 @@ import { site } from '../config/site'
     position: fixed;
     inset: 0 0 auto;
     z-index: 10;
-    color: #292929;
-    background: #faf9f6;
-    font-family: Arial, sans-serif;
+    color: var(--color-text);
+    background: var(--color-background);
   }
 
   .container {
@@ -181,25 +180,25 @@ import { site } from '../config/site'
 
   nav a:hover,
   nav a[aria-current='page'] {
-    color: #244e3e;
-    background: #eaf0e6;
+    color: var(--color-primary);
+    background: var(--color-soft);
   }
 
   nav .help-link {
     min-height: 44px;
     border-radius: 8px;
-    color: #fff;
-    background: #285442;
+    color: var(--color-surface);
+    background: var(--color-primary);
   }
 
   nav .help-link:hover {
-    color: #fff;
-    background: #1c4031;
+    color: var(--color-surface);
+    background: var(--color-primary-hover);
   }
 
   a:focus-visible,
   button:focus-visible {
-    outline: 3px solid #285442;
+    outline: 3px solid var(--color-primary);
     outline-offset: 4px;
   }
 
@@ -281,7 +280,7 @@ import { site } from '../config/site'
       gap: 8px;
       min-height: 44px;
       padding: 8px 12px;
-      border: 1px solid #b5c4b6;
+      border: 1px solid var(--color-border);
       border-radius: 8px;
       font: inherit;
       color: inherit;

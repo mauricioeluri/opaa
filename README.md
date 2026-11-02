@@ -50,6 +50,9 @@ precisamos manter um servidor de aplicação ou banco funcionando.
 Não é necessário configurar banco, contas externas ou variáveis de ambiente para
 começar a desenvolver localmente.
 
+A tipografia combina Lilita One nos títulos principais e de seções com Nunito
+Sans nos textos e controles. As duas fontes são servidas pelo próprio site.
+
 ## Onde editar
 
 | Caminho                        | O que contém                                                                                  |
@@ -154,6 +157,7 @@ não indexar orienta buscadores; ela não torna o site privado.
 - Preferir soluções simples, HTML semântico e CSS local. Reutilizar componentes
   sem criar camadas ou instalar bibliotecas desnecessárias.
 - Preservar o logo e usar apenas contatos, fotos e informações confirmados pela ONG.
+- Seguir o [kit de marca](docs/brand-guide.md) para logos, cores, fontes e ícones.
 - O arquivo `AGENTS.md` contém orientações específicas para assistentes de IA,
   incluindo limites para Git, publicação e execução de verificações.
 
