@@ -10,7 +10,7 @@ import { getWhatsAppUrl } from '../lib/whatsapp'
 const organization = await getOrganization()
 const whatsappUrl = getWhatsAppUrl(organization.phone)
 const formattedPhone = formatPhone(organization.phone)
-const formattedAddress = `${site.address.streetAddress}, ${site.address.addressLocality} - ${site.address.addressRegion}`
+const formattedAddress = `${site.address.streetAddress}, ${site.address.addressLocality} - ${site.address.addressRegion}, CEP ${site.address.postalCode}`
 const mapsUrl = getGoogleMapsUrl(
   `${formattedAddress}, ${site.address.addressCountry}`
 )
@@ -28,11 +28,17 @@ const socialLinks = getSocialLinks(
   <div class="container">
     <div class="columns">
       <div class="identity">
-        <a class="brand" href="/" aria-label={`${site.name} — página inicial`}>
+        <a
+          class="brand"
+          href="/#top"
+          aria-label={`${site.name} — página inicial`}
+        >
           <img src="/branding/opaa-logo.svg" alt="" width="64" height="64" />
           <span>{site.name}</span>
         </a>
         <p>{site.slogan}</p>
+        <p>{site.institution}</p>
+        <p class="registration">CNPJ: {site.cnpj}</p>
       </div>
 
       <section aria-labelledby="footer-contact">
@@ -40,13 +46,11 @@ const socialLinks = getSocialLinks(
         <ul>
           <li>
             <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-              <img
+              <span
                 class="social-icon"
-                src="/icons/whatsapp.svg"
-                alt=""
-                width="18"
-                height="18"
-              />
+                style="--icon: url('/icons/whatsapp.svg')"
+                aria-hidden="true"
+              ></span>
               <span>{formattedPhone}</span>
             </a>
           </li>
@@ -56,18 +60,25 @@ const socialLinks = getSocialLinks(
               <span>{organization.email}</span>
             </a>
           </li>
+          <li>
+            <address>
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Ver ${formattedAddress} no Google Maps`}
+              >
+                <MapPin size={18} aria-hidden="true" />
+                <span>
+                  {site.address.streetAddress}
+                  <br />
+                  {site.address.addressLocality} - {site.address.addressRegion},
+                  CEP {site.address.postalCode}
+                </span>
+              </a>
+            </address>
+          </li>
         </ul>
-        <address>
-          <a
-            href={mapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Ver ${formattedAddress} no Google Maps`}
-          >
-            <MapPin size={18} aria-hidden="true" />
-            <span>{formattedAddress}</span>
-          </a>
-        </address>
       </section>
 
       <nav aria-labelledby="footer-social">
@@ -77,13 +88,11 @@ const socialLinks = getSocialLinks(
             <li>
               <a href={href} target="_blank" rel="noopener noreferrer">
                 {icon && (
-                  <img
+                  <span
                     class="social-icon"
-                    src={icon}
-                    alt=""
-                    width="18"
-                    height="18"
-                  />
+                    style={`--icon: url('${icon}')`}
+                    aria-hidden="true"
+                  ></span>
                 )}
                 <span>{label}</span>
               </a>
@@ -112,7 +121,8 @@ const socialLinks = getSocialLinks(
     background: #edf1e9;
     color: #293d32;
     font-family: Arial, sans-serif;
-    line-height: 1.6;
+    --item-gap: 20px;
+    line-height: 24px;
   }
 
   .container {
@@ -149,12 +159,22 @@ const socialLinks = getSocialLinks(
   }
 
   p {
-    margin: 16px 0 0;
+    margin: 0;
     font-size: 14px;
   }
 
+  .identity {
+    display: grid;
+    gap: var(--item-gap);
+    max-width: 28ch;
+  }
+
+  .registration {
+    font-size: 12px;
+  }
+
   h2 {
-    margin: 0 0 12px;
+    margin: 0 0 calc(var(--item-gap) / 2);
     font-size: 16px;
   }
 
@@ -170,12 +190,13 @@ const socialLinks = getSocialLinks(
     overflow-wrap: anywhere;
   }
 
-  li a,
-  address a {
+  li a {
+    box-sizing: border-box;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     min-height: 44px;
+    padding-block: calc(var(--item-gap) / 2);
     width: fit-content;
     max-width: 100%;
     font-size: 14px;
@@ -183,13 +204,16 @@ const socialLinks = getSocialLinks(
   }
 
   .social-icon {
+    display: block;
     flex-shrink: 0;
     width: 18px;
     height: 18px;
+    margin-top: 3px;
+    background-color: currentColor;
+    mask: var(--icon) center / contain no-repeat;
   }
 
-  li a:hover,
-  address a:hover {
+  li a:hover {
     text-decoration: underline;
   }
 
@@ -199,10 +223,6 @@ const socialLinks = getSocialLinks(
   }
 
   address {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-height: 44px;
     margin: 0;
     font-size: 14px;
     font-style: normal;
@@ -211,6 +231,7 @@ const socialLinks = getSocialLinks(
 
   :global(.footer svg) {
     flex-shrink: 0;
+    margin-top: 3px;
   }
 
   .bottom {
@@ -218,13 +239,16 @@ const socialLinks = getSocialLinks(
     align-items: center;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 8px 24px;
+    gap: 0 24px;
     margin-top: 40px;
     padding-top: 20px;
     border-top: 1px solid #ced8c9;
   }
 
   small {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
     font-size: 12px;
   }
 
@@ -237,23 +261,18 @@ const socialLinks = getSocialLinks(
 
   @media (max-width: 55rem) {
     .columns {
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
     }
 
     .identity {
-      grid-column: 1 / -1;
+      max-width: 40ch;
     }
   }
 
   @media (max-width: 35rem) {
     .container {
       padding: 32px 16px 20px;
-    }
-
-    .columns {
-      grid-template-columns: 1fr;
-      gap: 28px;
     }
 
     .bottom {

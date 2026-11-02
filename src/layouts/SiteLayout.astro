@@ -21,7 +21,7 @@ interface Props {
     <meta name="generator" content={Astro.generator} />
     <SEO {...Astro.props} />
   </head>
-  <body>
+  <body id="top">
     <Topbar />
     <slot />
     <Footer />
@@ -36,14 +36,29 @@ interface Props {
     min-height: 100%;
   }
 
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 120px;
+  }
+
   body {
     box-sizing: border-box;
     padding-top: 120px;
   }
 
   @media (max-width: 47.999rem) {
+    html {
+      scroll-padding-top: 64px;
+    }
+
     body {
       padding-top: 64px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
     }
   }
 </style>
