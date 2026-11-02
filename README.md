@@ -14,16 +14,16 @@ repositório, sem banco de dados, API ou painel administrativo nesta etapa.
 
 ## O que usamos
 
-| Ferramenta | Para que serve |
-| --- | --- |
-| Astro | Monta as páginas e gera HTML estático para publicação. |
-| HTML e CSS | Definem a estrutura e a aparência das páginas. |
-| JavaScript e TypeScript | Implementam comportamento e dados; TypeScript ajuda a identificar erros de tipos. |
-| Node.js | Executa as ferramentas de desenvolvimento no computador. |
-| pnpm | Instala dependências e executa os comandos do projeto. |
-| Lucide (`@lucide/astro`) | Ícones SVG usados na interface. |
-| Prettier e ESLint | Padronizam a formatação e identificam problemas no código. |
-| GitHub e Cloudflare | Guardam o código e publicam o site, respectivamente. |
+| Ferramenta               | Para que serve                                                                    |
+| ------------------------ | --------------------------------------------------------------------------------- |
+| Astro                    | Monta as páginas e gera HTML estático para publicação.                            |
+| HTML e CSS               | Definem a estrutura e a aparência das páginas.                                    |
+| JavaScript e TypeScript  | Implementam comportamento e dados; TypeScript ajuda a identificar erros de tipos. |
+| Node.js                  | Executa as ferramentas de desenvolvimento no computador.                          |
+| pnpm                     | Instala dependências e executa os comandos do projeto.                            |
+| Lucide (`@lucide/astro`) | Ícones SVG usados na interface.                                                   |
+| Prettier e ESLint        | Padronizam a formatação e identificam problemas no código.                        |
+| GitHub e Cloudflare      | Guardam o código e publicam o site, respectivamente.                              |
 
 **Estático** significa que as páginas são geradas no build e servidas prontas aos
 visitantes. Alterar conteúdo exige gerar e publicar uma nova versão, mas não
@@ -52,16 +52,16 @@ começar a desenvolver localmente.
 
 ## Onde editar
 
-| Caminho | O que contém |
-| --- | --- |
-| `src/pages/index.astro` | Página inicial; arquivos em `pages` definem as rotas. |
-| `src/components/` | Partes reutilizáveis da interface, como `Hero.astro`. |
-| `src/layouts/SiteLayout.astro` | Estrutura comum do documento HTML. |
-| `src/data/api.json` | Dados da ONG, animais, publicações, produtos e meta. |
-| `src/lib/api.ts` | Funções para consultar esse conteúdo. |
-| `src/config/seo.ts` | Indexação e lista de páginas para buscadores. |
-| `public/branding/` | Logo e ícones oficiais. |
-| `public/` | Arquivos públicos; `public/branding/opaa-logo.svg` é acessado como `/branding/opaa-logo.svg`. |
+| Caminho                        | O que contém                                                                                  |
+| ------------------------------ | --------------------------------------------------------------------------------------------- |
+| `src/pages/index.astro`        | Página inicial; arquivos em `pages` definem as rotas.                                         |
+| `src/components/`              | Partes reutilizáveis da interface, como `Hero.astro`.                                         |
+| `src/layouts/SiteLayout.astro` | Estrutura comum do documento HTML.                                                            |
+| `src/data/api.json`            | Dados da ONG, animais, publicações, produtos e meta.                                          |
+| `src/lib/api.ts`               | Funções para consultar esse conteúdo.                                                         |
+| `src/config/seo.ts`            | Indexação e lista de páginas para buscadores.                                                 |
+| `public/branding/`             | Logo e ícones oficiais.                                                                       |
+| `public/`                      | Arquivos públicos; `public/branding/opaa-logo.svg` é acessado como `/branding/opaa-logo.svg`. |
 
 Um arquivo `.astro` combina HTML, estilos e, quando necessário, código entre
 `---` no início. Esse código prepara a página durante a geração do site; ele não
@@ -111,14 +111,14 @@ Valores monetários estão em centavos. Imagens usam caminhos públicos como
 
 Execute sempre na raiz do projeto:
 
-| Comando | O que faz |
-| --- | --- |
-| `pnpm dev` | Inicia o site para desenvolver localmente. |
-| `pnpm format` | Aplica a formatação padrão. |
-| `pnpm lint` | Analisa o código e aplica as correções automáticas disponíveis. |
-| `pnpm check-all` | Executa lint, formatação e verificação de tipos. |
-| `pnpm build` | Gera a versão de publicação em `dist/`. |
-| `pnpm preview` | Permite conferir localmente o resultado do build. |
+| Comando          | O que faz                                                       |
+| ---------------- | --------------------------------------------------------------- |
+| `pnpm dev`       | Inicia o site para desenvolver localmente.                      |
+| `pnpm format`    | Aplica a formatação padrão.                                     |
+| `pnpm lint`      | Analisa o código e aplica as correções automáticas disponíveis. |
+| `pnpm check-all` | Executa lint, formatação e verificação de tipos.                |
+| `pnpm build`     | Gera a versão de publicação em `dist/`.                         |
+| `pnpm preview`   | Permite conferir localmente o resultado do build.               |
 
 Antes de entregar uma alteração, execute `pnpm check-all` e confira o fluxo
 alterado no navegador, incluindo uma largura de celular. O comando modifica

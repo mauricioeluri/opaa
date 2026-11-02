@@ -44,16 +44,16 @@ e as configurações reais e manter os documentos coerentes ao alterá-los. Usar
 pnpm e preservar seu lockfile. Adicionar dependências somente quando necessárias
 à tarefa.
 
-| Diretório | Responsabilidade |
-| --- | --- |
-| `src/pages/` | Páginas e endpoints estáticos, incluindo sitemap e robots |
-| `src/layouts/` | Estrutura compartilhada do documento |
-| `src/components/` | Componentes Astro reutilizáveis |
-| `src/data/` | Conteúdo local em JSON |
-| `src/lib/` | Funções simples de consulta ao conteúdo |
-| `src/config/` | Configuração compartilhada, incluindo SEO |
-| `public/branding/` | Logos oficiais, favicons e ícone Apple |
-| `public/` | Arquivos servidos diretamente, sem processamento |
+| Diretório          | Responsabilidade                                          |
+| ------------------ | --------------------------------------------------------- |
+| `src/pages/`       | Páginas e endpoints estáticos, incluindo sitemap e robots |
+| `src/layouts/`     | Estrutura compartilhada do documento                      |
+| `src/components/`  | Componentes Astro reutilizáveis                           |
+| `src/data/`        | Conteúdo local em JSON                                    |
+| `src/lib/`         | Funções simples de consulta ao conteúdo                   |
+| `src/config/`      | Configuração compartilhada, incluindo SEO                 |
+| `public/branding/` | Logos oficiais, favicons e ícone Apple                    |
+| `public/`          | Arquivos servidos diretamente, sem processamento          |
 
 - Usar PascalCase para componentes e layouts Astro; kebab-case para demais
   arquivos novos e rotas. Seguir convenções existentes em cada área.
@@ -119,13 +119,13 @@ destinadas à equipe humana; não autorizam o agente a ignorar as restrições a
 
 Scripts disponíveis para o usuário:
 
-| Comando | Finalidade |
-| --- | --- |
-| `pnpm dev` | Iniciar desenvolvimento local |
-| `pnpm build` | Gerar o site estático em `dist/` |
-| `pnpm preview` | Conferir localmente o site gerado |
-| `pnpm format` | Formatar arquivos |
-| `pnpm lint` | Executar ESLint com correções automáticas |
+| Comando          | Finalidade                                             |
+| ---------------- | ------------------------------------------------------ |
+| `pnpm dev`       | Iniciar desenvolvimento local                          |
+| `pnpm build`     | Gerar o site estático em `dist/`                       |
+| `pnpm preview`   | Conferir localmente o site gerado                      |
+| `pnpm format`    | Formatar arquivos                                      |
+| `pnpm lint`      | Executar ESLint com correções automáticas              |
 | `pnpm check-all` | Executar lint, formatação e verificação de tipos Astro |
 
 - Não executar `check-all`, lint ou formatação, inclusive em modo de verificação

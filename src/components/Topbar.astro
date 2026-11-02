@@ -19,19 +19,35 @@ import { site } from '../config/site'
       hidden
     >
       Menu
-      <span class="open-icon" aria-hidden="true"><Menu size={20} /></span>
-      <span class="close-icon" aria-hidden="true"><X size={20} /></span>
+      <span class="open-icon" aria-hidden="true">
+        <Menu size={20} />
+      </span>
+      <span class="close-icon" aria-hidden="true">
+        <X size={20} />
+      </span>
     </button>
 
     <nav id="main-navigation" aria-label="Navegação principal">
       <div class="navigation-content">
-      <ul>
-        <li><a href="#">A OPAA</a></li>
-        <li><a href="#">Animais</a></li>
-        <li><a href="#">Novidades</a></li>
-        <li><a href="#">Loja solidária</a></li>
-        <li><a class="help-link" href="#">Quero ajudar</a></li>
-      </ul>
+        <ul>
+          <li>
+            <a href="#">A OPAA</a>
+          </li>
+          <li>
+            <a href="#">Animais</a>
+          </li>
+          <li>
+            <a href="#">Novidades</a>
+          </li>
+          <li>
+            <a href="#">Loja solidária</a>
+          </li>
+          <li>
+            <a class="help-link" href="#">
+              Quero ajudar
+            </a>
+          </li>
+        </ul>
       </div>
     </nav>
   </div>
@@ -63,7 +79,10 @@ import { site } from '../config/site'
     })
 
     header.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+      if (
+        event.key === 'Escape' &&
+        toggle.getAttribute('aria-expanded') === 'true'
+      ) {
         event.preventDefault()
         closeMenu()
         toggle.focus()
@@ -71,7 +90,8 @@ import { site } from '../config/site'
     })
 
     navigation.addEventListener('click', (event) => {
-      if (event.target instanceof Element && event.target.closest('a')) closeMenu()
+      if (event.target instanceof Element && event.target.closest('a'))
+        closeMenu()
     })
 
     desktop.addEventListener('change', closeMenu)
@@ -274,7 +294,9 @@ import { site } from '../config/site'
       grid-template-rows: 1fr;
       flex-basis: 100%;
       visibility: visible;
-      transition: grid-template-rows 240ms ease, visibility 0s;
+      transition:
+        grid-template-rows 240ms ease,
+        visibility 0s;
     }
 
     .navigation-content {
@@ -285,7 +307,9 @@ import { site } from '../config/site'
     .topbar[data-menu-open='false'] nav {
       grid-template-rows: 0fr;
       visibility: hidden;
-      transition: grid-template-rows 240ms ease, visibility 0s 240ms;
+      transition:
+        grid-template-rows 240ms ease,
+        visibility 0s 240ms;
     }
 
     .topbar[data-menu-open='false'] ul {
@@ -299,7 +323,9 @@ import { site } from '../config/site'
       gap: 0;
       max-height: calc(100svh - 64px);
       overflow-y: auto;
-      transition: opacity 200ms ease, transform 240ms ease;
+      transition:
+        opacity 200ms ease,
+        transform 240ms ease;
     }
 
     li:last-child {

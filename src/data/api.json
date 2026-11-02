@@ -15,9 +15,7 @@
       "name": "Bento",
       "description": "Exemplo fictício para desenvolvimento: cão adulto, de porte médio e companheiro. Este cadastro não representa um animal real disponível para adoção.",
       "available": true,
-      "images": [
-        "/branding/opaa-logo.svg"
-      ]
+      "images": ["/branding/opaa-logo.svg"]
     }
   ],
   "posts": [
@@ -28,9 +26,7 @@
       "body": "Desde março de 2009, a OPAA atua pela proteção animal em Alegrete, com resgates, castrações e mutirões de vacinação. Você pode ajudar como associado, com contribuição de R$ 20 por mês, voluntário ou lar temporário. Entre em contato pelo telefone (55) 99984-4045 ou pelo e-mail alegreteongopaa@gmail.com. Publicação de exemplo para desenvolvimento; a data é ilustrativa.",
       "category": "news",
       "published_at": "2026-11-01T12:00:00-03:00",
-      "images": [
-        "/branding/opaa-logo.svg"
-      ]
+      "images": ["/branding/opaa-logo.svg"]
     }
   ],
   "products": [
@@ -40,9 +36,7 @@
       "description": "Exemplo fictício de produto para apoiar a proteção animal. Modelo, preço e disponibilidade são ilustrativos e precisam ser confirmados pela ONG antes da divulgação.",
       "price_cents": 4990,
       "active": true,
-      "images": [
-        "/branding/opaa-logo.svg"
-      ]
+      "images": ["/branding/opaa-logo.svg"]
     }
   ],
   "monthly_goal": {

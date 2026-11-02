@@ -53,12 +53,12 @@ aprovado e está configurada para Open Graph e Twitter Card grande.
 
 ## Dados a preencher na publicação
 
-| Campo na Cloudflare (ambiente de build) | Valor |
-| --- | --- |
-| `SITE_URL` | Domínio HTTPS definitivo, ainda não informado. |
-| `SITE_INDEXABLE` | `true` na produção pronta; `false` nos previews. |
-| `GOOGLE_SITE_VERIFICATION` | Código fornecido pelo Search Console, se usar verificação por meta tag. |
-| `BING_SITE_VERIFICATION` | Código fornecido pelo Bing, se utilizar esse serviço e método. |
+| Campo na Cloudflare (ambiente de build) | Valor                                                                   |
+| --------------------------------------- | ----------------------------------------------------------------------- |
+| `SITE_URL`                              | Domínio HTTPS definitivo, ainda não informado.                          |
+| `SITE_INDEXABLE`                        | `true` na produção pronta; `false` nos previews.                        |
+| `GOOGLE_SITE_VERIFICATION`              | Código fornecido pelo Search Console, se usar verificação por meta tag. |
+| `BING_SITE_VERIFICATION`                | Código fornecido pelo Bing, se utilizar esse serviço e método.          |
 
 Na verificação por meta tag, copie apenas o valor de `content`, não a tag inteira.
 Se a verificação for por DNS, deixe os códigos vazios e cadastre o registro
