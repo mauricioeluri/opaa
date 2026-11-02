@@ -1,14 +1,17 @@
 ---
-import { organization, indexingEnabled } from '../config/seo'
+import { indexingEnabled } from '../config/seo'
+import { site } from '../config/site'
+import { getOrganization } from '../lib/api'
 
 interface Props {
   title?: string
   description?: string
   noindex?: boolean
 }
+const organization = await getOrganization()
 const {
-  title = organization.title,
-  description = organization.description,
+  title = site.title,
+  description = site.description,
   noindex = false,
 } = Astro.props
 if (indexingEnabled && !Astro.site)
@@ -17,24 +20,24 @@ const canonical = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).href
   : undefined
 const image = Astro.site
-  ? new URL(organization.socialImage, Astro.site).href
+  ? new URL('/branding/opaa-social.png', Astro.site).href
   : undefined
+const imageAlt = `${site.name} — ${site.slogan}`
 const indexable = indexingEnabled && !!Astro.site && !noindex
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'NGO',
-  name: organization.name,
-  legalName: organization.legalName,
-  description: organization.description,
-  telephone: organization.telephone,
+  name: site.name,
+  description: site.description,
+  telephone: organization.phone,
   email: organization.email,
   address: {
     '@type': 'PostalAddress',
-    ...organization.address,
+    ...site.address,
   },
   location: {
     '@type': 'Place',
-    address: { '@type': 'PostalAddress', ...organization.address },
+    address: { '@type': 'PostalAddress', ...site.address },
     openingHoursSpecification: organization.openingHours.map((hours) => ({
       '@type': 'OpeningHoursSpecification',
       ...hours,
@@ -42,8 +45,8 @@ const schema = {
   },
   areaServed: {
     '@type': 'City',
-    name: 'Alegrete',
-    containedInPlace: { '@type': 'State', name: 'Rio Grande do Sul' },
+    name: site.address.addressLocality,
+    containedInPlace: { '@type': 'State', name: site.address.addressRegion },
   },
   ...(Astro.site
     ? {
@@ -67,12 +70,12 @@ const schema = {
 {canonical && <link rel="canonical" href={canonical} />}
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="pt_BR" />
-<meta property="og:site_name" content={organization.name} />
+<meta property="og:site_name" content={site.name} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 {canonical && <meta property="og:url" content={canonical} />}
 {image && <meta property="og:image" content={image} />}
-{image && <meta property="og:image:alt" content="OPAA Alegrete — juntos pela proteção animal" />}
+{image && <meta property="og:image:alt" content={imageAlt} />}
 {image && <meta property="og:image:width" content="1200" />}
 {image && <meta property="og:image:height" content="630" />}
 {image && <meta property="og:image:type" content="image/png" />}
@@ -80,7 +83,7 @@ const schema = {
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 {image && <meta name="twitter:image" content={image} />}
-{image && <meta name="twitter:image:alt" content="OPAA Alegrete — juntos pela proteção animal" />}
+{image && <meta name="twitter:image:alt" content={imageAlt} />}
 {import.meta.env.GOOGLE_SITE_VERIFICATION && (
   <meta
     name="google-site-verification"

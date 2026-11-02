@@ -1,0 +1,75 @@
+{
+  "organization": {
+    "email": "alegreteongopaa@gmail.com",
+    "openingHours": [
+      {
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "opens": "13:30",
+        "closes": "18:00"
+      },
+      {
+        "dayOfWeek": [
+          "Saturday",
+          "Sunday"
+        ]
+      }
+    ],
+    "sameAs": [
+      "https://www.facebook.com/ONG.OPAA",
+      "https://www.instagram.com/ong.opaa"
+    ],
+    "pix": {
+      "key": "alegreteongopaa@gmail.com",
+      "keyType": "email"
+    },
+    "phone": "+5555999844045"
+  },
+  "animals": [
+    {
+      "public_id": "A7mK2pQ9xR4s",
+      "name": "Bento",
+      "description": "Exemplo fictício para desenvolvimento: cão adulto, de porte médio e companheiro. Este cadastro não representa um animal real disponível para adoção.",
+      "available": true,
+      "images": [
+        "/branding/opaa-logo.svg"
+      ]
+    }
+  ],
+  "posts": [
+    {
+      "public_id": "B8nP3qT6yL2w",
+      "slug": "conheca-o-trabalho-da-opaa",
+      "title": "Conheça o trabalho da OPAA Alegrete",
+      "body": "Desde março de 2009, a OPAA atua pela proteção animal em Alegrete, com resgates, castrações e mutirões de vacinação. Você pode ajudar como associado, com contribuição de R$ 20 por mês, voluntário ou lar temporário. Entre em contato pelo telefone (55) 99984-4045 ou pelo e-mail alegreteongopaa@gmail.com. Publicação de exemplo para desenvolvimento; a data é ilustrativa.",
+      "category": "news",
+      "published_at": "2026-11-01T12:00:00-03:00",
+      "images": [
+        "/branding/opaa-logo.svg"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "public_id": "C9rF4kM7zP3v",
+      "name": "Camiseta solidária (exemplo)",
+      "description": "Exemplo fictício de produto para apoiar a proteção animal. Modelo, preço e disponibilidade são ilustrativos e precisam ser confirmados pela ONG antes da divulgação.",
+      "price_cents": 4990,
+      "active": true,
+      "images": [
+        "/branding/opaa-logo.svg"
+      ]
+    }
+  ],
+  "monthly_goal": {
+    "month": "2026-11-01",
+    "target_cents": 500000,
+    "raised_cents": 125000,
+    "updated_at": "2026-11-01T12:00:00-03:00"
+  }
+}

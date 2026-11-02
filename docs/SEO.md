@@ -5,11 +5,14 @@ Para instalar o projeto e configurar as variáveis de ambiente, consulte o
 
 ## Onde alterar
 
-- `src/config/seo.ts`: dados oficiais da ONG e lista de páginas do sitemap.
-  Atualize contatos e horários aqui, sem duplicá-los nesta documentação.
+- `src/config/site.ts`: nome, descrição de SEO, endereço, título e slogan.
+- `src/data/api.json`, objeto `organization`: telefone, e-mail, horários, redes
+  sociais e chave Pix. O SEO consulta os campos relevantes por `getOrganization()`
+  durante o build, nunca a cada pesquisa no Google.
+- `src/config/seo.ts`: ativação da indexação e lista de páginas do sitemap.
 - `src/components/SEO.astro`: metadados para buscadores e compartilhamento,
   canonical (URL oficial da página) e dados estruturados da ONG em JSON-LD.
-- `src/layouts/Layout.astro`: recebe `title`, `description` e `noindex` de cada página.
+- `src/layouts/SiteLayout.astro`: recebe `title`, `description` e `noindex` de cada página.
 
 ## Ao criar uma página
 
@@ -41,8 +44,8 @@ restringe acesso nem torna o site privado.
 
 ## Pronto no projeto
 
-Nome institucional, descrição, fundação em março de 2009, endereço, telefone,
-e-mail, perfis oficiais e horários estão cadastrados em `src/config/seo.ts`.
+Nome, descrição e endereço estão em `src/config/site.ts`; contatos, perfis
+e horários vêm de `src/data/api.json`. Cada dado tem uma única fonte.
 Não é necessário digitá-los novamente na publicação.
 
 A imagem `public/branding/opaa-social.png` (1200 × 630) já usa o logo definitivo

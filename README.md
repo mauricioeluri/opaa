@@ -54,9 +54,11 @@ começar a desenvolver localmente.
 | Caminho | O que contém |
 | --- | --- |
 | `src/pages/index.astro` | Página inicial; arquivos em `pages` definem as rotas. |
-| `src/components/` | Partes reutilizáveis da interface, como `Welcome.astro`. |
-| `src/layouts/Layout.astro` | Estrutura comum do documento HTML. |
-| `src/config/seo.ts` | Informações da ONG e configuração para buscadores. |
+| `src/components/` | Partes reutilizáveis da interface, como `Hero.astro`. |
+| `src/layouts/SiteLayout.astro` | Estrutura comum do documento HTML. |
+| `src/data/api.json` | Dados da ONG, animais, publicações, produtos e meta. |
+| `src/lib/api.ts` | Funções para consultar esse conteúdo. |
+| `src/config/seo.ts` | Indexação e lista de páginas para buscadores. |
 | `public/branding/` | Logo e ícones oficiais. |
 | `public/` | Arquivos públicos; `public/branding/opaa-logo.svg` é acessado como `/branding/opaa-logo.svg`. |
 
@@ -67,6 +69,40 @@ Um arquivo `.astro` combina HTML, estilos e, quando necessário, código entre
 `package.json` lista comandos e dependências. `pnpm-lock.yaml` registra as versões
 resolvidas e deve acompanhar mudanças de dependências. Não edite manualmente
 `node_modules/`, `.astro/` ou `dist/`: são pastas geradas pelas ferramentas.
+
+## Dados locais
+
+O arquivo `src/data/api.json` simula os dados de uma API; não exige servidor.
+O objeto `organization` contém telefone, e-mail, horários, redes sociais e chave
+Pix (sem QR Code), acessados por `getOrganization()`. O campo `phone` guarda o
+número internacional para chamadas e WhatsApp; o site monta os links quando
+necessário. Não há um segundo número nem URL de WhatsApp armazenada.
+
+Nome, descrição de SEO, endereço e slogan ficam em
+`src/config/site.ts`. Cada informação tem uma única fonte. A API não inclui
+mensalidade nem campos de apresentação. Os dados são lidos durante o build,
+sem consultas à API a cada visita ou pesquisa no Google.
+
+Mantemos um exemplo de animal, publicação e produto, além de uma meta mensal.
+Animal, produto, preço, data da publicação e valores da meta são demonstrativos;
+substitua por dados confirmados antes de exibi-los como reais. Os fatos sobre a
+ONG no texto da publicação foram fornecidos pela equipe.
+
+Consulte os dados pelo módulo `src/lib/api.ts`. Exemplo no início de uma página
+Astro (entre `---`):
+
+```ts
+import { getAllAnimals } from '../lib/api'
+
+const animals = await getAllAnimals()
+```
+
+Existem funções `getAllAnimals`, `getAllPosts`, `getAllProducts` e
+`getMonthlyGoal`. As funções `getSingleAnimal`, `getSinglePost` e
+`getSingleProduct` recebem o `public_id` e retornam um registro ou `null`.
+As listas retornam todos os registros; a página decide quais estão disponíveis.
+Valores monetários estão em centavos. Imagens usam caminhos públicos como
+`/branding/opaa-logo.svg`, sem o prefixo `public/`.
 
 ## Comandos do dia a dia
 

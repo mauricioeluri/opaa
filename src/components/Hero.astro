@@ -1,12 +1,11 @@
+---
+import { site } from '../config/site'
+---
+
 <main>
-  <img
-    src="/branding/opaa-logo.svg"
-    alt="OPAA — Organização de Proteção Animal do Alegrete"
-    width="200"
-    height="200"
-  />
-  <h1>OPAA Alegrete</h1>
-  <p>Juntos pela proteção animal.</p>
+  <img src="/branding/opaa-logo.svg" alt={site.name} width="200" height="200" />
+  <h1>{site.name}</h1>
+  <p>{site.slogan}</p>
 </main>
 
 <style>
