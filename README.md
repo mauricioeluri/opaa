@@ -1,44 +1,122 @@
-# Astro Starter Kit: Basics
+<p align="center">
+  <img src="public/branding/opaa-logo.svg" alt="Logo da OPAA Alegrete" width="140" />
+</p>
 
-```sh
-pnpm create astro@latest -- --template basics
-```
+# OPAA Alegrete
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Site da Organização de Proteção Animal do Alegrete, uma ONG de Alegrete/RS.
+O objetivo é divulgar animais, apresentar o trabalho da entidade e facilitar
+adoções, doações e participação da comunidade.
 
-## 🚀 Project Structure
+O projeto está em construção. Começamos com uma página simples e identidade
+visual da ONG. O conteúdo será mantido em arquivos locais JS/JSON e imagens no
+repositório, sem banco de dados, API ou painel administrativo nesta etapa.
 
-Inside of your Astro project, you'll see the following folders and files:
+## O que usamos
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+| Ferramenta | Para que serve |
+| --- | --- |
+| Astro | Monta as páginas e gera HTML estático para publicação. |
+| HTML e CSS | Definem a estrutura e a aparência das páginas. |
+| JavaScript e TypeScript | Implementam comportamento e dados; TypeScript ajuda a identificar erros de tipos. |
+| Node.js | Executa as ferramentas de desenvolvimento no computador. |
+| pnpm | Instala dependências e executa os comandos do projeto. |
+| Prettier e ESLint | Padronizam a formatação e identificam problemas no código. |
+| GitHub e Cloudflare | Guardam o código e publicam o site, respectivamente. |
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+**Estático** significa que as páginas são geradas no build e servidas prontas aos
+visitantes. Alterar conteúdo exige gerar e publicar uma nova versão, mas não
+precisamos manter um servidor de aplicação ou banco funcionando.
 
-## 🧞 Commands
+## Como começar
 
-All commands are run from the root of the project, from a terminal:
+1. Instale o [Node.js](https://nodejs.org/) em uma versão compatível com
+   `package.json` (atualmente `>=22.23.4`) e o
+   [pnpm](https://pnpm.io/installation).
+2. Obtenha uma cópia do repositório e abra sua pasta no editor. Recomendamos
+   VS Code com as extensões sugeridas pelo projeto: Astro, Prettier e ESLint.
+3. Abra o terminal nessa pasta (onde está `package.json`) e execute:
 
-| Command        | Action                                       |
-| :------------- | :------------------------------------------- |
-| `pnpm install` | Installs dependencies                        |
-| `pnpm dev`     | Starts local dev server at `localhost:4321`  |
-| `pnpm build`   | Build your production site to `./dist/`      |
-| `pnpm preview` | Preview your build locally, before deploying |
+   ```sh
+   pnpm install
+   pnpm dev
+   ```
 
-## 👀 Want to learn more?
+4. Acesse o endereço informado no terminal, normalmente
+   `http://localhost:4321`. Ao salvar alterações, a página é atualizada.
+   Use `Ctrl+C` no terminal para encerrar o servidor.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Não é necessário configurar banco, contas externas ou variáveis de ambiente para
+começar a desenvolver localmente.
+
+## Onde editar
+
+| Caminho | O que contém |
+| --- | --- |
+| `src/pages/index.astro` | Página inicial; arquivos em `pages` definem as rotas. |
+| `src/components/` | Partes reutilizáveis da interface, como `Welcome.astro`. |
+| `src/layouts/Layout.astro` | Estrutura comum do documento HTML. |
+| `src/config/seo.ts` | Informações da ONG e configuração para buscadores. |
+| `public/branding/` | Logo e ícones oficiais. |
+| `public/` | Arquivos públicos; `public/branding/opaa-logo.svg` é acessado como `/branding/opaa-logo.svg`. |
+
+Um arquivo `.astro` combina HTML, estilos e, quando necessário, código entre
+`---` no início. Esse código prepara a página durante a geração do site; ele não
+é automaticamente enviado ao navegador.
+
+`package.json` lista comandos e dependências. `pnpm-lock.yaml` registra as versões
+resolvidas e deve acompanhar mudanças de dependências. Não edite manualmente
+`node_modules/`, `.astro/` ou `dist/`: são pastas geradas pelas ferramentas.
+
+## Comandos do dia a dia
+
+Execute sempre na raiz do projeto:
+
+| Comando | O que faz |
+| --- | --- |
+| `pnpm dev` | Inicia o site para desenvolver localmente. |
+| `pnpm format` | Aplica a formatação padrão. |
+| `pnpm lint` | Analisa o código e aplica as correções automáticas disponíveis. |
+| `pnpm check-all` | Executa lint, formatação e verificação de tipos. |
+| `pnpm build` | Gera a versão de publicação em `dist/`. |
+| `pnpm preview` | Permite conferir localmente o resultado do build. |
+
+Antes de entregar uma alteração, execute `pnpm check-all` e confira o fluxo
+alterado no navegador, incluindo uma largura de celular. O comando modifica
+arquivos; revise o resultado e corrija os problemas que exigirem intervenção.
+Para conferir a versão de publicação, execute `pnpm build` e depois `pnpm preview`.
+Não há suíte de testes automatizados configurada neste estágio.
+
+## Configuração e publicação
+
+O repositório já está integrado à Cloudflare: alterações enviadas à branch `main`
+podem disparar a publicação. Combine as mudanças com a equipe antes de enviá-las.
+O arquivo `wrangler.jsonc` indica que a pasta publicada é `dist/`.
+
+Para configurar os buscadores, copie `.env.example` para `.env`, sem sobrescrever
+um arquivo existente. Na Cloudflare, configure as variáveis no ambiente de build:
+
+- `SITE_URL`: origem HTTPS do domínio definitivo, sem subdiretórios.
+- `SITE_INDEXABLE`: mantenha `false` durante a construção. Use `true` somente
+  quando o site estiver pronto e `SITE_URL` estiver definido.
+- `GOOGLE_SITE_VERIFICATION` e `BING_SITE_VERIFICATION`: códigos opcionais de
+  verificação fornecidos pelos serviços; podem ficar vazios.
+
+Essas configurações são aplicadas no build. Não envie `.env` com credenciais ao
+repositório nem coloque informações privadas em arquivos públicos. A opção de
+não indexar orienta buscadores; ela não torna o site privado.
+
+## Combinados da equipe
+
+- Código, identificadores, nomes de arquivos novos e comentários em inglês;
+  comunicação, interface, validações e documentação em português. Componentes e
+  layouts Astro em PascalCase; outros arquivos novos e rotas em kebab-case.
+  Preservar nomes oficiais e arquivos de marca existentes.
+- Preferir soluções simples, HTML semântico e CSS local. Reutilizar componentes
+  sem criar camadas ou instalar bibliotecas desnecessárias.
+- Preservar o logo e usar apenas contatos, fotos e informações confirmados pela ONG.
+- O arquivo `AGENTS.md` contém orientações específicas para assistentes de IA,
+  incluindo limites para Git, publicação e execução de verificações.
+
+Para aprender mais, comece pelo
+[tutorial oficial do Astro](https://docs.astro.build/pt-br/tutorial/0-introduction/).
