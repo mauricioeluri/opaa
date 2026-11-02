@@ -1,0 +1,265 @@
+---
+import { Mail, MapPin } from '@lucide/astro'
+import { site } from '../config/site'
+import { getOrganization } from '../lib/api'
+import { formatPhone } from '../lib/format-phone'
+import { getGoogleMapsUrl } from '../lib/google-maps'
+import { getSocialLinks } from '../lib/social-links'
+import { getWhatsAppUrl } from '../lib/whatsapp'
+
+const organization = await getOrganization()
+const whatsappUrl = getWhatsAppUrl(organization.phone)
+const formattedPhone = formatPhone(organization.phone)
+const formattedAddress = `${site.address.streetAddress}, ${site.address.addressLocality} - ${site.address.addressRegion}`
+const mapsUrl = getGoogleMapsUrl(
+  `${formattedAddress}, ${site.address.addressCountry}`
+)
+const socialLinks = getSocialLinks(
+  organization.facebook,
+  organization.instagram
+).map((link) => ({
+  ...link,
+  icon:
+    link.label === 'Facebook' ? '/icons/facebook.svg' : '/icons/instagram.svg',
+}))
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns">
+      <div class="identity">
+        <a class="brand" href="/" aria-label={`${site.name} — página inicial`}>
+          <img src="/branding/opaa-logo.svg" alt="" width="64" height="64" />
+          <span>{site.name}</span>
+        </a>
+        <p>{site.slogan}</p>
+      </div>
+
+      <section aria-labelledby="footer-contact">
+        <h2 id="footer-contact">Fale com a OPAA</h2>
+        <ul>
+          <li>
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+              <img
+                class="social-icon"
+                src="/icons/whatsapp.svg"
+                alt=""
+                width="18"
+                height="18"
+              />
+              <span>{formattedPhone}</span>
+            </a>
+          </li>
+          <li>
+            <a href={`mailto:${organization.email}`}>
+              <Mail size={18} aria-hidden="true" />
+              <span>{organization.email}</span>
+            </a>
+          </li>
+        </ul>
+        <address>
+          <a
+            href={mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Ver ${formattedAddress} no Google Maps`}
+          >
+            <MapPin size={18} aria-hidden="true" />
+            <span>{formattedAddress}</span>
+          </a>
+        </address>
+      </section>
+
+      <nav aria-labelledby="footer-social">
+        <h2 id="footer-social">Acompanhe nosso trabalho</h2>
+        <ul>
+          {socialLinks.map(({ href, label, icon }) => (
+            <li>
+              <a href={href} target="_blank" rel="noopener noreferrer">
+                {icon && (
+                  <img
+                    class="social-icon"
+                    src={icon}
+                    alt=""
+                    width="18"
+                    height="18"
+                  />
+                )}
+                <span>{label}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+
+    <div class="bottom">
+      <small>
+        © {new Date().getFullYear()} {site.name}
+      </small>
+      <small>
+        {site.address.addressLocality} · {site.address.addressRegion}
+      </small>
+      <a class="admin-link" href="#" target="_blank" rel="noopener noreferrer">
+        Admin
+      </a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: #edf1e9;
+    color: #293d32;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin-inline: auto;
+    padding: 48px 24px 20px;
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, max-content));
+    align-items: start;
+    justify-content: space-between;
+    gap: 32px;
+  }
+
+  .columns > * {
+    min-width: 0;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .brand img {
+    flex-shrink: 0;
+    width: 64px;
+    height: auto;
+  }
+
+  p {
+    margin: 16px 0 0;
+    font-size: 14px;
+  }
+
+  h2 {
+    margin: 0 0 12px;
+    font-size: 16px;
+  }
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  a {
+    color: inherit;
+    text-underline-offset: 4px;
+    overflow-wrap: anywhere;
+  }
+
+  li a,
+  address a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    width: fit-content;
+    max-width: 100%;
+    font-size: 14px;
+    text-decoration: none;
+  }
+
+  .social-icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+  }
+
+  li a:hover,
+  address a:hover {
+    text-decoration: underline;
+  }
+
+  a:focus-visible {
+    outline: 3px solid #285442;
+    outline-offset: 4px;
+  }
+
+  address {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    margin: 0;
+    font-size: 14px;
+    font-style: normal;
+    overflow-wrap: anywhere;
+  }
+
+  :global(.footer svg) {
+    flex-shrink: 0;
+  }
+
+  .bottom {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #ced8c9;
+  }
+
+  small {
+    font-size: 12px;
+  }
+
+  .admin-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 12px;
+  }
+
+  @media (max-width: 55rem) {
+    .columns {
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .identity {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 35rem) {
+    .container {
+      padding: 32px 16px 20px;
+    }
+
+    .columns {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+
+    .bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-top: 28px;
+    }
+  }
+</style>

@@ -1,15 +1,13 @@
 {
   "organization": {
     "email": "alegreteongopaa@gmail.com",
-    "sameAs": [
-      "https://www.facebook.com/ONG.OPAA",
-      "https://www.instagram.com/ong.opaa"
-    ],
     "pix": {
       "key": "alegreteongopaa@gmail.com",
       "keyType": "email"
     },
-    "phone": "+5555999844045"
+    "phone": "+5555999844045",
+    "facebook": "ong.opaa",
+    "instagram": "ong.opaa"
   },
   "animals": [
     {

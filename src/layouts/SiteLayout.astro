@@ -1,6 +1,7 @@
 ---
 import SEO from '../components/SEO.astro'
 import Topbar from '../components/Topbar.astro'
+import Footer from '../components/Footer.astro'
 
 interface Props {
   title?: string
@@ -23,6 +24,7 @@ interface Props {
   <body>
     <Topbar />
     <slot />
+    <Footer />
   </body>
 </html>
 

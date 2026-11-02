@@ -77,7 +77,9 @@ O arquivo `src/data/api.json` simula os dados de uma API; não exige servidor.
 O objeto `organization` contém telefone, e-mail, redes sociais e chave
 Pix (sem QR Code), acessados por `getOrganization()`. O campo `phone` guarda o
 número internacional para chamadas e WhatsApp; o site monta os links quando
-necessário. Não há um segundo número nem URL de WhatsApp armazenada.
+necessário. Não há um segundo número nem URL de WhatsApp armazenada. Facebook e Instagram
+guardam apenas o username, sem `@`; `getSocialLinks()` monta os links para o
+footer e o SEO.
 
 Nome, descrição de SEO, endereço e slogan ficam em
 `src/config/site.ts`. Cada informação tem uma única fonte. A API não inclui

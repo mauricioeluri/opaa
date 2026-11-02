@@ -2,6 +2,7 @@
 import { indexingEnabled } from '../config/seo'
 import { site } from '../config/site'
 import { getOrganization } from '../lib/api'
+import { getSocialLinks } from '../lib/social-links'
 
 interface Props {
   title?: string
@@ -55,7 +56,9 @@ const schema = {
         logo: new URL('/branding/opaa-logo.svg', Astro.site).href,
       }
     : {}),
-  ...(organization.sameAs.length ? { sameAs: organization.sameAs } : {}),
+  sameAs: getSocialLinks(organization.facebook, organization.instagram).map(
+    (link) => link.href
+  ),
 }
 ---
 
