@@ -70,6 +70,10 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   padrão.
 - Entregar conteúdo relevante no HTML gerado, sem depender exclusivamente de
   carregamento no navegador. Mudanças nos dados locais exigem novo build/deploy.
+- A navegação usa `ClientRouter` no layout. Inicializar interações com
+  `onPageLoad()` de `src/lib/page-lifecycle.ts`; retornar a limpeza de timers e
+  listeners globais para não acumulá-los entre páginas. Preservar links nativos
+  e o funcionamento sem JavaScript.
 - Separar dados da apresentação quando introduzir conteúdo. Funções simples que
   importam JS/JSON bastam; não criar servidor para ler arquivos locais.
 - Preservar configuração de SEO, canonical, barras finais das URLs, sitemap e

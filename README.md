@@ -6,6 +6,9 @@ facilitar doações. Usa **Astro, TypeScript, CSS e pnpm**.
 Os dados são consultados por `src/lib/api.ts`. Por enquanto, esse módulo lê
 `src/data/api.json`, que simula uma API. O site é gerado como HTML estático:
 alterações nos dados exigem novo build e publicação.
+O `ClientRouter` do Astro permite navegar entre páginas sem recarregar o site
+inteiro. Uma barra no topo acompanha as etapas da navegação nos carregamentos
+mais lentos; ela não representa um percentual de bytes baixados.
 
 ## Rodar localmente
 
@@ -35,6 +38,8 @@ extensões recomendadas pelo projeto.
 | `public/`                      | Fotos, logos e PDF do kit de marca.                               |
 
 Um arquivo `.astro` reúne HTML, CSS e preparação dos dados entre `---`.
+Scripts interativos usam `onPageLoad()` de `src/lib/page-lifecycle.ts` para
+inicializar após cada navegação e encerrar timers ou listeners globais ao sair.
 Arquivos de `public/` são acessados sem esse prefixo: `/animals/foto.webp`.
 As fotos do slider inicial são `public/landing-page/slide-1.jpg` e `slide-2.jpg`.
 Para trocá-las, substitua os arquivos mantendo os nomes. Confira também se as

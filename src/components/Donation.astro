@@ -36,39 +36,47 @@ const organization = await getOrganization()
 </section>
 
 <script>
-  const pix = document.querySelector<HTMLDetailsElement>('.pix')
-  const copyButton = pix?.querySelector<HTMLButtonElement>('.copy-key')
-  const keyElement = pix?.querySelector<HTMLElement>('.pix-key')
-  const key = keyElement?.textContent?.trim()
-  const copyLabel = copyButton?.querySelector<HTMLElement>('.copy-label')
+  import { onPageLoad } from '../lib/page-lifecycle'
 
-  pix?.addEventListener('toggle', () => {
-    if (pix.open) {
-      const focusTarget =
-        copyButton && !copyButton.hidden ? copyButton : keyElement
-      focusTarget?.focus({ preventScroll: true })
-    }
-  })
+  onPageLoad(() => {
+    let feedbackTimer: number | undefined
+    const pix = document.querySelector<HTMLDetailsElement>('.pix')
+    const copyButton = pix?.querySelector<HTMLButtonElement>('.copy-key')
+    const keyElement = pix?.querySelector<HTMLElement>('.pix-key')
+    const key = keyElement?.textContent?.trim()
+    const copyLabel = copyButton?.querySelector<HTMLElement>('.copy-label')
 
-  if (copyButton && copyLabel && key && navigator.clipboard) {
-    copyButton.hidden = false
-    copyButton.addEventListener('click', async () => {
-      copyButton.disabled = true
-      copyLabel.textContent = 'Copiar chave Pix'
-
-      try {
-        await navigator.clipboard.writeText(key)
-        copyLabel.textContent = 'Chave Pix copiada'
-        window.setTimeout(() => {
-          copyLabel.textContent = 'Copiar chave Pix'
-          copyButton.disabled = false
-        }, 3000)
-      } catch {
-        copyLabel.textContent = 'Selecione a chave e copie manualmente'
-        copyButton.disabled = false
+    pix?.addEventListener('toggle', () => {
+      if (pix.open) {
+        const focusTarget =
+          copyButton && !copyButton.hidden ? copyButton : keyElement
+        focusTarget?.focus({ preventScroll: true })
       }
     })
-  }
+
+    if (copyButton && copyLabel && key && navigator.clipboard) {
+      copyButton.hidden = false
+      copyButton.addEventListener('click', async () => {
+        copyButton.disabled = true
+        copyLabel.textContent = 'Copiar chave Pix'
+
+        try {
+          await navigator.clipboard.writeText(key)
+          if (!copyButton.isConnected) return
+          copyLabel.textContent = 'Chave Pix copiada'
+          feedbackTimer = window.setTimeout(() => {
+            copyLabel.textContent = 'Copiar chave Pix'
+            copyButton.disabled = false
+          }, 3000)
+        } catch {
+          copyLabel.textContent = 'Selecione a chave e copie manualmente'
+          copyButton.disabled = false
+        }
+      })
+    }
+
+    return () => window.clearTimeout(feedbackTimer)
+  })
 </script>
 
 <style>

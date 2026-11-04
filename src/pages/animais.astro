@@ -84,52 +84,60 @@ const organization = await getOrganization()
 </SiteLayout>
 
 <script>
-  const listing = document.querySelector<HTMLElement>('.animal-listing')
-  const form = listing?.querySelector<HTMLFormElement>('.filters')
-  const count = listing?.querySelector<HTMLElement>('.result-count')
-  const empty = listing?.querySelector<HTMLElement>('.empty-state')
-  const animalType = form?.querySelector<HTMLSelectElement>('[name="type"]')
-  const sex = form?.querySelector<HTMLSelectElement>('[name="sex"]')
-  const neutered = form?.querySelector<HTMLSelectElement>('[name="neutered"]')
-  const ageGroup = form?.querySelector<HTMLSelectElement>('[name="age-group"]')
-  if (
-    listing &&
-    form &&
-    count &&
-    empty &&
-    animalType &&
-    sex &&
-    neutered &&
-    ageGroup
-  ) {
-    const cards = Array.from(listing.querySelectorAll<HTMLElement>('.animal'))
-    const update = () => {
-      let visible = 0
-      cards.forEach((element) => {
-        element.hidden =
-          (animalType.value !== '' &&
-            element.dataset.animalType !== animalType.value) ||
-          (sex.value !== '' && element.dataset.male !== sex.value) ||
-          (ageGroup.value !== '' &&
-            element.dataset.ageGroup !== ageGroup.value) ||
-          (neutered.value !== '' && element.dataset.neutered !== neutered.value)
-        if (!element.hidden) visible++
-      })
-      count.textContent =
-        visible === 1 ? '1 animal encontrado' : `${visible} animais encontrados`
-      empty.hidden = visible > 0
+  import { onPageLoad } from '../lib/page-lifecycle'
+
+  onPageLoad(() => {
+    const listing = document.querySelector<HTMLElement>('.animal-listing')
+    const form = listing?.querySelector<HTMLFormElement>('.filters')
+    const count = listing?.querySelector<HTMLElement>('.result-count')
+    const empty = listing?.querySelector<HTMLElement>('.empty-state')
+    const animalType = form?.querySelector<HTMLSelectElement>('[name="type"]')
+    const sex = form?.querySelector<HTMLSelectElement>('[name="sex"]')
+    const neutered = form?.querySelector<HTMLSelectElement>('[name="neutered"]')
+    const ageGroup =
+      form?.querySelector<HTMLSelectElement>('[name="age-group"]')
+    if (
+      listing &&
+      form &&
+      count &&
+      empty &&
+      animalType &&
+      sex &&
+      neutered &&
+      ageGroup
+    ) {
+      const cards = Array.from(listing.querySelectorAll<HTMLElement>('.animal'))
+      const update = () => {
+        let visible = 0
+        cards.forEach((element) => {
+          element.hidden =
+            (animalType.value !== '' &&
+              element.dataset.animalType !== animalType.value) ||
+            (sex.value !== '' && element.dataset.male !== sex.value) ||
+            (ageGroup.value !== '' &&
+              element.dataset.ageGroup !== ageGroup.value) ||
+            (neutered.value !== '' &&
+              element.dataset.neutered !== neutered.value)
+          if (!element.hidden) visible++
+        })
+        count.textContent =
+          visible === 1
+            ? '1 animal encontrado'
+            : `${visible} animais encontrados`
+        empty.hidden = visible > 0
+      }
+      form.hidden = false
+      form.addEventListener('submit', (event) => event.preventDefault())
+      form.addEventListener('change', update)
     }
-    form.hidden = false
-    form.addEventListener('submit', (event) => event.preventDefault())
-    form.addEventListener('change', update)
-  }
+  })
 </script>
 
 <style>
   main {
     max-width: 1120px;
     margin-inline: auto;
-    padding: 48px 24px 64px;
+    padding: 80px 24px 64px;
   }
 
   .intro {
@@ -214,7 +222,7 @@ const organization = await getOrganization()
 
   @media (max-width: 47.999rem) {
     main {
-      padding: 24px 16px 48px;
+      padding: 32px 16px 48px;
     }
 
     .intro {

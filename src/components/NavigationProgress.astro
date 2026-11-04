@@ -1,0 +1,95 @@
+<progress
+  class="navigation-progress"
+  aria-label="Carregando página"
+  max="3"
+  value="0"
+  transition:persist
+  hidden
+></progress>
+
+<script>
+  let navigation = 0
+  let finishTimer: number | undefined
+
+  const setStage = (value: number, text: string) => {
+    const progress = document.querySelector<HTMLProgressElement>(
+      '.navigation-progress'
+    )
+    if (progress) {
+      progress.value = value
+      progress.setAttribute('aria-valuetext', text)
+    }
+    return progress
+  }
+
+  document.addEventListener('astro:before-preparation', (event) => {
+    window.clearTimeout(finishTimer)
+    const progress = setStage(1, 'Etapa 1 de 3: buscando a página')
+    if (!progress) return
+
+    const current = ++navigation
+    const loader = event.loader
+    progress.hidden = true
+    const timer = window.setTimeout(() => {
+      if (!event.signal.aborted) progress.hidden = false
+    }, 150)
+
+    event.loader = async () => {
+      let prepared = false
+      try {
+        await loader()
+        prepared = !event.defaultPrevented && !event.signal.aborted
+      } finally {
+        window.clearTimeout(timer)
+        if (current === navigation && !prepared) progress.hidden = true
+      }
+    }
+  })
+
+  document.addEventListener('astro:after-preparation', () => {
+    setStage(2, 'Etapa 2 de 3: preparando o conteúdo')
+  })
+
+  document.addEventListener('astro:page-load', () => {
+    const progress = setStage(3, 'Etapa 3 de 3: página pronta')
+    if (progress) {
+      finishTimer = window.setTimeout(() => {
+        progress.hidden = true
+      }, 180)
+    }
+  })
+</script>
+
+<style>
+  .navigation-progress {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 100;
+    width: 100%;
+    height: 3px;
+    border: 0;
+    appearance: none;
+    background: transparent;
+    color: var(--color-primary);
+    pointer-events: none;
+  }
+
+  .navigation-progress::-webkit-progress-bar {
+    background: transparent;
+  }
+
+  .navigation-progress::-webkit-progress-value {
+    background: var(--color-primary);
+    transition: width 180ms ease;
+  }
+
+  .navigation-progress::-moz-progress-bar {
+    background: var(--color-primary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .navigation-progress::-webkit-progress-value {
+      transition: none;
+    }
+  }
+</style>

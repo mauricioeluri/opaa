@@ -54,85 +54,101 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
 </div>
 
 <script>
-  document.querySelectorAll<HTMLElement>('.image-slider').forEach((slider) => {
-    const photos = slider.querySelector<HTMLElement>('.photos')
-    const dots = Array.from(slider.querySelectorAll<HTMLButtonElement>('.dot'))
-    const controls = slider.querySelector<HTMLElement>('.dots')
-    if (!photos || !controls) return
+  import { onPageLoad } from '../lib/page-lifecycle'
 
-    const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const automatic = slider.dataset.autoplay === 'true'
-    let timer: number | undefined
-    let drag: { x: number; scroll: number; index: number } | undefined
-    const current = () => Math.round(photos.scrollLeft / photos.clientWidth)
-    const moveTo = (index: number) =>
-      photos.scrollTo({
-        left: ((index + dots.length) % dots.length) * photos.clientWidth,
-        behavior: motion.matches ? 'instant' : 'smooth',
-      })
-    const updateTimer = () => {
-      window.clearInterval(timer)
-      if (automatic && !drag && !document.hidden) {
-        timer = window.setInterval(() => moveTo(current() + 1), 6000)
-      }
-    }
+  onPageLoad(() => {
+    const cleanups: (() => void)[] = []
 
-    controls.hidden = false
-    photos.style.touchAction = 'pan-y'
-    dots.forEach((dot, index) =>
-      dot.addEventListener('click', () => moveTo(index))
-    )
-    photos.addEventListener(
-      'scroll',
-      () => {
-        dots.forEach((dot, index) =>
-          dot.setAttribute('aria-current', String(index === current()))
+    document
+      .querySelectorAll<HTMLElement>('.image-slider')
+      .forEach((slider) => {
+        const photos = slider.querySelector<HTMLElement>('.photos')
+        const dots = Array.from(
+          slider.querySelectorAll<HTMLButtonElement>('.dot')
         )
-      },
-      { passive: true }
-    )
-    photos.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-        event.preventDefault()
-        moveTo(current() + (event.key === 'ArrowRight' ? 1 : -1))
-      }
-    })
-    photos.addEventListener('pointerdown', (event) => {
-      if (!event.isPrimary || event.button !== 0) return
-      window.clearInterval(timer)
-      if (event.pointerType === 'mouse') event.preventDefault()
-      drag = {
-        x: event.clientX,
-        scroll: photos.scrollLeft,
-        index: current(),
-      }
-      photos.setPointerCapture(event.pointerId)
-      photos.style.scrollSnapType = 'none'
-      photos.classList.add('dragging')
-    })
-    photos.addEventListener('pointermove', (event) => {
-      if (drag) photos.scrollLeft = drag.scroll + drag.x - event.clientX
-    })
-    const endDrag = (event: PointerEvent) => {
-      if (drag) {
-        const distance = drag.x - event.clientX
-        const threshold = Math.min(40, photos.clientWidth * 0.15)
-        const step =
-          event.type !== 'pointercancel' && Math.abs(distance) >= threshold
-            ? Math.sign(distance)
-            : 0
-        const index = drag.index + step
-        drag = undefined
-        photos.style.scrollSnapType = ''
-        photos.classList.remove('dragging')
-        moveTo(index)
-      }
-      updateTimer()
-    }
-    photos.addEventListener('pointerup', endDrag)
-    photos.addEventListener('pointercancel', endDrag)
-    document.addEventListener('visibilitychange', updateTimer)
-    updateTimer()
+        const controls = slider.querySelector<HTMLElement>('.dots')
+        if (!photos || !controls) return
+
+        const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
+        const automatic = slider.dataset.autoplay === 'true'
+        let timer: number | undefined
+        let drag: { x: number; scroll: number; index: number } | undefined
+        const current = () => Math.round(photos.scrollLeft / photos.clientWidth)
+        const moveTo = (index: number) =>
+          photos.scrollTo({
+            left: ((index + dots.length) % dots.length) * photos.clientWidth,
+            behavior: motion.matches ? 'instant' : 'smooth',
+          })
+        const updateTimer = () => {
+          window.clearInterval(timer)
+          if (automatic && !drag && !document.hidden) {
+            timer = window.setInterval(() => moveTo(current() + 1), 6000)
+          }
+        }
+
+        controls.hidden = false
+        photos.style.touchAction = 'pan-y'
+        dots.forEach((dot, index) =>
+          dot.addEventListener('click', () => moveTo(index))
+        )
+        photos.addEventListener(
+          'scroll',
+          () => {
+            dots.forEach((dot, index) =>
+              dot.setAttribute('aria-current', String(index === current()))
+            )
+          },
+          { passive: true }
+        )
+        photos.addEventListener('keydown', (event) => {
+          if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+            event.preventDefault()
+            moveTo(current() + (event.key === 'ArrowRight' ? 1 : -1))
+          }
+        })
+        photos.addEventListener('pointerdown', (event) => {
+          if (!event.isPrimary || event.button !== 0) return
+          window.clearInterval(timer)
+          if (event.pointerType === 'mouse') event.preventDefault()
+          drag = {
+            x: event.clientX,
+            scroll: photos.scrollLeft,
+            index: current(),
+          }
+          photos.setPointerCapture(event.pointerId)
+          photos.style.scrollSnapType = 'none'
+          photos.classList.add('dragging')
+        })
+        photos.addEventListener('pointermove', (event) => {
+          if (drag) photos.scrollLeft = drag.scroll + drag.x - event.clientX
+        })
+        const endDrag = (event: PointerEvent) => {
+          if (drag) {
+            const distance = drag.x - event.clientX
+            const threshold = Math.min(40, photos.clientWidth * 0.15)
+            const step =
+              event.type !== 'pointercancel' && Math.abs(distance) >= threshold
+                ? Math.sign(distance)
+                : 0
+            const index = drag.index + step
+            drag = undefined
+            photos.style.scrollSnapType = ''
+            photos.classList.remove('dragging')
+            moveTo(index)
+          }
+          updateTimer()
+        }
+        photos.addEventListener('pointerup', endDrag)
+        photos.addEventListener('pointercancel', endDrag)
+        document.addEventListener('visibilitychange', updateTimer)
+        cleanups.push(() => {
+          window.clearInterval(timer)
+          document.removeEventListener('visibilitychange', updateTimer)
+        })
+        updateTimer()
+      })
+
+    return () => cleanups.forEach((cleanup) => cleanup())
   })
 </script>
 
@@ -148,7 +164,6 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
-    border-radius: 24px;
     cursor: default;
   }
 
@@ -174,6 +189,7 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
     height: auto;
     aspect-ratio: 16 / 9;
     object-fit: cover;
+    border-radius: 24px;
     user-select: none;
   }
 
@@ -238,24 +254,31 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
   }
 
   .slider-animal .photos {
-    border-radius: 12px;
+    width: 100%;
+    aspect-ratio: 1;
+    max-height: 320px;
+  }
+
+  .slider-animal figure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
   }
 
   .slider-animal img {
-    aspect-ratio: 1;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    aspect-ratio: auto;
     object-fit: contain;
-    background: var(--color-soft);
+    border-radius: 12px;
   }
 
   @media (max-width: 55rem) and (min-width: 48rem), (max-width: 35rem) {
     .slider-hero img {
       aspect-ratio: 4 / 3;
-    }
-  }
-
-  @media (max-width: 35rem) {
-    .slider-animal img {
-      max-height: 320px;
     }
   }
 </style>

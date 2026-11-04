@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css'
+import { ClientRouter } from 'astro:transitions'
+import NavigationProgress from '../components/NavigationProgress.astro'
 import SEO from '../components/SEO.astro'
 import Topbar from '../components/Topbar.astro'
 import Footer from '../components/Footer.astro'
@@ -21,8 +23,10 @@ interface Props {
     <link rel="apple-touch-icon" href="/branding/opaa-apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
     <SEO {...Astro.props} />
+    <ClientRouter fallback="swap" />
   </head>
   <body id="inicio">
+    <NavigationProgress />
     <Topbar />
     <slot />
     <Footer />

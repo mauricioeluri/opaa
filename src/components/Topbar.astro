@@ -1,6 +1,8 @@
 ---
 import { Menu, X } from '@lucide/astro'
 import { site } from '../config/site'
+
+const isAnimalsPage = /^\/animais(?:\/|$)/.test(Astro.url.pathname)
 ---
 
 <header class="topbar">
@@ -35,7 +37,11 @@ import { site } from '../config/site'
       <div class="navigation-content">
         <ul>
           <li>
-            <a href="/#animais">Animais</a>
+            {isAnimalsPage ? (
+              <span aria-current="page">Animais</span>
+            ) : (
+              <a href="/#animais">Animais</a>
+            )}
           </li>
           <li>
             <a href="#">A OPAA</a>
@@ -58,55 +64,84 @@ import { site } from '../config/site'
 </header>
 
 <script>
-  const header = document.querySelector<HTMLElement>('.topbar')
-  const toggle = header?.querySelector<HTMLButtonElement>('.menu-toggle')
-  const navigation = header?.querySelector<HTMLElement>('nav')
+  import { onPageLoad } from '../lib/page-lifecycle'
 
-  if (header && toggle && navigation) {
-    const desktop = window.matchMedia('(min-width: 48rem)')
+  onPageLoad(() => {
+    const header = document.querySelector<HTMLElement>('.topbar')
+    const toggle = header?.querySelector<HTMLButtonElement>('.menu-toggle')
+    const navigation = header?.querySelector<HTMLElement>('nav')
 
-    const updateScrollState = () => {
-      header.dataset.scrolled = String(window.scrollY > 40)
-    }
+    if (header && toggle && navigation) {
+      const desktop = window.matchMedia('(min-width: 48rem)')
 
-    updateScrollState()
-    window.addEventListener('scroll', updateScrollState, { passive: true })
-
-    const setMenuOpen = (open: boolean) => {
-      header.dataset.menuOpen = String(open)
-      toggle.setAttribute('aria-expanded', String(open))
-      toggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu')
-      navigation.inert = !desktop.matches && !open
-    }
-
-    const closeMenu = () => setMenuOpen(false)
-
-    closeMenu()
-    toggle.hidden = false
-
-    toggle.addEventListener('click', () => {
-      const open = toggle.getAttribute('aria-expanded') !== 'true'
-      setMenuOpen(open)
-    })
-
-    header.addEventListener('keydown', (event) => {
-      if (
-        event.key === 'Escape' &&
-        toggle.getAttribute('aria-expanded') === 'true'
-      ) {
-        event.preventDefault()
-        closeMenu()
-        toggle.focus()
+      const updateScrollState = () => {
+        header.dataset.scrolled = String(window.scrollY > 40)
       }
-    })
 
-    navigation.addEventListener('click', (event) => {
-      if (event.target instanceof Element && event.target.closest('a'))
-        closeMenu()
-    })
+      updateScrollState()
+      window.addEventListener('scroll', updateScrollState, { passive: true })
 
-    desktop.addEventListener('change', closeMenu)
-  }
+      const setMenuOpen = (open: boolean) => {
+        header.dataset.menuOpen = String(open)
+        toggle.setAttribute('aria-expanded', String(open))
+        toggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu')
+        navigation.inert = !desktop.matches && !open
+      }
+
+      const closeMenu = () => setMenuOpen(false)
+
+      closeMenu()
+      toggle.hidden = false
+
+      toggle.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') !== 'true'
+        setMenuOpen(open)
+      })
+
+      header.addEventListener('keydown', (event) => {
+        if (
+          event.key === 'Escape' &&
+          toggle.getAttribute('aria-expanded') === 'true'
+        ) {
+          event.preventDefault()
+          closeMenu()
+          toggle.focus()
+        }
+      })
+
+      navigation.addEventListener('click', (event) => {
+        if (event.target instanceof Element && event.target.closest('a'))
+          closeMenu()
+      })
+
+      desktop.addEventListener('change', closeMenu)
+
+      const animals = document.querySelector<HTMLElement>('#animais')
+      const animalsLink = navigation.querySelector<HTMLAnchorElement>(
+        'a[href="/#animais"]'
+      )
+      const observer =
+        animals && animalsLink
+          ? new IntersectionObserver(
+              ([entry]) => {
+                if (entry.isIntersecting) {
+                  animalsLink.setAttribute('aria-current', 'location')
+                } else {
+                  animalsLink.removeAttribute('aria-current')
+                }
+              },
+              { rootMargin: '-64px 0px -40% 0px' }
+            )
+          : undefined
+      if (animals) observer?.observe(animals)
+
+      return () => {
+        observer?.disconnect()
+        window.removeEventListener('scroll', updateScrollState)
+        desktop.removeEventListener('change', closeMenu)
+      }
+    }
+  })
 </script>
 
 <style>
@@ -181,7 +216,8 @@ import { site } from '../config/site'
     list-style: none;
   }
 
-  nav a {
+  nav a,
+  nav span[aria-current] {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -192,7 +228,7 @@ import { site } from '../config/site'
   }
 
   nav a:not(.button):hover,
-  nav a[aria-current='page'] {
+  nav [aria-current] {
     color: var(--color-primary);
     background: var(--color-soft);
   }
@@ -236,7 +272,8 @@ import { site } from '../config/site'
       display: flex;
     }
 
-    nav a:not(.help-link) {
+    nav a:not(.help-link),
+    nav span[aria-current] {
       box-sizing: border-box;
       height: 100%;
       border-radius: 0;
@@ -335,7 +372,8 @@ import { site } from '../config/site'
       position: static;
     }
 
-    nav a {
+    nav a,
+    nav span[aria-current] {
       min-height: 48px;
       justify-content: flex-start;
     }
