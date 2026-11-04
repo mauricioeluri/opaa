@@ -1,0 +1,204 @@
+---
+import type { InferGetStaticPropsType } from 'astro'
+import { ArrowLeft } from '@lucide/astro'
+import BrandIcon from '../../components/BrandIcon.astro'
+import PhotoSlider from '../../components/PhotoSlider.astro'
+import { site } from '../../config/site'
+import SiteLayout from '../../layouts/SiteLayout.astro'
+import { getAvailableAnimals, getOrganization } from '../../lib/api'
+import { animalAgeGroups, getAnimalLabel } from '../../lib/animal-label'
+import { getWhatsAppUrl } from '../../lib/whatsapp'
+
+export async function getStaticPaths() {
+  return (await getAvailableAnimals()).map((animal) => ({
+    params: { id: animal.public_id },
+    props: { animal },
+  }))
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>
+
+const { animal } = Astro.props
+const organization = await getOrganization()
+const label = getAnimalLabel(animal)
+const title = animal.name?.trim() || 'Ainda sem nome'
+const animalTypes: Record<string, string> = {
+  dog: 'Cachorro',
+  cat: 'Gato',
+  other: 'Outro animal',
+}
+const animalType = animalTypes[animal.type]
+const sex = animal.isMale ? 'Macho' : 'Fêmea'
+const ageGroup = animalAgeGroups[animal.ageGroup]
+const publishedDate = new Intl.DateTimeFormat('pt-BR', {
+  timeZone: 'America/Sao_Paulo',
+}).format(new Date(animal.published_at))
+const animalUrl = new URL(
+  `/animais/${animal.public_id}/`,
+  Astro.site ?? Astro.url
+)
+const contactMessage = `Oi, pessoal! Me interessei por este animal. Podemos conversar sobre a adoção?\n\n${animalUrl.href}`
+const details = [
+  { label: 'Tipo de animal', value: animalType },
+  { label: 'Sexo', value: sex },
+  { label: 'Faixa etária', value: ageGroup },
+  {
+    label: 'Idade',
+    value: animal.age
+      ? `${animal.isAgeApproximate ? '≈ ' : ''}${animal.age}`
+      : null,
+  },
+  { label: 'Raça', value: animal.breed },
+  {
+    label: 'Castração',
+    value: animal.neutered ? 'Sim' : 'Não',
+  },
+  { label: 'Vacinas', value: animal.vaccinations },
+  { label: 'Publicado em', value: publishedDate },
+].filter((detail) => detail.value?.trim())
+---
+
+<SiteLayout
+  title={`${title} | ${site.name}`}
+  description={animal.description}
+  image={animal.images[0]}
+  imageAlt={label}
+>
+  <main>
+    <a class="back-link" href="/animais/">
+      <ArrowLeft size={20} aria-hidden="true" />
+      Ver todos os animais
+    </a>
+
+    <article aria-labelledby="animal-title">
+      <div class="gallery">
+        <PhotoSlider
+          label={`Fotos de ${label}`}
+          variant="animal"
+          thumbnails
+          images={animal.images.map((src, index) => ({
+            src,
+            alt: `${label} — foto ${index + 1} de ${animal.images.length}`,
+          }))}
+        />
+      </div>
+
+      <div class="animal-content">
+        <p class="status">Disponível para adoção</p>
+        <h1 id="animal-title">{title}</h1>
+        <dl>
+          {details.map((detail) => (
+            <div>
+              <dt>{detail.label}</dt>
+              <dd>{detail.value}</dd>
+            </div>
+          ))}
+        </dl>
+        <p class="description">{animal.description}</p>
+        <a
+          class="button"
+          href={getWhatsAppUrl(organization.phone, contactMessage)}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <BrandIcon src="/icons/whatsapp.svg" size={20} />
+          Falar com a OPAA pelo WhatsApp
+        </a>
+      </div>
+    </article>
+  </main>
+</SiteLayout>
+
+<style>
+  main {
+    max-width: 1120px;
+    margin-inline: auto;
+    padding: 80px 24px 64px;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    color: var(--color-primary);
+    text-underline-offset: 4px;
+  }
+
+  article {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 40px;
+  }
+
+  .gallery {
+    min-width: 0;
+    padding: 16px;
+    border-radius: 24px;
+    background: var(--color-soft);
+  }
+
+  .gallery :global(.slider-animal .photos) {
+    height: clamp(280px, 40vw, 420px);
+    max-height: none;
+    aspect-ratio: auto;
+  }
+
+  .animal-content {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .status {
+    margin: 0 0 12px;
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  h1 {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: clamp(32px, 4vw, 44px);
+  }
+
+  dl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 32px;
+    margin: 24px 0 0;
+  }
+
+  dt {
+    color: var(--color-muted);
+    font-size: 14px;
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .description {
+    margin: 24px 0;
+    white-space: pre-line;
+  }
+
+  .button:not([hidden]) {
+    display: flex;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+  }
+
+  @media (max-width: 47.999rem) {
+    main {
+      padding: 32px 16px 48px;
+    }
+
+    article {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+    }
+  }
+</style>

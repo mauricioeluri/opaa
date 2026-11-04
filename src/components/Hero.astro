@@ -1,5 +1,6 @@
 ---
-import HeroGallery from './HeroGallery.astro'
+import { site } from '../config/site'
+import PhotoSlider from './PhotoSlider.astro'
 import SectionDivider from './SectionDivider.astro'
 ---
 
@@ -13,7 +14,7 @@ import SectionDivider from './SectionDivider.astro'
         chega mais longe.
       </p>
     </div>
-    <HeroGallery />
+    <PhotoSlider label="A OPAA em ação" images={site.heroSlides} autoplay />
   </div>
   <SectionDivider position="top" />
 </section>

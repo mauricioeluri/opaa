@@ -1,7 +1,8 @@
 import type { APIRoute } from 'astro'
 import { indexingEnabled, indexablePaths } from '../config/seo'
+import { getAvailableAnimals } from '../lib/api'
 
-export const GET: APIRoute = ({ site }) => {
+export const GET: APIRoute = async ({ site }) => {
   if (indexingEnabled && !site)
     throw new Error('SITE_URL é obrigatório para indexação.')
   const escape = (value: string) =>
@@ -13,7 +14,12 @@ export const GET: APIRoute = ({ site }) => {
       .replace(/'/g, '&apos;')
   const urls =
     indexingEnabled && site
-      ? indexablePaths
+      ? [
+          ...indexablePaths,
+          ...(await getAvailableAnimals()).map(
+            (animal) => `/animais/${animal.public_id}/`
+          ),
+        ]
           .map(
             (path) =>
               `<url><loc>${escape(new URL(path, site).href)}</loc></url>`

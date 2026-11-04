@@ -8,22 +8,24 @@ interface Props {
   title?: string
   description?: string
   noindex?: boolean
+  image?: string
+  imageAlt?: string
 }
 const organization = await getOrganization()
 const {
   title = site.title,
   description = site.description,
   noindex = false,
+  image: imagePath = '/branding/opaa-social.png',
+  imageAlt = `${site.name} — ${site.slogan}`,
 } = Astro.props
 if (indexingEnabled && !Astro.site)
   throw new Error('Configure SITE_URL antes de ativar a indexação.')
 const canonical = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).href
   : undefined
-const image = Astro.site
-  ? new URL('/branding/opaa-social.png', Astro.site).href
-  : undefined
-const imageAlt = `${site.name} — ${site.slogan}`
+const image = Astro.site ? new URL(imagePath, Astro.site).href : undefined
+const isBrandImage = imagePath === '/branding/opaa-social.png'
 const indexable = indexingEnabled && !!Astro.site && !noindex
 const schema = {
   '@context': 'https://schema.org',
@@ -79,9 +81,9 @@ const schema = {
 {canonical && <meta property="og:url" content={canonical} />}
 {image && <meta property="og:image" content={image} />}
 {image && <meta property="og:image:alt" content={imageAlt} />}
-{image && <meta property="og:image:width" content="1200" />}
-{image && <meta property="og:image:height" content="630" />}
-{image && <meta property="og:image:type" content="image/png" />}
+{image && isBrandImage && <meta property="og:image:width" content="1200" />}
+{image && isBrandImage && <meta property="og:image:height" content="630" />}
+{image && isBrandImage && <meta property="og:image:type" content="image/png" />}
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />

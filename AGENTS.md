@@ -135,16 +135,24 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
 - Centralizar contatos e textos compartilhados quando reutilizados. Não criar
   sistema de configuração ou editor para cada informação.
 - Animais não têm campo `title`. Sem nome, usar `name: null`. A apresentação
-  combina nome (quando houver), sexo e faixa etária com `getAnimalLabel()`;
+  dos cards combina nome (quando houver), sexo e faixa etária com `getAnimalLabel()`;
   os rótulos das faixas também são usados pelo filtro. A API informa `ageGroup`,
   sem classificação ou cálculo de idade pelo site. Manter os mesmos campos nos
   registros: `age: null` para idade desconhecida e `isAgeApproximate: false`
   quando não houver estimativa informada. Esses campos não entram no cabeçalho
-  dos cards. Preferir a inferência de tipos do JSON. `images` tem uma a três
-  fotos; sem foto, a fonte informa `/animals/default.webp`. Não escolher imagem
+  dos cards. `isMale` e `neutered` são booleanos obrigatórios, sem `null`;
+  `ageGroup` e `published_at` também são obrigatórios. Idade, raça e vacinas
+  (`vaccinations`, texto ou `null`) só aparecem nos detalhes quando informadas.
+  Não presumir vacinação completa nem status de castração desconhecido. Preferir
+  a inferência de tipos do JSON. Os cards exibem até duas
+  fotos de `images`; a página individual permite ver todas. Sem foto, a fonte
+  informa `/animals/default.webp`. Não escolher imagem
   padrão nem completar dados desconhecidos no site.
 - A API informa o tipo em `type`: `dog`, `cat` ou `other`. A interface apresenta
   cães, gatos e outros, sem limitar textos e listagens somente a cães.
+- Cards levam a `/animais/public_id/`. A página individual mostra todas as fotos
+  e a descrição completa; o contato sobre o animal pelo WhatsApp fica nessa página.
+  Seu título usa apenas o nome ou “Ainda sem nome”; sexo e faixa etária ficam nos detalhes.
 - Na landing page, mostrar no máximo os dois animais disponíveis publicados mais
   recentemente, por `published_at` decrescente. Sem disponíveis, ocultar a seção
   inteira. Não limitar a

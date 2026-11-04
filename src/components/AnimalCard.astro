@@ -1,18 +1,17 @@
 ---
 import type { getAllAnimals } from '../lib/api'
 import { getAnimalLabel } from '../lib/animal-label'
-import { getWhatsAppUrl } from '../lib/whatsapp'
 import PhotoSlider from './PhotoSlider.astro'
 
 interface Props {
   animal: Awaited<ReturnType<typeof getAllAnimals>>[number]
-  phone: string
   catalog?: boolean
 }
 
-const { animal, phone, catalog = false } = Astro.props
+const { animal, catalog = false } = Astro.props
 const Heading = catalog ? 'h2' : 'h3'
 const label = getAnimalLabel(animal)
+const images = animal.images.slice(0, 2)
 ---
 
 <article
@@ -25,22 +24,14 @@ const label = getAnimalLabel(animal)
   <PhotoSlider
     label={label}
     variant="animal"
-    images={animal.images.map((src, index) => ({
+    images={images.map((src, index) => ({
       src,
-      alt: `${label} — foto ${index + 1} de ${animal.images.length}`,
+      alt: `${label} — foto ${index + 1} de ${images.length}`,
     }))}
   />
   <div class="animal-content">
     <Heading>
-      <a
-        class="animal-link"
-        href={getWhatsAppUrl(
-          phone,
-          `Olá! Gostaria de saber mais sobre este animal: ${label} (cadastro ${animal.public_id}).`
-        )}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a class="animal-link" href={`/animais/${animal.public_id}/`}>
         {label}
       </a>
     </Heading>
@@ -134,11 +125,6 @@ const label = getAnimalLabel(animal)
   .catalog h2 {
     color: var(--color-primary);
     font-size: 26px;
-  }
-
-  .catalog .animal-content {
-    display: flex;
-    flex-direction: column;
   }
 
   .catalog .description {

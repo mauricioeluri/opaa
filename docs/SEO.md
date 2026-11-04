@@ -9,8 +9,11 @@ pesquisas no Google.
 - `src/config/site.ts`: título, descrição, endereço, horários e redes sociais.
 - `src/data/api.json`, em `organization`: telefone e e-mail.
 - `src/config/seo.ts`: indexação e rotas do sitemap.
+- Páginas dos animais disponíveis entram automaticamente no sitemap.
 - `src/components/SEO.astro`: implementação dos metadados.
 - `public/branding/opaa-social.png`: prévia de compartilhamento (1200 × 630).
+- Páginas individuais usam a primeira foto do animal na prévia. O WhatsApp decide
+  se exibe a imagem; a página e a foto precisam estar acessíveis publicamente.
 
 ## Publicação
 
@@ -25,6 +28,8 @@ Use `.env.example` como referência. Configure no ambiente de build da Cloudflar
 
 Os códigos de verificação são opcionais; com verificação por DNS, deixe-os vazios.
 Na meta tag, copie somente o valor de `content`. Alterar variáveis exige novo build.
+`SITE_URL` também define o domínio do link enviado na mensagem de adoção pelo
+WhatsApp. Configure-o antes de publicar; localmente, esse link usa o servidor local.
 
 Antes de ativar a indexação, confirme o conteúdo e confira título, descrição,
 canonical, `/robots.txt` e `/sitemap.xml` no domínio publicado. Depois, envie o

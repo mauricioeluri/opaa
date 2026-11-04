@@ -12,8 +12,7 @@ export function getAnimalLabel(
     'name' | 'isMale' | 'ageGroup'
   >
 ) {
-  const sex =
-    animal.isMale === true ? 'Macho' : animal.isMale === false ? 'Fêmea' : null
+  const sex = animal.isMale ? 'Macho' : 'Fêmea'
 
   return [animal.name?.trim(), sex, animalAgeGroups[animal.ageGroup]]
     .filter(Boolean)

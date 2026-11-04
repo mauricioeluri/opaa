@@ -2,7 +2,9 @@
 import { Menu, X } from '@lucide/astro'
 import { site } from '../config/site'
 
-const isAnimalsPage = /^\/animais(?:\/|$)/.test(Astro.url.pathname)
+const isAnimalsPage = /^\/animais\/?$/.test(Astro.url.pathname)
+const isAnimalPage =
+  Astro.url.pathname.startsWith('/animais/') && !isAnimalsPage
 ---
 
 <header class="topbar">
@@ -40,7 +42,12 @@ const isAnimalsPage = /^\/animais(?:\/|$)/.test(Astro.url.pathname)
             {isAnimalsPage ? (
               <span aria-current="page">Animais</span>
             ) : (
-              <a href="/#animais">Animais</a>
+              <a
+                href={isAnimalPage ? '/animais/' : '/#animais'}
+                aria-current={isAnimalPage ? 'location' : undefined}
+              >
+                Animais
+              </a>
             )}
           </li>
           <li>

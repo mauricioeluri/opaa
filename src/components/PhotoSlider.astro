@@ -4,9 +4,16 @@ interface Props {
   label: string
   variant?: 'hero' | 'animal'
   autoplay?: boolean
+  thumbnails?: boolean
 }
 
-const { images, label, variant = 'hero', autoplay = false } = Astro.props
+const {
+  images,
+  label,
+  variant = 'hero',
+  autoplay = false,
+  thumbnails = false,
+} = Astro.props
 ---
 
 <div
@@ -21,14 +28,16 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
     tabindex={images.length > 1 ? 0 : undefined}
     aria-label="Fotos; use as setas do teclado para navegar"
   >
-    {images.map((image) => (
+    {images.map((image, index) => (
       <figure>
         <img
           src={image.src}
           alt={image.alt}
           width="1200"
           height={variant === 'animal' ? 1200 : 675}
-          loading={variant === 'animal' ? 'lazy' : 'eager'}
+          loading={
+            index === 0 && (variant === 'hero' || thumbnails) ? 'eager' : 'lazy'
+          }
           draggable="false"
         />
         {image.caption && (
@@ -40,14 +49,18 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
     ))}
   </div>
   {images.length > 1 && (
-    <div class="dots" hidden>
-      {images.map((_, index) => (
+    <div class:list={['dots', { thumbnails }]} hidden>
+      {images.map((image, index) => (
         <button
           type="button"
           class="dot"
           aria-label={`Mostrar foto ${index + 1} de ${images.length}`}
           aria-current={index === 0 ? 'true' : 'false'}
-        ></button>
+        >
+          {thumbnails && (
+            <img src={image.src} alt="" width="64" height="64" loading="lazy" />
+          )}
+        </button>
       ))}
     </div>
   )}
@@ -58,6 +71,7 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
 
   onPageLoad(() => {
     const cleanups: (() => void)[] = []
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
 
     document
       .querySelectorAll<HTMLElement>('.image-slider')
@@ -69,7 +83,6 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
         const controls = slider.querySelector<HTMLElement>('.dots')
         if (!photos || !controls) return
 
-        const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
         const automatic = slider.dataset.autoplay === 'true'
         let timer: number | undefined
         let drag: { x: number; scroll: number; index: number } | undefined
@@ -140,12 +153,14 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
         }
         photos.addEventListener('pointerup', endDrag)
         photos.addEventListener('pointercancel', endDrag)
-        document.addEventListener('visibilitychange', updateTimer)
-        cleanups.push(() => {
-          window.clearInterval(timer)
-          document.removeEventListener('visibilitychange', updateTimer)
-        })
-        updateTimer()
+        if (automatic) {
+          document.addEventListener('visibilitychange', updateTimer)
+          cleanups.push(() => {
+            window.clearInterval(timer)
+            document.removeEventListener('visibilitychange', updateTimer)
+          })
+          updateTimer()
+        }
       })
 
     return () => cleanups.forEach((cleanup) => cleanup())
@@ -183,7 +198,7 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
     scroll-snap-align: start;
   }
 
-  img {
+  .photos img {
     display: block;
     width: 100%;
     height: auto;
@@ -266,7 +281,7 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
     min-height: 0;
   }
 
-  .slider-animal img {
+  .slider-animal .photos img {
     width: auto;
     height: auto;
     max-width: 100%;
@@ -276,8 +291,45 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
     border-radius: 12px;
   }
 
+  .thumbnails:not([hidden]) {
+    position: static;
+    transform: none;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 0;
+    background: transparent;
+  }
+
+  .thumbnails .dot {
+    box-sizing: border-box;
+    display: block;
+    width: 56px;
+    height: 56px;
+    padding: 4px;
+    border: 2px solid transparent;
+    border-radius: 12px;
+  }
+
+  .thumbnails .dot::after {
+    display: none;
+  }
+
+  .thumbnails .dot[aria-current='true'] {
+    border-color: var(--color-primary);
+  }
+
+  .thumbnails img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 6px;
+  }
+
   @media (max-width: 55rem) and (min-width: 48rem), (max-width: 35rem) {
-    .slider-hero img {
+    .slider-hero .photos img {
       aspect-ratio: 4 / 3;
     }
   }

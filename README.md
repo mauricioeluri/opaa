@@ -53,14 +53,23 @@ continuam corretos. Cada slide reúne `src` (imagem), `caption` (legenda) e `alt
   antigo por `published_at`. Sem disponíveis, a seção não aparece.
 - `/animais/` mostra todos os disponíveis, com filtros no navegador.
   Os cards e sliders são compartilhados com a landing page.
-- Não há `title` nos animais. O site apresenta nome (quando houver), sexo e faixa
+- Os cards levam a `/animais/public_id/`, com todas as fotos, descrição completa
+  e botão de contato pelo WhatsApp. Essas páginas são geradas no build.
+- Não há `title` nos animais. Os cards apresentam nome (quando houver), sexo e faixa
   etária, como `Mel · Fêmea · Adulto`. A descrição fica limitada a três linhas
   apenas na prévia; o site não calcula idade.
-- `images` recebe de uma a três fotos. Sem foto, a fonte deve enviar
+  Na página individual, o título é só o nome ou “Ainda sem nome”.
+- Os cards mostram até duas fotos; a página individual permite ver todas.
+  Sem foto, a fonte deve enviar
   `["/animals/default.webp"]`; o site não escolhe a imagem padrão.
-- Sem nome, use `name: null`, em vez de uma string vazia. O contato identifica
-  o animal por `public_id`.
-  Use `null` para informações desconhecidas e fotos reais, sem filtros de IA.
+- Sem nome, use `name: null`, em vez de uma string vazia. `public_id` identifica
+  a URL; a mensagem do WhatsApp contém um convite para conversar e o link do animal.
+  Use fotos reais, sem filtros de IA.
+- `isMale` e `neutered` são booleanos obrigatórios (`true` ou `false`, sem `null`).
+  `ageGroup` e `published_at` também são obrigatórios.
+- `breed`, `age` e `vaccinations` aceitam texto ou `null`. Informações opcionais
+  nulas, vazias ou ausentes não aparecem nos detalhes. Em `vaccinations`, informe
+  as vacinas ou doses conhecidas; não presuma que a vacinação está completa.
 - `ageGroup` vem pronto: `puppy` (filhote), `adult` (adulto) ou `senior` (idoso).
   `age` recebe um texto, como `2 anos`, ou `null` quando desconhecida.
   `isAgeApproximate` é `true` para uma estimativa e `false` nos demais casos.

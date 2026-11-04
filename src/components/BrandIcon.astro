@@ -1,0 +1,23 @@
+---
+interface Props {
+  src: string
+  size?: number
+}
+
+const { src, size = 18 } = Astro.props
+---
+
+<span
+  class="brand-icon"
+  style={`--icon: url('${src}'); width: ${size}px; height: ${size}px`}
+  aria-hidden="true"
+></span>
+
+<style>
+  .brand-icon {
+    display: block;
+    flex-shrink: 0;
+    background: currentColor;
+    mask: var(--icon) center / contain no-repeat;
+  }
+</style>

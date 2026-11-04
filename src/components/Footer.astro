@@ -1,5 +1,6 @@
 ---
 import { Mail, MapPin } from '@lucide/astro'
+import BrandIcon from './BrandIcon.astro'
 import { site } from '../config/site'
 import { getOrganization } from '../lib/api'
 import { formatPhone } from '../lib/format-phone'
@@ -45,11 +46,7 @@ const socialLinks = getSocialLinks(site.facebook, site.instagram).map(
         <ul>
           <li>
             <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-              <span
-                class="social-icon"
-                style="--icon: url('/icons/whatsapp.svg')"
-                aria-hidden="true"
-              ></span>
+              <BrandIcon src="/icons/whatsapp.svg" />
               <span>{formattedPhone}</span>
             </a>
           </li>
@@ -85,11 +82,7 @@ const socialLinks = getSocialLinks(site.facebook, site.instagram).map(
           {socialLinks.map(({ href, label, icon }) => (
             <li>
               <a href={href} target="_blank" rel="noopener noreferrer">
-                <span
-                  class="social-icon"
-                  style={`--icon: url('${icon}')`}
-                  aria-hidden="true"
-                ></span>
+                <BrandIcon src={icon} />
                 <span>{label}</span>
               </a>
             </li>
@@ -208,16 +201,6 @@ const socialLinks = getSocialLinks(site.facebook, site.instagram).map(
     text-decoration: none;
   }
 
-  .social-icon {
-    display: block;
-    flex-shrink: 0;
-    width: 18px;
-    height: 18px;
-    margin-top: 3px;
-    background-color: currentColor;
-    mask: var(--icon) center / contain no-repeat;
-  }
-
   li a:hover {
     text-decoration: underline;
   }
@@ -229,6 +212,7 @@ const socialLinks = getSocialLinks(site.facebook, site.instagram).map(
     overflow-wrap: anywhere;
   }
 
+  li :global(.brand-icon),
   :global(.footer svg) {
     flex-shrink: 0;
     margin-top: 3px;

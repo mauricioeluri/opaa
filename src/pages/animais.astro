@@ -3,11 +3,10 @@ import { PawPrint } from '@lucide/astro'
 import AnimalCard from '../components/AnimalCard.astro'
 import { site } from '../config/site'
 import SiteLayout from '../layouts/SiteLayout.astro'
-import { getAvailableAnimals, getOrganization } from '../lib/api'
+import { getAvailableAnimals } from '../lib/api'
 import { animalAgeGroups } from '../lib/animal-label'
 
 const animals = await getAvailableAnimals()
-const organization = await getOrganization()
 ---
 
 <SiteLayout
@@ -30,7 +29,7 @@ const organization = await getOrganization()
       <form class="filters" aria-label="Filtrar animais para adoção" hidden>
         <label>
           Tipo de animal
-          <select name="type">
+          <select name="animalType">
             <option value="">Todos</option>
             <option value="dog">Cães</option>
             <option value="cat">Gatos</option>
@@ -39,7 +38,7 @@ const organization = await getOrganization()
         </label>
         <label>
           Sexo
-          <select name="sex">
+          <select name="male">
             <option value="">Todos</option>
             <option value="false">Fêmeas</option>
             <option value="true">Machos</option>
@@ -47,7 +46,7 @@ const organization = await getOrganization()
         </label>
         <label>
           Faixa etária
-          <select name="age-group">
+          <select name="ageGroup">
             <option value="">Todas</option>
             {Object.entries(animalAgeGroups).map(([value, label]) => (
               <option value={value}>{label}</option>
@@ -72,7 +71,7 @@ const organization = await getOrganization()
     </p>
     <section class="cards" aria-label="Animais disponíveis para adoção">
       {animals.map((animal) => (
-        <AnimalCard animal={animal} phone={organization.phone} catalog />
+        <AnimalCard animal={animal} catalog />
       ))}
     </section>
     <p class="empty-state" hidden={animals.length > 0}>
@@ -91,33 +90,17 @@ const organization = await getOrganization()
     const form = listing?.querySelector<HTMLFormElement>('.filters')
     const count = listing?.querySelector<HTMLElement>('.result-count')
     const empty = listing?.querySelector<HTMLElement>('.empty-state')
-    const animalType = form?.querySelector<HTMLSelectElement>('[name="type"]')
-    const sex = form?.querySelector<HTMLSelectElement>('[name="sex"]')
-    const neutered = form?.querySelector<HTMLSelectElement>('[name="neutered"]')
-    const ageGroup =
-      form?.querySelector<HTMLSelectElement>('[name="age-group"]')
-    if (
-      listing &&
-      form &&
-      count &&
-      empty &&
-      animalType &&
-      sex &&
-      neutered &&
-      ageGroup
-    ) {
+    if (listing && form && count && empty) {
+      const filters = Array.from(form.querySelectorAll('select'))
       const cards = Array.from(listing.querySelectorAll<HTMLElement>('.animal'))
       const update = () => {
         let visible = 0
         cards.forEach((element) => {
-          element.hidden =
-            (animalType.value !== '' &&
-              element.dataset.animalType !== animalType.value) ||
-            (sex.value !== '' && element.dataset.male !== sex.value) ||
-            (ageGroup.value !== '' &&
-              element.dataset.ageGroup !== ageGroup.value) ||
-            (neutered.value !== '' &&
-              element.dataset.neutered !== neutered.value)
+          element.hidden = filters.some(
+            (filter) =>
+              filter.value !== '' &&
+              element.dataset[filter.name] !== filter.value
+          )
           if (!element.hidden) visible++
         })
         count.textContent =
