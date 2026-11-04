@@ -17,9 +17,13 @@ manutenção. O site não é um sistema de gestão.
 - Não publicar, executar deploy ou alterar configurações do GitHub e Cloudflare.
   O usuário cuida dessas operações; alterações enviadas à main podem publicar
   automaticamente o site.
-- Código, identificadores, arquivos novos e comentários em inglês. Comunicação,
-  documentação, interface e mensagens de validação em português. Preservar nomes
-  oficiais e nomes existentes dos arquivos de marca.
+- Tudo destinado ao usuário deve estar em português: interface, mensagens,
+  textos alternativos, metadados, rotas públicas e âncoras de navegação, além da
+  comunicação e documentação. Inglês fica restrito ao código, comentários,
+  identificadores, arquivos técnicos e campos/valores técnicos da API; o conteúdo
+  da API exibido ao usuário também deve estar em português. Arquivos que definem
+  rotas seguem o nome público em português. Preservar nomes oficiais e arquivos
+  de marca existentes.
 - Comentar apenas decisões ou restrições que não sejam evidentes no código.
 - Preservar layouts e branding aprovados. Refatorar não autoriza redesenhar a
   interface, criar funcionalidades ou reorganizar trabalho fora do escopo.
@@ -117,18 +121,26 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
 - Usar links para navegação e botões para ações. Não criar links sem destino,
   controles sem função ou mensagens de sucesso sem uma ação concluída.
 - Usar `organization` em `src/data/api.json`, via `getOrganization()`, como única
-  fonte de telefone, e-mail, redes sociais e chave Pix. `phone` é o
+  fonte de telefone, e-mail e chave Pix. `phone` é o
   número internacional usado para chamadas e WhatsApp; URLs são montadas pelo site.
-  Manter nome, descrição de SEO, endereço, horários, título e slogan em
+  Manter nome, descrição de SEO, endereço, horários, título, slogan e perfis das redes sociais em
   `src/config/site.ts`, sem cópias na API. Referenciar logos e ícones diretamente
-  nos componentes; não criar configuração para caminhos de arquivos estáticos. Não incluir
+  nos componentes. Os slides iniciais ficam em `site.heroSlides`, com imagem,
+  legenda e texto alternativo; não duplicar esses dados nos componentes. Não incluir
   mensalidade ou QR Code Pix na API. Novos campos exigem necessidade concreta.
 - Centralizar contatos e textos compartilhados quando reutilizados. Não criar
   sistema de configuração ou editor para cada informação.
-- Nos animais, a fonte de dados entrega `title`, `description` e `age` prontos.
-  O site não monta títulos a partir do nome ou das características. `images` tem
-  uma a três fotos. Sem foto, ela informa `/animals/default.webp`. O site não
-  calcula idade, escolhe imagem padrão ou completa os dados recebidos.
+- Animais não têm campo `title`. Sem nome, usar `name: null`. A apresentação
+  combina nome (quando houver), sexo e faixa etária com `getAnimalLabel()`;
+  os rótulos das faixas também são usados pelo filtro. A API informa `ageGroup`,
+  sem classificação ou cálculo de idade pelo site. Manter os mesmos campos nos
+  registros: `age: null` para idade desconhecida e `isAgeApproximate: false`
+  quando não houver estimativa informada. Esses campos não entram no cabeçalho
+  dos cards. Preferir a inferência de tipos do JSON. `images` tem uma a três
+  fotos; sem foto, a fonte informa `/animals/default.webp`. Não escolher imagem
+  padrão nem completar dados desconhecidos no site.
+- A API informa o tipo em `type`: `dog`, `cat` ou `other`. A interface apresenta
+  cães, gatos e outros, sem limitar textos e listagens somente a cães.
 - Na landing page, mostrar no máximo os dois animais disponíveis publicados mais
   recentemente, por `published_at` decrescente. Sem disponíveis, ocultar a seção
   inteira. Não limitar a

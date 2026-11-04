@@ -1,18 +1,14 @@
 ---
-import { ArrowRight, ArrowUpRight } from '@lucide/astro'
-import { getAllAnimals, getOrganization } from '../lib/api'
-import { getWhatsAppUrl } from '../lib/whatsapp'
-import PhotoSlider from './PhotoSlider.astro'
+import { ArrowRight } from '@lucide/astro'
+import { getAvailableAnimals, getOrganization } from '../lib/api'
+import AnimalCard from './AnimalCard.astro'
 
-const animals = (await getAllAnimals())
-  .filter((animal) => animal.available)
-  .sort((a, b) => Date.parse(b.published_at) - Date.parse(a.published_at))
-  .slice(0, 2)
+const animals = (await getAvailableAnimals()).slice(0, 2)
 const organization = await getOrganization()
 ---
 
 {animals.length > 0 && (
-  <section class="adoption" id="animals" aria-labelledby="adoption-title">
+  <section class="adoption" id="animais" aria-labelledby="adoption-title">
     <header>
       <p class="eyebrow">Adoção responsável</p>
       <h2 id="adoption-title">Seu novo amigo pode estar aqui.</h2>
@@ -20,35 +16,11 @@ const organization = await getOrganization()
 
     <div class="cards">
       {animals.map((animal) => (
-        <article class="animal">
-          <PhotoSlider
-            label={animal.title}
-            variant="animal"
-            images={animal.images.map((src, index) => ({
-              src,
-              alt: `${animal.title} — foto ${index + 1} de ${animal.images.length}`,
-            }))}
-          />
-          <div class="animal-content">
-            <h3>{animal.title}</h3>
-            <p class="description">{animal.description}</p>
-            <a
-              href={getWhatsAppUrl(
-                organization.phone,
-                `Olá! Gostaria de saber mais sobre este animal: ${animal.title} (cadastro ${animal.public_id}).`
-              )}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Quero saber mais
-              <ArrowUpRight size={18} aria-hidden="true" />
-            </a>
-          </div>
-        </article>
+        <AnimalCard animal={animal} phone={organization.phone} />
       ))}
     </div>
 
-    <a class="button view-all" href="#">
+    <a class="button view-all" href="/animais/">
       Ver todos os animais disponíveis para adoção
       <ArrowRight size={20} aria-hidden="true" />
     </a>
@@ -92,58 +64,6 @@ const organization = await getOrganization()
     gap: 24px;
   }
 
-  .animal {
-    display: grid;
-    grid-template-columns: 160px minmax(0, 1fr);
-    align-items: center;
-    gap: 24px;
-    min-width: 0;
-    padding: 20px;
-    border-radius: 16px;
-    background: var(--color-soft);
-  }
-
-  .animal-content {
-    min-width: 0;
-    max-width: 65ch;
-  }
-
-  h3 {
-    margin: 0 0 8px;
-    font-size: 20px;
-  }
-
-  .animal p {
-    color: var(--color-muted);
-    overflow-wrap: anywhere;
-  }
-
-  .description {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    overflow: hidden;
-  }
-
-  a:not(.button) {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 44px;
-    margin-top: 12px;
-    color: var(--color-primary);
-    font-size: 14px;
-    text-align: left;
-    text-decoration: none;
-    text-underline-offset: 4px;
-  }
-
-  a:not(.button):hover {
-    color: var(--color-primary-hover);
-    text-decoration: underline;
-  }
-
   .view-all.button {
     display: flex;
     width: fit-content;
@@ -161,11 +81,6 @@ const organization = await getOrganization()
   @media (max-width: 35rem) {
     .adoption {
       padding: 32px 16px 48px;
-    }
-
-    .animal {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 16px;
     }
   }
 </style>

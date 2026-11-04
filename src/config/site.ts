@@ -21,4 +21,20 @@ export const site = {
   ],
   title: 'OPAA Alegrete | Proteção animal em Alegrete, RS',
   slogan: 'Juntos pela proteção animal.',
+  facebook: 'ong.opaa',
+  instagram: 'ong.opaa',
+  heroSlides: [
+    {
+      src: '/landing-page/slide-1.jpg',
+      alt: 'Membros da OPAA reunidos com balões que representam os resultados de 2025',
+      caption:
+        'Parceria com a Prefeitura: em 2025, foram 981 castrações e 338 adoções.',
+    },
+    {
+      src: '/landing-page/slide-2.jpg',
+      alt: 'Grupo reunido durante a realização de um galeto beneficente da OPAA',
+      caption:
+        'Galeto beneficente: a comunidade reunida para apoiar a proteção animal.',
+    },
+  ],
 }

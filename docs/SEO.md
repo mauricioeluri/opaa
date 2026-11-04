@@ -6,8 +6,8 @@ pesquisas no Google.
 
 ## Onde alterar
 
-- `src/config/site.ts`: título, descrição, endereço e horários.
-- `src/data/api.json`, em `organization`: telefone, e-mail e redes sociais.
+- `src/config/site.ts`: título, descrição, endereço, horários e redes sociais.
+- `src/data/api.json`, em `organization`: telefone e e-mail.
 - `src/config/seo.ts`: indexação e rotas do sitemap.
 - `src/components/SEO.astro`: implementação dos metadados.
 - `public/branding/opaa-social.png`: prévia de compartilhamento (1200 × 630).

@@ -5,36 +5,38 @@
       "key": "alegreteongopaa@gmail.com",
       "keyType": "email"
     },
-    "phone": "+5555999844045",
-    "facebook": "ong.opaa",
-    "instagram": "ong.opaa"
+    "phone": "+5555999844045"
   },
   "animals": [
     {
       "public_id": "P4xN8mL2qR7s",
       "published_at": "2026-11-04T12:00:00-03:00",
       "name": null,
-      "title": "Fêmea · Filhote",
-      "age": "Filhote",
+      "ageGroup": "puppy",
+      "age": null,
+      "isAgeApproximate": false,
       "isMale": false,
       "breed": null,
       "neutered": null,
       "description": "Amigos, essa filhotinha linda procura uma família! Quem pode oferecer um lar com carinho e cuidado para ela? Fale com a OPAA!",
       "available": true,
-      "images": ["/animals/jsmxV48OYOJe.webp", "/animals/CTLPGIUPXU-u.webp"]
+      "images": ["/animals/jsmxV48OYOJe.webp", "/animals/CTLPGIUPXU-u.webp"],
+      "type": "dog"
     },
     {
       "public_id": "B6tQ9nR3xL8m",
       "published_at": "2026-11-03T12:00:00-03:00",
       "name": "Bento",
-      "title": "Bento",
+      "ageGroup": "puppy",
       "age": "2 meses",
+      "isAgeApproximate": false,
       "isMale": true,
       "breed": null,
       "neutered": null,
       "description": "Bento tem 2 meses, porte pequeno e adora brincar! É carinhoso, curioso e já recebeu a primeira dose da vacina importada. Quem vai dar um lar para esse pequeno?",
       "available": true,
-      "images": ["/animals/UuK8K1-lz0Vx.webp", "/animals/etiDluvlxc2H.webp"]
+      "images": ["/animals/UuK8K1-lz0Vx.webp", "/animals/etiDluvlxc2H.webp"],
+      "type": "dog"
     }
   ],
   "posts": [

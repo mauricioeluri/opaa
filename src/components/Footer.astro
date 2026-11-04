@@ -14,14 +14,15 @@ const formattedAddress = `${site.address.streetAddress}, ${site.address.addressL
 const mapsUrl = getGoogleMapsUrl(
   `${formattedAddress}, ${site.address.addressCountry}`
 )
-const socialLinks = getSocialLinks(
-  organization.facebook,
-  organization.instagram
-).map((link) => ({
-  ...link,
-  icon:
-    link.label === 'Facebook' ? '/icons/facebook.svg' : '/icons/instagram.svg',
-}))
+const socialLinks = getSocialLinks(site.facebook, site.instagram).map(
+  (link) => ({
+    ...link,
+    icon:
+      link.label === 'Facebook'
+        ? '/icons/facebook.svg'
+        : '/icons/instagram.svg',
+  })
+)
 ---
 
 <footer class="footer">

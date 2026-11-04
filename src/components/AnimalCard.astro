@@ -1,0 +1,159 @@
+---
+import type { getAllAnimals } from '../lib/api'
+import { getAnimalLabel } from '../lib/animal-label'
+import { getWhatsAppUrl } from '../lib/whatsapp'
+import PhotoSlider from './PhotoSlider.astro'
+
+interface Props {
+  animal: Awaited<ReturnType<typeof getAllAnimals>>[number]
+  phone: string
+  catalog?: boolean
+}
+
+const { animal, phone, catalog = false } = Astro.props
+const Heading = catalog ? 'h2' : 'h3'
+const label = getAnimalLabel(animal)
+---
+
+<article
+  class:list={['animal', { catalog }]}
+  data-male={String(animal.isMale)}
+  data-neutered={String(animal.neutered)}
+  data-age-group={animal.ageGroup}
+  data-animal-type={animal.type}
+>
+  <PhotoSlider
+    label={label}
+    variant="animal"
+    images={animal.images.map((src, index) => ({
+      src,
+      alt: `${label} — foto ${index + 1} de ${animal.images.length}`,
+    }))}
+  />
+  <div class="animal-content">
+    <Heading>
+      <a
+        class="animal-link"
+        href={getWhatsAppUrl(
+          phone,
+          `Olá! Gostaria de saber mais sobre este animal: ${label} (cadastro ${animal.public_id}).`
+        )}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {label}
+      </a>
+    </Heading>
+    <p class="description">{animal.description}</p>
+  </div>
+</article>
+
+<style>
+  .animal {
+    position: relative;
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr);
+    align-items: center;
+    gap: 24px;
+    min-width: 0;
+    padding: 20px;
+    border-radius: 16px;
+    background: var(--color-soft);
+    cursor: pointer;
+  }
+
+  .animal[hidden] {
+    display: none;
+  }
+
+  .animal-content {
+    min-width: 0;
+    max-width: 65ch;
+  }
+
+  h2,
+  h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--color-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+
+  .animal-link {
+    color: inherit;
+    text-decoration: none;
+    text-underline-offset: 4px;
+  }
+
+  .animal-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: 16px;
+  }
+
+  .animal-link:focus-visible::after {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 4px;
+  }
+
+  .animal:hover:not(:has(.image-slider:hover)) .animal-link,
+  .animal-link:focus-visible {
+    color: var(--color-primary-hover);
+    text-decoration: underline;
+  }
+
+  .animal :global(.image-slider) {
+    z-index: 2;
+    cursor: default;
+  }
+
+  .catalog {
+    box-sizing: border-box;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 280px 1fr;
+    align-items: stretch;
+    gap: 20px;
+    max-width: 560px;
+  }
+
+  .catalog h2 {
+    color: var(--color-primary);
+    font-size: 26px;
+  }
+
+  .catalog .animal-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .catalog .description {
+    min-height: 4.8em;
+  }
+
+  .catalog :global(.slider-animal img) {
+    height: 280px;
+    aspect-ratio: auto;
+  }
+
+  @media (max-width: 35rem) {
+    .animal {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+    }
+  }
+</style>

@@ -7,3 +7,9 @@ export async function getOrganization() {
 export async function getAllAnimals() {
   return data.animals
 }
+
+export async function getAvailableAnimals() {
+  return (await getAllAnimals())
+    .filter((animal) => animal.available)
+    .sort((a, b) => Date.parse(b.published_at) - Date.parse(a.published_at))
+}
