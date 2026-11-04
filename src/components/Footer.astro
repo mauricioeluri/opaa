@@ -84,13 +84,11 @@ const socialLinks = getSocialLinks(
           {socialLinks.map(({ href, label, icon }) => (
             <li>
               <a href={href} target="_blank" rel="noopener noreferrer">
-                {icon && (
-                  <span
-                    class="social-icon"
-                    style={`--icon: url('${icon}')`}
-                    aria-hidden="true"
-                  ></span>
-                )}
+                <span
+                  class="social-icon"
+                  style={`--icon: url('${icon}')`}
+                  aria-hidden="true"
+                ></span>
                 <span>{label}</span>
               </a>
             </li>
@@ -108,10 +106,7 @@ const socialLinks = getSocialLinks(
       >
         Kit de marca
       </a>
-      <!--target="_blank" rel="noopener noreferrer"-->
-      <a class="admin-link" href="#">
-        Admin
-      </a>
+      <a href="#">Admin</a>
     </div>
   </div>
 </footer>
@@ -149,7 +144,6 @@ const socialLinks = getSocialLinks(
     gap: 12px;
     font-size: 18px;
     font-weight: 700;
-    text-decoration: none;
   }
 
   .brand img {
@@ -225,11 +219,6 @@ const socialLinks = getSocialLinks(
 
   li a:hover {
     text-decoration: underline;
-  }
-
-  a:focus-visible {
-    outline: 3px solid var(--color-primary);
-    outline-offset: 4px;
   }
 
   address {

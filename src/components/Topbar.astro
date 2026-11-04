@@ -43,7 +43,7 @@ import { site } from '../config/site'
             <a href="#">Loja solidária</a>
           </li>
           <li>
-            <a class="help-link" href="#">
+            <a class="button help-link" href="#">
               Quero ajudar
             </a>
           </li>
@@ -187,7 +187,7 @@ import { site } from '../config/site'
     text-decoration: none;
   }
 
-  nav a:hover,
+  nav a:not(.button):hover,
   nav a[aria-current='page'] {
     color: var(--color-primary);
     background: var(--color-soft);
@@ -195,20 +195,7 @@ import { site } from '../config/site'
 
   nav .help-link {
     min-height: 44px;
-    border-radius: 8px;
-    color: var(--color-surface);
-    background: var(--color-primary);
-  }
-
-  nav .help-link:hover {
-    color: var(--color-surface);
-    background: var(--color-primary-hover);
-  }
-
-  a:focus-visible,
-  button:focus-visible {
-    outline: 3px solid var(--color-primary);
-    outline-offset: 4px;
+    padding-block: 0;
   }
 
   .menu-toggle {

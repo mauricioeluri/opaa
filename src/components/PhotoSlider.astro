@@ -63,7 +63,7 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
     const automatic = slider.dataset.autoplay === 'true'
     let timer: number | undefined
-    let drag: { x: number; scroll: number } | undefined
+    let drag: { x: number; scroll: number; index: number } | undefined
     const current = () => Math.round(photos.scrollLeft / photos.clientWidth)
     const moveTo = (index: number) =>
       photos.scrollTo({
@@ -78,6 +78,7 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
     }
 
     controls.hidden = false
+    photos.style.touchAction = 'pan-y'
     dots.forEach((dot, index) =>
       dot.addEventListener('click', () => moveTo(index))
     )
@@ -97,10 +98,14 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
       }
     })
     photos.addEventListener('pointerdown', (event) => {
+      if (!event.isPrimary || event.button !== 0) return
       window.clearInterval(timer)
-      if (event.pointerType !== 'mouse' || event.button !== 0) return
-      event.preventDefault()
-      drag = { x: event.clientX, scroll: photos.scrollLeft }
+      if (event.pointerType === 'mouse') event.preventDefault()
+      drag = {
+        x: event.clientX,
+        scroll: photos.scrollLeft,
+        index: current(),
+      }
       photos.setPointerCapture(event.pointerId)
       photos.style.scrollSnapType = 'none'
       photos.classList.add('dragging')
@@ -108,9 +113,15 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
     photos.addEventListener('pointermove', (event) => {
       if (drag) photos.scrollLeft = drag.scroll + drag.x - event.clientX
     })
-    const endDrag = () => {
+    const endDrag = (event: PointerEvent) => {
       if (drag) {
-        const index = current()
+        const distance = drag.x - event.clientX
+        const threshold = Math.min(40, photos.clientWidth * 0.15)
+        const step =
+          event.type !== 'pointercancel' && Math.abs(distance) >= threshold
+            ? Math.sign(distance)
+            : 0
+        const index = drag.index + step
         drag = undefined
         photos.style.scrollSnapType = ''
         photos.classList.remove('dragging')
@@ -228,6 +239,8 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
 
   .slider-animal img {
     aspect-ratio: 1;
+    object-fit: contain;
+    background: var(--color-soft);
   }
 
   @media (max-width: 55rem) and (min-width: 48rem), (max-width: 35rem) {
@@ -238,8 +251,7 @@ const { images, label, variant = 'hero', autoplay = false } = Astro.props
 
   @media (max-width: 35rem) {
     .slider-animal img {
-      height: 180px;
-      aspect-ratio: auto;
+      max-height: 320px;
     }
   }
 </style>
