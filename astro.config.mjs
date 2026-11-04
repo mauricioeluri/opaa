@@ -14,4 +14,4 @@ if (
 }
 
 // https://astro.build/config
-export default defineConfig({ site, trailingSlash: 'always' })
+export default defineConfig({ site, trailingSlash: 'ignore' })
