@@ -1,0 +1,192 @@
+---
+import { ArrowRight, ArrowUpRight } from '@lucide/astro'
+import { getAllAnimals, getOrganization } from '../lib/api'
+import { getWhatsAppUrl } from '../lib/whatsapp'
+import PhotoSlider from './PhotoSlider.astro'
+
+const animals = (await getAllAnimals())
+  .filter((animal) => animal.available)
+  .sort((a, b) => Date.parse(b.published_at) - Date.parse(a.published_at))
+  .slice(0, 2)
+const organization = await getOrganization()
+---
+
+{animals.length > 0 && (
+  <section class="adoption" id="animals" aria-labelledby="adoption-title">
+    <header>
+      <p class="eyebrow">Adoção responsável</p>
+      <h2 id="adoption-title">Seu novo amigo pode estar aqui.</h2>
+    </header>
+
+    <div class="cards">
+      {animals.map((animal) => (
+        <article class="animal">
+          <PhotoSlider
+            label={animal.title}
+            variant="animal"
+            images={animal.images.map((src, index) => ({
+              src,
+              alt: `${animal.title} — foto ${index + 1} de ${animal.images.length}`,
+            }))}
+          />
+          <div class="animal-content">
+            <h3>{animal.title}</h3>
+            <p class="description">{animal.description}</p>
+            <a
+              href={getWhatsAppUrl(
+                organization.phone,
+                `Olá! Gostaria de saber mais sobre este animal: ${animal.title} (cadastro ${animal.public_id}).`
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Quero saber mais
+              <ArrowUpRight size={18} aria-hidden="true" />
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <a class="view-all" href="#">
+      Ver todos os animais disponíveis para adoção
+      <ArrowRight size={20} aria-hidden="true" />
+    </a>
+  </section>
+)}
+
+<style>
+  .adoption {
+    max-width: 1120px;
+    margin-inline: auto;
+    padding: 40px 24px 64px;
+  }
+
+  header {
+    margin-bottom: 24px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .eyebrow {
+    margin-bottom: 12px;
+    color: var(--color-primary);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  h2 {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: clamp(24px, 3vw, 32px);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr));
+    align-items: start;
+    gap: 24px;
+  }
+
+  .animal {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr);
+    align-items: center;
+    gap: 24px;
+    min-width: 0;
+    padding: 20px;
+    border-radius: 16px;
+    background: var(--color-soft);
+  }
+
+  .animal-content {
+    min-width: 0;
+    max-width: 65ch;
+  }
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+  }
+
+  .animal p {
+    color: var(--color-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    margin-top: 12px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-primary);
+    font-size: 14px;
+    text-align: left;
+    text-decoration: none;
+    text-underline-offset: 4px;
+    cursor: pointer;
+  }
+
+  a:hover {
+    color: var(--color-primary-hover);
+    text-decoration: underline;
+  }
+
+  a:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 4px;
+  }
+
+  .view-all {
+    display: flex;
+    box-sizing: border-box;
+    width: fit-content;
+    max-width: 100%;
+    margin: 24px auto 0;
+    min-height: 48px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: var(--color-primary);
+    color: var(--color-surface);
+    font-size: 16px;
+    line-height: 1.35;
+  }
+
+  :global(.view-all > svg) {
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  .view-all:hover {
+    background: var(--color-primary-hover);
+    color: var(--color-surface);
+    text-decoration: none;
+  }
+
+  @media (max-width: 35rem) {
+    .adoption {
+      padding: 32px 16px 48px;
+    }
+
+    .animal {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+    }
+  }
+</style>

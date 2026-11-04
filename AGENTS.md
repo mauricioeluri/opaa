@@ -125,6 +125,14 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   mensalidade ou QR Code Pix na API. Novos campos exigem necessidade concreta.
 - Centralizar contatos e textos compartilhados quando reutilizados. Não criar
   sistema de configuração ou editor para cada informação.
+- Nos animais, a fonte de dados entrega `title`, `description` e `age` prontos.
+  O site não monta títulos a partir do nome ou das características. `images` tem
+  uma a três fotos. Sem foto, ela informa `/animals/default.webp`. O site não
+  calcula idade, escolhe imagem padrão ou completa os dados recebidos.
+- Na landing page, mostrar no máximo os dois animais disponíveis publicados mais
+  recentemente, por `published_at` decrescente. Sem disponíveis, ocultar a seção
+  inteira. Não limitar a
+  consulta compartilhada `getAllAnimals()`, usada pelas demais páginas.
 
 ## Comandos e validação
 

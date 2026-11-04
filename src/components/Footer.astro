@@ -28,17 +28,13 @@ const socialLinks = getSocialLinks(
   <div class="container">
     <div class="columns">
       <div class="identity">
-        <a
-          class="brand"
-          href="/#top"
-          aria-label={`${site.name} — página inicial`}
-        >
+        <div class="brand">
           <img src="/branding/opaa-logo.svg" alt="" width="64" height="64" />
           <span class="brand-copy">
             <span>{site.name}</span>
             <span class="tagline">Desde 2009, {site.slogan.toLowerCase()}</span>
           </span>
-        </a>
+        </div>
         <p>{site.institution}</p>
         <p class="registration">CNPJ: {site.cnpj}</p>
       </div>
@@ -105,6 +101,13 @@ const socialLinks = getSocialLinks(
 
     <div class="bottom">
       <small>© {new Date().getFullYear()} OPAA</small>
+      <a
+        href="/docs/opaa-brand-kit.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Kit de marca
+      </a>
       <!--target="_blank" rel="noopener noreferrer"-->
       <a class="admin-link" href="#">
         Admin
@@ -259,7 +262,7 @@ const socialLinks = getSocialLinks(
     font-size: 12px;
   }
 
-  .admin-link {
+  .bottom a {
     display: inline-flex;
     align-items: center;
     min-height: 44px;

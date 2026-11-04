@@ -1,0 +1,245 @@
+---
+interface Props {
+  images: { src: string; alt: string; caption?: string }[]
+  label: string
+  variant?: 'hero' | 'animal'
+  autoplay?: boolean
+}
+
+const { images, label, variant = 'hero', autoplay = false } = Astro.props
+---
+
+<div
+  class:list={['image-slider', `slider-${variant}`]}
+  data-autoplay={autoplay}
+  role="group"
+  aria-label={label}
+  aria-roledescription="carrossel"
+>
+  <div
+    class="photos"
+    tabindex={images.length > 1 ? 0 : undefined}
+    aria-label="Fotos; use as setas do teclado para navegar"
+  >
+    {images.map((image) => (
+      <figure>
+        <img
+          src={image.src}
+          alt={image.alt}
+          width="1200"
+          height={variant === 'animal' ? 1200 : 675}
+          loading={variant === 'animal' ? 'lazy' : 'eager'}
+          draggable="false"
+        />
+        {image.caption && (
+          <figcaption>
+            <span>{image.caption}</span>
+          </figcaption>
+        )}
+      </figure>
+    ))}
+  </div>
+  {images.length > 1 && (
+    <div class="dots" hidden>
+      {images.map((_, index) => (
+        <button
+          type="button"
+          class="dot"
+          aria-label={`Mostrar foto ${index + 1} de ${images.length}`}
+          aria-current={index === 0 ? 'true' : 'false'}
+        ></button>
+      ))}
+    </div>
+  )}
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.image-slider').forEach((slider) => {
+    const photos = slider.querySelector<HTMLElement>('.photos')
+    const dots = Array.from(slider.querySelectorAll<HTMLButtonElement>('.dot'))
+    const controls = slider.querySelector<HTMLElement>('.dots')
+    if (!photos || !controls) return
+
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const automatic = slider.dataset.autoplay === 'true'
+    let timer: number | undefined
+    let drag: { x: number; scroll: number } | undefined
+    const current = () => Math.round(photos.scrollLeft / photos.clientWidth)
+    const moveTo = (index: number) =>
+      photos.scrollTo({
+        left: ((index + dots.length) % dots.length) * photos.clientWidth,
+        behavior: motion.matches ? 'instant' : 'smooth',
+      })
+    const updateTimer = () => {
+      window.clearInterval(timer)
+      if (automatic && !drag && !document.hidden) {
+        timer = window.setInterval(() => moveTo(current() + 1), 6000)
+      }
+    }
+
+    controls.hidden = false
+    dots.forEach((dot, index) =>
+      dot.addEventListener('click', () => moveTo(index))
+    )
+    photos.addEventListener(
+      'scroll',
+      () => {
+        dots.forEach((dot, index) =>
+          dot.setAttribute('aria-current', String(index === current()))
+        )
+      },
+      { passive: true }
+    )
+    photos.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        event.preventDefault()
+        moveTo(current() + (event.key === 'ArrowRight' ? 1 : -1))
+      }
+    })
+    photos.addEventListener('pointerdown', (event) => {
+      window.clearInterval(timer)
+      if (event.pointerType !== 'mouse' || event.button !== 0) return
+      event.preventDefault()
+      drag = { x: event.clientX, scroll: photos.scrollLeft }
+      photos.setPointerCapture(event.pointerId)
+      photos.style.scrollSnapType = 'none'
+      photos.classList.add('dragging')
+    })
+    photos.addEventListener('pointermove', (event) => {
+      if (drag) photos.scrollLeft = drag.scroll + drag.x - event.clientX
+    })
+    const endDrag = () => {
+      if (drag) {
+        const index = current()
+        drag = undefined
+        photos.style.scrollSnapType = ''
+        photos.classList.remove('dragging')
+        moveTo(index)
+      }
+      updateTimer()
+    }
+    photos.addEventListener('pointerup', endDrag)
+    photos.addEventListener('pointercancel', endDrag)
+    document.addEventListener('visibilitychange', updateTimer)
+    updateTimer()
+  })
+</script>
+
+<style>
+  .image-slider {
+    position: relative;
+    min-width: 0;
+    color: var(--color-surface);
+  }
+
+  .photos {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    border-radius: 24px;
+    cursor: grab;
+  }
+
+  .photos.dragging {
+    cursor: grabbing;
+  }
+
+  figure {
+    position: relative;
+    flex: 0 0 100%;
+    min-width: 0;
+    margin: 0;
+    scroll-snap-align: start;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    user-select: none;
+  }
+
+  figcaption {
+    position: absolute;
+    inset: auto 16px 36px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  figcaption span {
+    padding: 3px 8px;
+    background: color-mix(in srgb, var(--color-text) 85%, transparent);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .dots:not([hidden]) {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    padding-inline: 4px;
+    border-radius: 20px;
+    background: color-mix(in srgb, var(--color-text) 60%, transparent);
+  }
+
+  button {
+    color: inherit;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .dot {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: transparent;
+  }
+
+  .dot::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.45;
+  }
+
+  .dot[aria-current='true']::after {
+    opacity: 1;
+  }
+
+  button:focus-visible,
+  .photos:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
+  .slider-animal .photos {
+    border-radius: 12px;
+  }
+
+  .slider-animal img {
+    aspect-ratio: 1;
+  }
+
+  @media (max-width: 55rem) and (min-width: 48rem), (max-width: 35rem) {
+    .slider-hero img {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  @media (max-width: 35rem) {
+    .slider-animal img {
+      height: 180px;
+      aspect-ratio: auto;
+    }
+  }
+</style>
