@@ -61,6 +61,13 @@ import { site } from '../config/site'
   if (header && toggle && navigation) {
     const desktop = window.matchMedia('(min-width: 48rem)')
 
+    const updateScrollState = () => {
+      header.dataset.scrolled = String(window.scrollY > 40)
+    }
+
+    updateScrollState()
+    window.addEventListener('scroll', updateScrollState, { passive: true })
+
     const setMenuOpen = (open: boolean) => {
       header.dataset.menuOpen = String(open)
       toggle.setAttribute('aria-expanded', String(open))
@@ -136,6 +143,8 @@ import { site } from '../config/site'
     width: 108px;
     height: 108px;
     z-index: 1;
+    transform-origin: top left;
+    transition: transform 240ms ease;
   }
 
   .brand span {
@@ -219,6 +228,10 @@ import { site } from '../config/site'
   }
 
   @media (min-width: 48rem) {
+    .topbar[data-scrolled='true'] .brand img {
+      transform: scale(calc(48 / 108));
+    }
+
     .navigation-content,
     ul {
       height: 100%;
@@ -342,6 +355,7 @@ import { site } from '../config/site'
     }
   }
   @media (prefers-reduced-motion: reduce) {
+    .brand img,
     nav,
     .topbar[data-menu-open='false'] nav,
     ul {

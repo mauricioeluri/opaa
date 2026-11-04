@@ -1,8 +1,17 @@
 ---
 import Hero from '../components/Hero.astro'
+import Donation from '../components/Donation.astro'
+import SectionDivider from '../components/SectionDivider.astro'
 import SiteLayout from '../layouts/SiteLayout.astro'
 ---
 
 <SiteLayout>
-  <Hero />
+  <main>
+    <Hero />
+    <Donation />
+    <SectionDivider />
+    <section aria-label="Cães">
+      <p></p>
+    </section>
+  </main>
 </SiteLayout>

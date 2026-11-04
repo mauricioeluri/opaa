@@ -1,0 +1,46 @@
+---
+interface Props {
+  position?: 'top' | 'bottom'
+}
+
+const { position = 'bottom' } = Astro.props
+---
+
+<svg
+  class:list={[
+    'section-divider',
+    { 'section-divider-top': position === 'top' },
+  ]}
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox={position === 'top' ? '0 0 1440 120' : '0 0 1440 40'}
+  preserveAspectRatio="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path
+    d={
+      position === 'top'
+        ? 'M0 108C300 82 650 116 880 104Q1008 104 1008 0H1440V120H0Z'
+        : 'M0 0H1440V16C1080 42 480 0 0 28Z'
+    }
+  />
+</svg>
+
+<style>
+  .section-divider {
+    display: block;
+    width: 100%;
+    height: 40px;
+    background: var(--color-background);
+    fill: var(--color-primary);
+  }
+
+  .section-divider-top {
+    position: absolute;
+    inset: auto 0 0;
+    z-index: -1;
+    height: 120px;
+    background: transparent;
+    pointer-events: none;
+  }
+</style>

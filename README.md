@@ -60,7 +60,7 @@ Sans nos textos e controles. As duas fontes são servidas pelo próprio site.
 | `src/pages/index.astro`        | Página inicial; arquivos em `pages` definem as rotas.                                         |
 | `src/components/`              | Partes reutilizáveis da interface, como `Hero.astro`.                                         |
 | `src/layouts/SiteLayout.astro` | Estrutura comum do documento HTML.                                                            |
-| `src/data/api.json`            | Dados da ONG, animais, publicações, produtos e meta.                                          |
+| `src/data/api.json`            | Dados da ONG, animais, publicações e produtos.                                                |
 | `src/lib/api.ts`               | Funções para consultar esse conteúdo.                                                         |
 | `src/config/seo.ts`            | Indexação e lista de páginas para buscadores.                                                 |
 | `public/branding/`             | Logo e ícones oficiais.                                                                       |
@@ -89,10 +89,14 @@ Nome, descrição de SEO, endereço e slogan ficam em
 mensalidade nem campos de apresentação. Os dados são lidos durante o build,
 sem consultas à API a cada visita ou pesquisa no Google.
 
-Mantemos um exemplo de animal, publicação e produto, além de uma meta mensal.
-Animal, produto, preço, data da publicação e valores da meta são demonstrativos;
+Mantemos um exemplo de animal, publicação e produto.
+Animal, produto, preço e data da publicação são demonstrativos;
 substitua por dados confirmados antes de exibi-los como reais. Os fatos sobre a
 ONG no texto da publicação foram fornecidos pela equipe.
+
+A seção de doações mostra um convite para contribuir e a chave Pix, sem metas,
+valores arrecadados ou integração bancária. A chave pode ser consultada sem
+JavaScript; a cópia automática usa JavaScript.
 
 Consulte os dados pelo módulo `src/lib/api.ts`. Exemplo no início de uma página
 Astro (entre `---`):
@@ -103,8 +107,8 @@ import { getAllAnimals } from '../lib/api'
 const animals = await getAllAnimals()
 ```
 
-Existem funções `getAllAnimals`, `getAllPosts`, `getAllProducts` e
-`getMonthlyGoal`. As funções `getSingleAnimal`, `getSinglePost` e
+Existem funções `getAllAnimals`, `getAllPosts` e `getAllProducts`.
+As funções `getSingleAnimal`, `getSinglePost` e
 `getSingleProduct` recebem o `public_id` e retornam um registro ou `null`.
 As listas retornam todos os registros; a página decide quais estão disponíveis.
 Valores monetários estão em centavos. Imagens usam caminhos públicos como

@@ -77,8 +77,8 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
 - Adoção, associação, voluntariado, lar temporário e encomendas encaminham aos
   contatos confirmados da ONG. Não inventar telefones, endereços ou links.
 - Pix usa informações fixas confirmadas. Não simular confirmação de pagamento.
-- A meta é de arrecadação e tem total informado manualmente, mês de referência e
-  data da atualização. Não apresentar valores como tempo real ou integração bancária.
+- A seção de doações mostra apenas o convite e a chave Pix. Não adicionar metas,
+  valores arrecadados ou acompanhamento de pagamentos sem nova solicitação.
 - Não acrescentar checkout, agendamento, venda de números de rifas, controle
   financeiro, publicação em redes ou telas administrativas sem uma nova solicitação.
 - Não apresentar animais, histórias, produtos ou valores demonstrativos como

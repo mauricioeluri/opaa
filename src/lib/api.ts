@@ -27,7 +27,3 @@ export async function getAllProducts() {
 export async function getSingleProduct(publicId: string) {
   return data.products.find((product) => product.public_id === publicId) ?? null
 }
-
-export async function getMonthlyGoal() {
-  return data.monthly_goal
-}

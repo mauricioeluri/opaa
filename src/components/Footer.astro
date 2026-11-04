@@ -10,7 +10,7 @@ import { getWhatsAppUrl } from '../lib/whatsapp'
 const organization = await getOrganization()
 const whatsappUrl = getWhatsAppUrl(organization.phone)
 const formattedPhone = formatPhone(organization.phone)
-const formattedAddress = `${site.address.streetAddress}, ${site.address.addressLocality} - ${site.address.addressRegion}, CEP ${site.address.postalCode}`
+const formattedAddress = `${site.address.streetAddress}, ${site.address.addressLocality} - ${site.address.addressRegion}`
 const mapsUrl = getGoogleMapsUrl(
   `${formattedAddress}, ${site.address.addressCountry}`
 )
@@ -34,9 +34,11 @@ const socialLinks = getSocialLinks(
           aria-label={`${site.name} — página inicial`}
         >
           <img src="/branding/opaa-logo.svg" alt="" width="64" height="64" />
-          <span>{site.name}</span>
+          <span class="brand-copy">
+            <span>{site.name}</span>
+            <span class="tagline">Desde 2009, {site.slogan.toLowerCase()}</span>
+          </span>
         </a>
-        <p>{site.slogan}</p>
         <p>{site.institution}</p>
         <p class="registration">CNPJ: {site.cnpj}</p>
       </div>
@@ -72,8 +74,7 @@ const socialLinks = getSocialLinks(
                 <span>
                   {site.address.streetAddress}
                   <br />
-                  {site.address.addressLocality} - {site.address.addressRegion},
-                  CEP {site.address.postalCode}
+                  {site.address.addressLocality} - {site.address.addressRegion}
                 </span>
               </a>
             </address>
@@ -103,13 +104,9 @@ const socialLinks = getSocialLinks(
     </div>
 
     <div class="bottom">
-      <small>
-        © {new Date().getFullYear()} {site.name}
-      </small>
-      <small>
-        {site.address.addressLocality} · {site.address.addressRegion}
-      </small>
-      <a class="admin-link" href="#" target="_blank" rel="noopener noreferrer">
+      <small>© {new Date().getFullYear()} OPAA</small>
+      <!--target="_blank" rel="noopener noreferrer"-->
+      <a class="admin-link" href="#">
         Admin
       </a>
     </div>
@@ -140,6 +137,7 @@ const socialLinks = getSocialLinks(
 
   .columns > * {
     min-width: 0;
+    max-width: 320px;
   }
 
   .brand {
@@ -157,6 +155,17 @@ const socialLinks = getSocialLinks(
     height: auto;
   }
 
+  .brand-copy {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .tagline {
+    font-size: 14px;
+    font-weight: 400;
+  }
+
   p {
     margin: 0;
     font-size: 14px;
@@ -165,7 +174,6 @@ const socialLinks = getSocialLinks(
   .identity {
     display: grid;
     gap: var(--item-gap);
-    max-width: 28ch;
   }
 
   .registration {
@@ -262,10 +270,6 @@ const socialLinks = getSocialLinks(
     .columns {
       grid-template-columns: minmax(0, 1fr);
       gap: 28px;
-    }
-
-    .identity {
-      max-width: 40ch;
     }
   }
 
