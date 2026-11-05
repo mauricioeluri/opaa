@@ -30,20 +30,15 @@ const animals = (await getAvailableAnimals()).slice(0, 2)
   .adoption {
     max-width: 1120px;
     margin-inline: auto;
-    padding: 24px 24px 64px;
+    padding: 24px 24px var(--section-gap);
   }
 
   header {
     margin-bottom: 24px;
   }
 
-  p {
-    margin: 0;
-    font-size: 14px;
-  }
-
   .eyebrow {
-    margin-bottom: 8px;
+    margin: 0 0 8px;
     color: var(--color-primary);
     font-size: 16px;
     font-weight: 700;
@@ -79,7 +74,7 @@ const animals = (await getAvailableAnimals()).slice(0, 2)
 
   @media (max-width: 35rem) {
     .adoption {
-      padding: 24px 16px 48px;
+      padding-inline: 16px;
     }
   }
 </style>

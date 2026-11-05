@@ -1,8 +1,6 @@
 ---
 import { Copy, Heart, PawPrint, X } from '@lucide/astro'
-import { getOrganization } from '../lib/api'
-
-const organization = await getOrganization()
+import { site } from '../config/site'
 ---
 
 <dialog
@@ -53,7 +51,7 @@ const organization = await getOrganization()
       />
       <p class="key-label">Chave Pix (e-mail)</p>
       <p class="pix-key" tabindex="-1">
-        {organization.pix.key}
+        {site.pixKey}
       </p>
       <button class="button copy-key" type="button" hidden>
         <Copy size={18} aria-hidden="true" />
@@ -274,10 +272,6 @@ const organization = await getOrganization()
   }
 
   h3 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
     margin: 0 0 8px;
     color: var(--color-primary);
     font-size: 24px;

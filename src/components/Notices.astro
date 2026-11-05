@@ -1,9 +1,9 @@
 ---
 import { ArrowUpRight, ChevronDown, Megaphone, Pin } from '@lucide/astro'
 import { getNotices } from '../lib/api'
+import { formatDate } from '../lib/format-date'
 
-const notices = (await getNotices()).slice(0, 4)
-const dateFormatter = new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' })
+const notices = (await getNotices()).slice(0, 6)
 ---
 
 {notices.length > 0 && (
@@ -36,7 +36,7 @@ const dateFormatter = new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' })
             <span class="notice-copy">
               <span class="metadata">
                 <time datetime={notice.published_at}>
-                  {dateFormatter.format(new Date(notice.published_at))}
+                  {formatDate(notice.published_at)}
                 </time>
               </span>
               <span class="notice-title">{notice.title}</span>
@@ -54,7 +54,7 @@ const dateFormatter = new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' })
   .notices {
     max-width: 1120px;
     margin-inline: auto;
-    padding: 12px 24px 32px;
+    padding: 0 24px var(--section-gap);
   }
 
   header {
@@ -96,8 +96,8 @@ const dateFormatter = new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' })
     grid-template-columns: 24px minmax(0, 1fr) 20px;
     align-items: center;
     gap: 16px;
-    min-height: 56px;
-    padding-block: 10px;
+    min-height: 48px;
+    padding-block: 8px;
     list-style: none;
     cursor: pointer;
   }
@@ -166,13 +166,13 @@ const dateFormatter = new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' })
 
   .notice-body {
     margin: 0;
-    padding: 0 0 24px 40px;
+    padding: 0 0 16px 40px;
     white-space: pre-line;
   }
 
   @media (max-width: 35rem) {
     .notices {
-      padding: 12px 16px 32px;
+      padding-inline: 16px;
     }
 
     .notice-list {

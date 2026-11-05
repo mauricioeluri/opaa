@@ -2,9 +2,19 @@
 import { Menu, X } from '@lucide/astro'
 import { site } from '../config/site'
 
-const isAnimalsPage = /^\/animais\/?$/.test(Astro.url.pathname)
-const isAnimalPage =
-  Astro.url.pathname.startsWith('/animais/') && !isAnimalsPage
+const pathname = Astro.url.pathname.replace(/\/$/, '')
+const items = [
+  { label: 'Animais', section: 'animais', page: '/animais' },
+  { label: 'Castração', section: 'castracao' },
+  { label: 'Comunicados', section: 'comunicados' },
+  { label: 'Novidades', section: 'novidades' },
+  { label: 'Loja solidária', section: 'loja' },
+  {
+    label: 'Histórias felizes',
+    section: 'historias-felizes',
+    page: '/historias-felizes',
+  },
+]
 ---
 
 <header class="topbar">
@@ -38,27 +48,27 @@ const isAnimalPage =
     <nav id="main-navigation" aria-label="Navegação principal">
       <div class="navigation-content">
         <ul>
-          <li>
-            {isAnimalsPage ? (
-              <span aria-current="page">Animais</span>
-            ) : (
-              <a
-                href={isAnimalPage ? '/animais/' : '/#animais'}
-                aria-current={isAnimalPage ? 'location' : undefined}
-              >
-                Animais
-              </a>
-            )}
-          </li>
-          <li>
-            <a href="#">A OPAA</a>
-          </li>
-          <li>
-            <a href="#">Novidades</a>
-          </li>
-          <li>
-            <a href="#">Loja solidária</a>
-          </li>
+          {items.map((item) => {
+            const isCurrentPage = pathname === item.page
+            const isDetailPage =
+              item.page && pathname.startsWith(`${item.page}/`)
+
+            return (
+              <li>
+                {isCurrentPage ? (
+                  <span aria-current="page">{item.label}</span>
+                ) : (
+                  <a
+                    href={isDetailPage ? `${item.page}/` : `/#${item.section}`}
+                    data-section={item.section}
+                    aria-current={isDetailPage ? 'location' : undefined}
+                  >
+                    {item.label}
+                  </a>
+                )}
+              </li>
+            )
+          })}
           <li>
             <button class="button help-link" type="button" data-open-pix hidden>
               Quero ajudar
@@ -84,14 +94,37 @@ const isAnimalPage =
     const navigation = header?.querySelector<HTMLElement>('nav')
 
     if (header && toggle && navigation) {
-      const desktop = window.matchMedia('(min-width: 48rem)')
+      const desktop = window.matchMedia('(min-width: 64rem)')
+      const sectionLinks = Array.from(
+        navigation.querySelectorAll<HTMLAnchorElement>('a[data-section]')
+      ).flatMap((link) => {
+        const section = document.getElementById(link.dataset.section || '')
+        return section ? [{ link, section }] : []
+      })
 
       const updateScrollState = () => {
         header.dataset.scrolled = String(window.scrollY > 40)
+        const atBottom =
+          window.scrollY + window.innerHeight >=
+          document.documentElement.scrollHeight - 2
+        const active = atBottom
+          ? sectionLinks.at(-1)
+          : sectionLinks.findLast(({ section }) => {
+              const bounds = section.getBoundingClientRect()
+              return bounds.top <= 160 && bounds.bottom > 64
+            })
+        sectionLinks.forEach(({ link }) => {
+          if (link === active?.link) {
+            link.setAttribute('aria-current', 'location')
+          } else {
+            link.removeAttribute('aria-current')
+          }
+        })
       }
 
       updateScrollState()
       window.addEventListener('scroll', updateScrollState, { passive: true })
+      window.addEventListener('resize', updateScrollState)
 
       const setMenuOpen = (open: boolean) => {
         header.dataset.menuOpen = String(open)
@@ -131,28 +164,9 @@ const isAnimalPage =
 
       desktop.addEventListener('change', closeMenu)
 
-      const animals = document.querySelector<HTMLElement>('#animais')
-      const animalsLink = navigation.querySelector<HTMLAnchorElement>(
-        'a[href="/#animais"]'
-      )
-      const observer =
-        animals && animalsLink
-          ? new IntersectionObserver(
-              ([entry]) => {
-                if (entry.isIntersecting) {
-                  animalsLink.setAttribute('aria-current', 'location')
-                } else {
-                  animalsLink.removeAttribute('aria-current')
-                }
-              },
-              { rootMargin: '-64px 0px -40% 0px' }
-            )
-          : undefined
-      if (animals) observer?.observe(animals)
-
       return () => {
-        observer?.disconnect()
         window.removeEventListener('scroll', updateScrollState)
+        window.removeEventListener('resize', updateScrollState)
         desktop.removeEventListener('change', closeMenu)
       }
     }
@@ -269,7 +283,7 @@ const isAnimalPage =
     display: none;
   }
 
-  @media (min-width: 48rem) {
+  @media (min-width: 64rem) {
     .topbar[data-scrolled='true'] .brand img {
       transform: scale(calc(48 / 108));
     }
@@ -295,7 +309,7 @@ const isAnimalPage =
     }
   }
 
-  @media (max-width: 47.999rem) {
+  @media (max-width: 63.999rem) {
     .topbar {
       max-height: 100svh;
       overflow-y: auto;

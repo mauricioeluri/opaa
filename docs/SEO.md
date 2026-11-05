@@ -6,8 +6,7 @@ pesquisas no Google.
 
 ## Onde alterar
 
-- `src/config/site.ts`: título, descrição, endereço, horários e redes sociais.
-- `src/data/api.json`, em `organization`: telefone e e-mail.
+- `src/config/site.ts`: título, descrição, contatos, endereço, horários e redes sociais.
 - `src/config/seo.ts`: indexação e rotas do sitemap.
 - Páginas dos animais disponíveis entram automaticamente no sitemap.
 - `src/components/SEO.astro`: implementação dos metadados.

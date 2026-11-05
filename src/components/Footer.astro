@@ -2,15 +2,13 @@
 import { Mail, MapPin } from '@lucide/astro'
 import BrandIcon from './BrandIcon.astro'
 import { site } from '../config/site'
-import { getOrganization } from '../lib/api'
 import { formatPhone } from '../lib/format-phone'
 import { getGoogleMapsUrl } from '../lib/google-maps'
 import { getSocialLinks } from '../lib/social-links'
 import { getWhatsAppUrl } from '../lib/whatsapp'
 
-const organization = await getOrganization()
-const whatsappUrl = getWhatsAppUrl(organization.phone)
-const formattedPhone = formatPhone(organization.phone)
+const whatsappUrl = getWhatsAppUrl(site.phone)
+const formattedPhone = formatPhone(site.phone)
 const formattedAddress = `${site.address.streetAddress}, ${site.address.addressLocality} - ${site.address.addressRegion}`
 const mapsUrl = getGoogleMapsUrl(
   `${formattedAddress}, ${site.address.addressCountry}`
@@ -51,9 +49,9 @@ const socialLinks = getSocialLinks(site.facebook, site.instagram).map(
             </a>
           </li>
           <li>
-            <a href={`mailto:${organization.email}`}>
+            <a href={`mailto:${site.email}`}>
               <Mail size={18} aria-hidden="true" />
-              <span>{organization.email}</span>
+              <span>{site.email}</span>
             </a>
           </li>
           <li>
@@ -117,6 +115,10 @@ const socialLinks = getSocialLinks(site.facebook, site.instagram).map(
     max-width: 1120px;
     margin-inline: auto;
     padding: 48px 24px 20px;
+  }
+
+  :global(body:has(.animal-notice)) .container {
+    padding-bottom: calc(88px + env(safe-area-inset-bottom));
   }
 
   .columns {
@@ -252,7 +254,8 @@ const socialLinks = getSocialLinks(site.facebook, site.instagram).map(
 
   @media (max-width: 35rem) {
     .container {
-      padding: 32px 16px 20px;
+      padding-top: 32px;
+      padding-inline: 16px;
     }
 
     .bottom {

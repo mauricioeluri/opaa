@@ -3,6 +3,7 @@
 @import '@fontsource/lilita-one/latin-400.css';
 
 :root {
+  --section-gap: clamp(48px, 6vw, 72px);
   --color-primary: #176b42;
   --color-primary-hover: #105333;
   --color-soft: #edf4ee;

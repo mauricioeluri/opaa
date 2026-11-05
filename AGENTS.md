@@ -57,7 +57,7 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
 | `src/lib/`         | Funções simples de consulta ao conteúdo                   |
 | `src/config/`      | Configuração compartilhada, incluindo SEO                 |
 | `public/branding/` | Logos oficiais, favicons e ícone Apple                    |
-| `public/api/`      | Mídias de animais, blog e produtos recebidas da API       |
+| `public/api/`      | Mídias de animais, histórias, blog e produtos do conteúdo |
 | `public/images/`   | Imagens próprias do site, incluindo slides, Pix e 404     |
 | `public/`          | Arquivos servidos diretamente, sem processamento          |
 
@@ -133,14 +133,19 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   evitar deslocamentos de layout.
 - Usar links para navegação e botões para ações. Não criar links sem destino,
   controles sem função ou mensagens de sucesso sem uma ação concluída.
-- Usar `organization` em `src/data/api.json`, via `getOrganization()`, como única
-  fonte de telefone, e-mail e chave Pix. `phone` é o
-  número internacional usado para chamadas e WhatsApp; URLs são montadas pelo site.
-  Manter nome, descrição de SEO, endereço, horários, título, slogan e perfis das redes sociais em
-  `src/config/site.ts`, sem cópias na API. Referenciar logos e ícones diretamente
-  nos componentes. Os slides iniciais ficam em `site.heroSlides`, com imagem,
-  legenda e texto alternativo; não duplicar esses dados nos componentes. Não incluir
-  mensalidade ou QR Code Pix na API. Novos campos exigem necessidade concreta.
+- Centralizar contatos, Pix, dados institucionais, SEO, endereço, horários e redes
+  sociais em `site`, de `src/config/site.ts`, sem cópias na API. `phone` é o número
+  internacional usado nos links de chamadas e WhatsApp; `email` e `pixKey` são
+  campos separados. Slides ficam em `site.heroSlides`, com imagem, legenda e alt.
+  Referenciar logos e ícones diretamente nos componentes. Não incluir mensalidade
+  ou QR Code Pix na API. Novos campos exigem necessidade concreta.
+- Posts do blog ficam em `posts`, identificados pelo `slug`, sem `public_id` ou
+  `expires_at`. Não aplicar essa regra aos identificadores dos animais.
+- Histórias ficam em `stories`, sem identificador, com `name`, `description`,
+  `published_at`, `afterImage` obrigatória e `beforeImage` como caminho ou `null`.
+  O site gera o alt com nome e foto atual/anterior. A home mostra até seis fotos
+  atuais; `/historias-felizes/` reúne todas por data decrescente, sem carrossel ou
+  páginas individuais. Preservar o layout de papel aprovado.
 - Centralizar contatos e textos compartilhados quando reutilizados. Não criar
   sistema de configuração ou editor para cada informação.
 - Animais não têm campo `title`. Sem nome, usar `name: null`. A apresentação
@@ -166,9 +171,11 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   recentemente, por `published_at` decrescente. Sem disponíveis, ocultar a seção
   inteira. Não limitar a
   consulta compartilhada `getAllAnimals()`, usada pelas demais páginas.
-- Comunicados ficam em `posts`, com `category: 'notice'`, `isPinned` booleano e
-  `images: []`. Na home, exibir no máximo quatro: fixados primeiro e data de
-  publicação decrescente dentro de cada grupo. Sem comunicados, ocultar a seção.
+- Comunicados ficam em `notices`, separados dos posts do blog, com apenas `title`,
+  `body`, `published_at` e `isPinned` booleano. Não têm imagens, identificadores,
+  categorias, prazo de validade ou páginas individuais. Na home, exibir no máximo
+  seis: fixados primeiro e data decrescente dentro de cada grupo. Sem comunicados,
+  ocultar a seção.
   Exibir o corpo em texto escapado, com abertura nativa por `details`/`summary`.
   Datas sem horário usam `AAAA-MM-DD` e são exibidas sem deslocamento de fuso.
 
@@ -176,17 +183,6 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
 
 As instruções do README para executar comandos de revisão e publicar são
 destinadas à equipe humana; não autorizam o agente a ignorar as restrições abaixo.
-
-Scripts disponíveis para o usuário:
-
-| Comando          | Finalidade                                             |
-| ---------------- | ------------------------------------------------------ |
-| `pnpm dev`       | Iniciar desenvolvimento local                          |
-| `pnpm build`     | Gerar o site estático em `dist/`                       |
-| `pnpm preview`   | Conferir localmente o site gerado                      |
-| `pnpm format`    | Formatar arquivos                                      |
-| `pnpm lint`      | Executar ESLint com correções automáticas              |
-| `pnpm check-all` | Executar lint, formatação e verificação de tipos Astro |
 
 - Não executar `check-all`, lint ou formatação, inclusive em modo de verificação
   ou chamando os executáveis diretamente. O usuário executa essas rotinas.

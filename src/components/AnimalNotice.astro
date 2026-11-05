@@ -1,0 +1,198 @@
+---
+import { ArrowUpRight, Megaphone, Search, ShieldAlert, X } from '@lucide/astro'
+import { site } from '../config/site'
+import { getWhatsAppUrl } from '../lib/whatsapp'
+
+const reportsUrl = getWhatsAppUrl(
+  site.phone,
+  'Oi, pessoal! Gostaria de informar uma situação de maus-tratos a um animal.'
+)
+const lostAnimalUrl = getWhatsAppUrl(
+  site.phone,
+  'Oi, pessoal! Gostaria de avisar sobre um animal perdido ou encontrado.'
+)
+---
+
+<details class="animal-notice">
+  <summary class="button notice-trigger">
+    <Megaphone size={20} aria-hidden="true" />
+    Avisar a OPAA
+  </summary>
+  <section class="notice-options" aria-labelledby="notice-options-title">
+    <header>
+      <h3 id="notice-options-title">O que você quer informar?</h3>
+      <button
+        class="close-options"
+        type="button"
+        aria-label="Fechar opções"
+        hidden
+      >
+        <X size={20} aria-hidden="true" />
+      </button>
+    </header>
+    <a href={reportsUrl} target="_blank" rel="noopener noreferrer">
+      <ShieldAlert size={18} aria-hidden="true" />
+      <span>Informar maus-tratos</span>
+      <ArrowUpRight size={18} aria-hidden="true" />
+    </a>
+    <a href={lostAnimalUrl} target="_blank" rel="noopener noreferrer">
+      <Search size={18} aria-hidden="true" />
+      <span>Animal perdido ou encontrado</span>
+      <ArrowUpRight size={18} aria-hidden="true" />
+    </a>
+    <p>O atendimento será pelo WhatsApp.</p>
+  </section>
+</details>
+
+<script>
+  import { onPageLoad } from '../lib/page-lifecycle'
+
+  onPageLoad(() => {
+    const notice = document.querySelector<HTMLDetailsElement>('.animal-notice')
+    const trigger = notice?.querySelector<HTMLElement>('summary')
+    const closeButton =
+      notice?.querySelector<HTMLButtonElement>('.close-options')
+    if (!notice || !trigger || !closeButton) return
+
+    const close = (restoreFocus = false) => {
+      notice.open = false
+      if (restoreFocus) trigger.focus({ preventScroll: true })
+    }
+    const onPointerDown = (event: PointerEvent) => {
+      if (event.target instanceof Node && !notice.contains(event.target))
+        close()
+    }
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && notice.open) {
+        event.preventDefault()
+        close(true)
+      }
+    }
+
+    closeButton.hidden = false
+    closeButton.addEventListener('click', () => close(true))
+    notice.addEventListener('focusout', (event) => {
+      if (
+        event.relatedTarget instanceof Node &&
+        !notice.contains(event.relatedTarget)
+      ) {
+        close()
+      }
+    })
+    notice.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => close())
+    })
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+      close()
+    }
+  })
+</script>
+
+<style>
+  .animal-notice {
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right));
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    z-index: 9;
+    max-width: calc(100% - 32px);
+  }
+
+  :global(body:has(dialog[open])) .animal-notice {
+    visibility: hidden;
+  }
+
+  .notice-trigger {
+    list-style: none;
+    border-radius: 24px;
+    box-shadow:
+      0 6px 24px color-mix(in srgb, var(--color-text) 24%, transparent),
+      0 2px 6px color-mix(in srgb, var(--color-text) 16%, transparent);
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .notice-options {
+    box-sizing: border-box;
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 12px);
+    width: 310px;
+    max-width: calc(100vw - 32px);
+    max-height: calc(100dvh - 104px - env(safe-area-inset-bottom));
+    overflow-y: auto;
+    padding: 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    background: var(--color-surface);
+    box-shadow: 0 6px 24px
+      color-mix(in srgb, var(--color-text) 12%, transparent);
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 16px;
+  }
+
+  .close-options:not([hidden]) {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--color-muted);
+    cursor: pointer;
+  }
+
+  .notice-options a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 54px;
+    padding: 8px 4px;
+    color: var(--color-primary);
+    font-size: 15px;
+    text-decoration: none;
+  }
+
+  a + a {
+    border-top: 1px solid var(--color-border);
+  }
+
+  a span {
+    flex: 1;
+  }
+
+  .animal-notice :global(svg) {
+    flex-shrink: 0;
+  }
+
+  .notice-options a:hover,
+  .close-options:hover {
+    background: var(--color-soft);
+  }
+
+  p {
+    margin: 10px 0 0;
+    color: var(--color-muted);
+    font-size: 12px;
+  }
+</style>

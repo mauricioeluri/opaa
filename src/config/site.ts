@@ -2,6 +2,9 @@ export const site = {
   name: 'OPAA Alegrete',
   institution: 'Organização de Proteção Animal do Alegrete – ONG OPAA',
   cnpj: '10.825.728/0001-06',
+  email: 'alegreteongopaa@gmail.com',
+  phone: '+5555999844045',
+  pixKey: 'alegreteongopaa@gmail.com',
   description:
     'Desde março de 2009, a OPAA atua pela proteção animal em Alegrete, RS, com resgates, castração e vacinação. Ajude como sócio, voluntário ou lar temporário.',
   address: {

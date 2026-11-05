@@ -1,7 +1,6 @@
 ---
 import { indexingEnabled } from '../config/seo'
 import { site } from '../config/site'
-import { getOrganization } from '../lib/api'
 import { getSocialLinks } from '../lib/social-links'
 
 interface Props {
@@ -11,7 +10,6 @@ interface Props {
   image?: string
   imageAlt?: string
 }
-const organization = await getOrganization()
 const {
   title = site.title,
   description = site.description,
@@ -32,8 +30,8 @@ const schema = {
   '@type': 'NGO',
   name: site.name,
   description: site.description,
-  telephone: organization.phone,
-  email: organization.email,
+  telephone: site.phone,
+  email: site.email,
   address: {
     '@type': 'PostalAddress',
     ...site.address,

@@ -5,7 +5,7 @@ import BrandIcon from '../../components/BrandIcon.astro'
 import PhotoSlider from '../../components/PhotoSlider.astro'
 import { site } from '../../config/site'
 import SiteLayout from '../../layouts/SiteLayout.astro'
-import { getAvailableAnimals, getOrganization } from '../../lib/api'
+import { getAvailableAnimals } from '../../lib/api'
 import { animalAgeGroups, getAnimalLabel } from '../../lib/animal-label'
 import { getWhatsAppUrl } from '../../lib/whatsapp'
 
@@ -19,7 +19,6 @@ export async function getStaticPaths() {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>
 
 const { animal } = Astro.props
-const organization = await getOrganization()
 const label = getAnimalLabel(animal)
 const title = animal.name?.trim() || 'Ainda sem nome'
 const animalTypes: Record<string, string> = {
@@ -97,7 +96,7 @@ const details = [
         <p class="description">{animal.description}</p>
         <a
           class="button"
-          href={getWhatsAppUrl(organization.phone, contactMessage)}
+          href={getWhatsAppUrl(site.phone, contactMessage)}
           target="_blank"
           rel="noopener noreferrer"
         >

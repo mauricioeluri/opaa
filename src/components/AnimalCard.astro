@@ -1,4 +1,5 @@
 ---
+import { Cat, Dog, PawPrint } from '@lucide/astro'
 import type { getAllAnimals } from '../lib/api'
 import { getAnimalLabel } from '../lib/animal-label'
 import PhotoSlider from './PhotoSlider.astro'
@@ -12,6 +13,8 @@ const { animal, catalog = false } = Astro.props
 const Heading = catalog ? 'h2' : 'h3'
 const label = getAnimalLabel(animal)
 const images = animal.images.slice(0, 2)
+const AnimalIcon =
+  animal.type === 'dog' ? Dog : animal.type === 'cat' ? Cat : PawPrint
 ---
 
 <article
@@ -21,6 +24,12 @@ const images = animal.images.slice(0, 2)
   data-age-group={animal.ageGroup}
   data-animal-type={animal.type}
 >
+  <AnimalIcon
+    class="animal-icon"
+    size={72}
+    stroke-width={1.25}
+    aria-hidden="true"
+  />
   <PhotoSlider
     label={label}
     variant="animal"
@@ -42,6 +51,7 @@ const images = animal.images.slice(0, 2)
 <style>
   .animal {
     position: relative;
+    isolation: isolate;
     display: grid;
     grid-template-columns: 160px minmax(0, 1fr);
     align-items: center;
@@ -51,6 +61,18 @@ const images = animal.images.slice(0, 2)
     border-radius: 16px;
     background: var(--color-soft);
     cursor: pointer;
+  }
+
+  .animal :global(.animal-icon) {
+    position: absolute;
+    z-index: -1;
+    right: 16px;
+    bottom: 12px;
+    color: var(--color-primary);
+    opacity: 0.08;
+    transform: rotate(-14deg);
+    pointer-events: none;
+    user-select: none;
   }
 
   .animal[hidden] {
