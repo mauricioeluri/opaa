@@ -20,7 +20,7 @@ export const site = {
     { dayOfWeek: ['Saturday', 'Sunday'] },
   ],
   title: 'OPAA Alegrete | Proteção animal em Alegrete, RS',
-  slogan: 'Juntos pela proteção animal.',
+  slogan: 'Juntos pela proteção animal',
   facebook: 'ong.opaa',
   instagram: 'ong.opaa',
   heroSlides: [

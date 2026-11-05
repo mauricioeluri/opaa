@@ -124,6 +124,11 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   de identidade solicitadas pelo usuário.
 - Manter responsividade, HTML semântico, navegação por teclado, foco visível, links
   descritivos e textos alternativos relevantes nas imagens.
+- Não usar ponto final em títulos, chamadas curtas, slogans e botões. Manter a
+  pontuação normal em parágrafos, descrições e orientações, além da interrogação
+  em perguntas. Não substituir os pontos removidos por exclamações.
+  Ao adaptar chamadas com mais de uma frase, reescrevê-las para preservar o
+  sentido e a fluidez; não remover mecanicamente pontuação necessária à leitura.
 - Preservar proporções de imagens e informar dimensões quando conhecidas para
   evitar deslocamentos de layout.
 - Usar links para navegação e botões para ações. Não criar links sem destino,
@@ -161,6 +166,11 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   recentemente, por `published_at` decrescente. Sem disponíveis, ocultar a seção
   inteira. Não limitar a
   consulta compartilhada `getAllAnimals()`, usada pelas demais páginas.
+- Comunicados ficam em `posts`, com `category: 'notice'`, `isPinned` booleano e
+  `images: []`. Na home, exibir no máximo quatro: fixados primeiro e data de
+  publicação decrescente dentro de cada grupo. Sem comunicados, ocultar a seção.
+  Exibir o corpo em texto escapado, com abertura nativa por `details`/`summary`.
+  Datas sem horário usam `AAAA-MM-DD` e são exibidas sem deslocamento de fuso.
 
 ## Comandos e validação
 

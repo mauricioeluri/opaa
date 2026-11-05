@@ -89,6 +89,16 @@ animais e os exemplos de publicação e produto ainda são demonstrativos.
 Telefone, e-mail e Pix ficam em `organization` no JSON. Os perfis das redes sociais
 ficam em `src/config/site.ts`, compartilhados pelo footer e pelo SEO.
 
+## Comunicados e alertas
+
+Ficam em `posts`, no JSON, com `category: "notice"` e sem imagens (`images: []`).
+`isPinned: true` fixa um aviso no topo. A home mostra até quatro: primeiro os
+fixados e depois os demais, do mais recente para o mais antigo em cada grupo.
+A data aparece na lista e o texto completo abre ao clicar, inclusive sem JavaScript.
+O link para ver todos aponta para `#` até a criação da página de comunicados.
+As datas dos comunicados usam `AAAA-MM-DD`, sem inventar horários. `expires_at`
+permanece `null` nos registros enviados, pois não foi informado prazo de validade.
+
 ## Comandos
 
 | Comando          | Finalidade                                             |

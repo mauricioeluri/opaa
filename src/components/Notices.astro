@@ -1,0 +1,196 @@
+---
+import { ArrowUpRight, ChevronDown, Megaphone, Pin } from '@lucide/astro'
+import { getNotices } from '../lib/api'
+
+const notices = (await getNotices()).slice(0, 4)
+const dateFormatter = new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' })
+---
+
+{notices.length > 0 && (
+  <section class="notices" id="comunicados" aria-labelledby="notices-title">
+    <header>
+      <div>
+        <p class="eyebrow">Para a comunidade</p>
+        <h2 id="notices-title">Comunicados e alertas</h2>
+      </div>
+      <a
+        class="view-all"
+        href="#"
+        aria-label="Ver todos os comunicados e alertas"
+      >
+        Ver todos
+        <ArrowUpRight size={18} aria-hidden="true" />
+      </a>
+    </header>
+    <div class="notice-list">
+      {notices.map((notice) => (
+        <details>
+          <summary>
+            <span class="notice-icon">
+              {notice.isPinned ? (
+                <Pin size={22} aria-label="Fixado" role="img" />
+              ) : (
+                <Megaphone size={22} aria-hidden="true" />
+              )}
+            </span>
+            <span class="notice-copy">
+              <span class="metadata">
+                <time datetime={notice.published_at}>
+                  {dateFormatter.format(new Date(notice.published_at))}
+                </time>
+              </span>
+              <span class="notice-title">{notice.title}</span>
+            </span>
+            <ChevronDown class="chevron" size={20} aria-hidden="true" />
+          </summary>
+          <p class="notice-body">{notice.body}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+)}
+
+<style>
+  .notices {
+    max-width: 1120px;
+    margin-inline: auto;
+    padding: 12px 24px 32px;
+  }
+
+  header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .eyebrow {
+    margin: 0 0 4px;
+    color: var(--color-primary);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+
+  h2 {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: clamp(24px, 3vw, 32px);
+  }
+
+  .notice-list {
+    padding-inline: 24px;
+    border-left: 4px solid var(--color-primary);
+    border-radius: 20px;
+    background: var(--color-soft);
+  }
+
+  details + details {
+    border-top: 1px solid var(--color-border);
+  }
+
+  summary {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr) 20px;
+    align-items: center;
+    gap: 16px;
+    min-height: 56px;
+    padding-block: 10px;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .notice-icon {
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-primary);
+  }
+
+  .metadata {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-right: 12px;
+    vertical-align: middle;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--color-muted);
+  }
+
+  .notice-title {
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .notice-copy,
+  .notice-body {
+    overflow-wrap: anywhere;
+  }
+
+  .view-all {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 6px;
+    min-height: 44px;
+    color: var(--color-primary);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    text-underline-offset: 4px;
+  }
+
+  .view-all:hover {
+    text-decoration: underline;
+  }
+
+  .view-all :global(svg) {
+    flex-shrink: 0;
+  }
+
+  summary :global(.chevron) {
+    color: var(--color-primary);
+    transition: transform 180ms ease;
+  }
+
+  details[open] summary :global(.chevron) {
+    transform: rotate(180deg);
+  }
+
+  .notice-body {
+    margin: 0;
+    padding: 0 0 24px 40px;
+    white-space: pre-line;
+  }
+
+  @media (max-width: 35rem) {
+    .notices {
+      padding: 12px 16px 32px;
+    }
+
+    .notice-list {
+      padding-inline: 16px;
+    }
+
+    summary {
+      gap: 10px;
+    }
+
+    .notice-body {
+      padding-inline: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    summary :global(.chevron) {
+      transition: none;
+    }
+  }
+</style>

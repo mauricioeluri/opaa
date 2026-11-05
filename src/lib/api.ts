@@ -13,3 +13,13 @@ export async function getAvailableAnimals() {
     .filter((animal) => animal.available)
     .sort((a, b) => Date.parse(b.published_at) - Date.parse(a.published_at))
 }
+
+export async function getNotices() {
+  return data.posts
+    .filter((post) => post.category === 'notice')
+    .sort(
+      (a, b) =>
+        Number(b.isPinned) - Number(a.isPinned) ||
+        Date.parse(b.published_at) - Date.parse(a.published_at)
+    )
+}
