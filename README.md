@@ -40,12 +40,19 @@ extensões recomendadas pelo projeto.
 Um arquivo `.astro` reúne HTML, CSS e preparação dos dados entre `---`.
 Scripts interativos usam `onPageLoad()` de `src/lib/page-lifecycle.ts` para
 inicializar após cada navegação e encerrar timers ou listeners globais ao sair.
-Arquivos de `public/` são acessados sem esse prefixo: `/animals/foto.webp`.
-As fotos do slider inicial são `public/landing-page/slide-1.jpg` e `slide-2.jpg`.
+Arquivos de `public/` são acessados sem esse prefixo: `/api/animals/foto.webp`.
+Mídias da API ficam em `public/api/animals`, `public/api/blog` e `public/api/products`.
+Imagens próprias do site ficam juntas em `public/images/`.
+As fotos do slider inicial são `public/images/slide-1.jpg` e `slide-2.jpg`.
 Para trocá-las, substitua os arquivos mantendo os nomes. Confira também se as
 legendas e os textos alternativos em `heroSlides`, no `src/config/site.ts`,
 continuam corretos. Cada slide reúne `src` (imagem), `caption` (legenda) e `alt`
 (descrição acessível).
+
+Os botões de contribuição abrem `PixModal.astro`, compartilhado entre as páginas.
+A chave vem de `organization.pix`; o QR Code fica em
+`public/images/pix-qr-code.webp`. Sem JavaScript, os links levam às informações
+Pix exibidas no fim da página.
 
 ## Dados dos animais
 
@@ -61,7 +68,7 @@ continuam corretos. Cada slide reúne `src` (imagem), `caption` (legenda) e `alt
   Na página individual, o título é só o nome ou “Ainda sem nome”.
 - Os cards mostram até duas fotos; a página individual permite ver todas.
   Sem foto, a fonte deve enviar
-  `["/animals/default.webp"]`; o site não escolhe a imagem padrão.
+  `["/api/animals/default.webp"]`; o site não escolhe a imagem padrão.
 - Sem nome, use `name: null`, em vez de uma string vazia. `public_id` identifica
   a URL; a mensagem do WhatsApp contém um convite para conversar e o link do animal.
   Use fotos reais, sem filtros de IA.

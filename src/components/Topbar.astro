@@ -60,9 +60,14 @@ const isAnimalPage =
             <a href="#">Loja solidária</a>
           </li>
           <li>
-            <a class="button help-link" href="/#doacoes">
+            <button class="button help-link" type="button" data-open-pix hidden>
               Quero ajudar
-            </a>
+            </button>
+            <noscript>
+              <a class="button help-link" href="#contribuir">
+                Quero ajudar
+              </a>
+            </noscript>
           </li>
         </ul>
       </div>
@@ -117,7 +122,10 @@ const isAnimalPage =
       })
 
       navigation.addEventListener('click', (event) => {
-        if (event.target instanceof Element && event.target.closest('a'))
+        if (
+          event.target instanceof Element &&
+          event.target.closest('a, [data-open-pix]')
+        )
           closeMenu()
       })
 

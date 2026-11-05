@@ -5,6 +5,7 @@ import { ClientRouter } from 'astro:transitions'
 import NavigationProgress from '../components/NavigationProgress.astro'
 import SEO from '../components/SEO.astro'
 import Topbar from '../components/Topbar.astro'
+import PixModal from '../components/PixModal.astro'
 import Footer from '../components/Footer.astro'
 
 type Props = ComponentProps<typeof SEO>
@@ -27,6 +28,7 @@ type Props = ComponentProps<typeof SEO>
     <Topbar />
     <slot />
     <Footer />
+    <PixModal />
   </body>
 </html>
 
@@ -46,6 +48,10 @@ type Props = ComponentProps<typeof SEO>
   body {
     box-sizing: border-box;
     padding-top: 64px;
+  }
+
+  html:has(dialog[open]) {
+    overflow: hidden;
   }
 
   @media (max-width: 47.999rem) {

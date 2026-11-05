@@ -21,7 +21,10 @@
       "vaccinations": null,
       "description": "Amigos, essa filhotinha linda procura uma família! Quem pode oferecer um lar com carinho e cuidado para ela? Fale com a OPAA!",
       "available": true,
-      "images": ["/animals/jsmxV48OYOJe.webp", "/animals/CTLPGIUPXU-u.webp"],
+      "images": [
+        "/api/animals/jsmxV48OYOJe.webp",
+        "/api/animals/CTLPGIUPXU-u.webp"
+      ],
       "type": "dog"
     },
     {
@@ -37,7 +40,10 @@
       "vaccinations": "Primeira dose da vacina importada aplicada.",
       "description": "Bento tem 2 meses, porte pequeno e adora brincar! É carinhoso, curioso e já recebeu a primeira dose da vacina importada. Quem vai dar um lar para esse pequeno?",
       "available": true,
-      "images": ["/animals/UuK8K1-lz0Vx.webp", "/animals/etiDluvlxc2H.webp"],
+      "images": [
+        "/api/animals/UuK8K1-lz0Vx.webp",
+        "/api/animals/etiDluvlxc2H.webp"
+      ],
       "type": "dog"
     }
   ],

@@ -1,8 +1,5 @@
 ---
-import { Copy, Heart } from '@lucide/astro'
-import { getOrganization } from '../lib/api'
-
-const organization = await getOrganization()
+import { Heart } from '@lucide/astro'
 ---
 
 <section class="donation" id="doacoes" aria-labelledby="donation-title">
@@ -11,73 +8,18 @@ const organization = await getOrganization()
       Doações e vendas ajudam a manter nosso trabalho pelos animais.
     </h2>
 
-    <details class="pix">
-      <summary class="button">
+    <button class="button" type="button" data-open-pix hidden>
+      Contribuir com Pix
+      <Heart size={18} aria-hidden="true" />
+    </button>
+    <noscript>
+      <a class="button" href="#contribuir">
         Contribuir com Pix
         <Heart size={18} aria-hidden="true" />
-      </summary>
-      <p>Use a chave abaixo no aplicativo do seu banco e escolha o valor.</p>
-      <p class="pix-label">Chave Pix (e-mail)</p>
-      <p class="pix-key" tabindex="-1">
-        {organization.pix.key}
-      </p>
-      <button
-        class="button copy-key"
-        type="button"
-        aria-live="polite"
-        aria-atomic="true"
-        hidden
-      >
-        <Copy size={18} aria-hidden="true" />
-        <span class="copy-label">Copiar chave Pix</span>
-      </button>
-    </details>
+      </a>
+    </noscript>
   </div>
 </section>
-
-<script>
-  import { onPageLoad } from '../lib/page-lifecycle'
-
-  onPageLoad(() => {
-    let feedbackTimer: number | undefined
-    const pix = document.querySelector<HTMLDetailsElement>('.pix')
-    const copyButton = pix?.querySelector<HTMLButtonElement>('.copy-key')
-    const keyElement = pix?.querySelector<HTMLElement>('.pix-key')
-    const key = keyElement?.textContent?.trim()
-    const copyLabel = copyButton?.querySelector<HTMLElement>('.copy-label')
-
-    pix?.addEventListener('toggle', () => {
-      if (pix.open) {
-        const focusTarget =
-          copyButton && !copyButton.hidden ? copyButton : keyElement
-        focusTarget?.focus({ preventScroll: true })
-      }
-    })
-
-    if (copyButton && copyLabel && key && navigator.clipboard) {
-      copyButton.hidden = false
-      copyButton.addEventListener('click', async () => {
-        copyButton.disabled = true
-        copyLabel.textContent = 'Copiar chave Pix'
-
-        try {
-          await navigator.clipboard.writeText(key)
-          if (!copyButton.isConnected) return
-          copyLabel.textContent = 'Chave Pix copiada'
-          feedbackTimer = window.setTimeout(() => {
-            copyLabel.textContent = 'Copiar chave Pix'
-            copyButton.disabled = false
-          }, 3000)
-        } catch {
-          copyLabel.textContent = 'Selecione a chave e copie manualmente'
-          copyButton.disabled = false
-        }
-      })
-    }
-
-    return () => window.clearTimeout(feedbackTimer)
-  })
-</script>
 
 <style>
   .donation {
@@ -104,43 +46,14 @@ const organization = await getOrganization()
     min-width: 0;
   }
 
-  p {
-    margin: 0;
-    font-size: 14px;
-  }
-
   h2 {
     margin: 0;
     color: var(--color-primary);
     font-size: 24px;
   }
 
-  summary {
+  .button {
     width: 100%;
-    list-style: none;
-  }
-
-  summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .pix[open] > summary {
-    display: none;
-  }
-
-  .pix-label {
-    margin-top: 12px;
-    font-weight: 700;
-  }
-
-  .pix-key {
-    overflow-wrap: anywhere;
-    user-select: all;
-  }
-
-  .copy-key {
-    width: 100%;
-    margin-top: 12px;
   }
 
   @media (max-width: 62rem) {

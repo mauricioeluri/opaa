@@ -57,6 +57,8 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
 | `src/lib/`         | Funções simples de consulta ao conteúdo                   |
 | `src/config/`      | Configuração compartilhada, incluindo SEO                 |
 | `public/branding/` | Logos oficiais, favicons e ícone Apple                    |
+| `public/api/`      | Mídias de animais, blog e produtos recebidas da API       |
+| `public/images/`   | Imagens próprias do site, incluindo slides, Pix e 404     |
 | `public/`          | Arquivos servidos diretamente, sem processamento          |
 
 - Usar PascalCase para componentes e layouts Astro; kebab-case para demais
@@ -85,7 +87,9 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
 - Adoção, associação, voluntariado, lar temporário e encomendas encaminham aos
   contatos confirmados da ONG. Não inventar telefones, endereços ou links.
 - Pix usa informações fixas confirmadas. Não simular confirmação de pagamento.
-- A seção de doações mostra apenas o convite e a chave Pix. Não adicionar metas,
+- A seção de doações abre o modal compartilhado com a topbar, com chave Pix e
+  QR Code em `public/images/pix-qr-code.webp`. O convite pode ser para uma ajuda
+  pontual ou mensal, sem cobrança automática. Não adicionar metas,
   valores arrecadados ou acompanhamento de pagamentos sem nova solicitação.
 - Não acrescentar checkout, agendamento, venda de números de rifas, controle
   financeiro, publicação em redes ou telas administrativas sem uma nova solicitação.
@@ -146,7 +150,7 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   Não presumir vacinação completa nem status de castração desconhecido. Preferir
   a inferência de tipos do JSON. Os cards exibem até duas
   fotos de `images`; a página individual permite ver todas. Sem foto, a fonte
-  informa `/animals/default.webp`. Não escolher imagem
+  informa `/api/animals/default.webp`. Não escolher imagem
   padrão nem completar dados desconhecidos no site.
 - A API informa o tipo em `type`: `dog`, `cat` ou `other`. A interface apresenta
   cães, gatos e outros, sem limitar textos e listagens somente a cães.

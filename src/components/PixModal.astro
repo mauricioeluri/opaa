@@ -1,0 +1,403 @@
+---
+import { Copy, Heart, PawPrint, X } from '@lucide/astro'
+import { getOrganization } from '../lib/api'
+
+const organization = await getOrganization()
+---
+
+<dialog
+  id="contribuir"
+  aria-labelledby="pix-title"
+  aria-describedby="pix-intro"
+>
+  <form method="dialog" class="close-form">
+    <button type="submit" class="close-button" aria-label="Fechar" autofocus>
+      <X size={22} aria-hidden="true" />
+    </button>
+  </form>
+  <div class="modal-content">
+    <div class="invitation">
+      <span class="heart">
+        <Heart size={28} aria-hidden="true" />
+      </span>
+      <p class="eyebrow">Seu carinho vira cuidado.</p>
+      <h2 id="pix-title">
+        Uma ajuda sua.
+        <br />
+        Muitas vidas acolhidas.
+      </h2>
+      <p id="pix-intro">
+        Sua doação vira alimento, cuidado e proteção para os animais.
+      </p>
+      <p class="frequency">
+        Pode ser hoje. Pode ser todo mês.
+        <span>
+          Agende um Pix recorrente no aplicativo do seu banco para contribuir
+          automaticamente todo mês, com o valor que escolher.
+        </span>
+      </p>
+      <PawPrint class="paw" size={140} stroke-width={1} aria-hidden="true" />
+    </div>
+
+    <section class="payment" aria-labelledby="pix-payment-title">
+      <h3 id="pix-payment-title">Ajude com Pix</h3>
+      <p class="instructions">
+        Escaneie o QR Code ou copie a chave no aplicativo do seu banco.
+      </p>
+      <img
+        class="qr-code"
+        src="/images/pix-qr-code.webp"
+        alt="QR Code para contribuir com a OPAA por Pix"
+        width="1098"
+        height="1098"
+        loading="lazy"
+      />
+      <p class="key-label">Chave Pix (e-mail)</p>
+      <p class="pix-key" tabindex="-1">
+        {organization.pix.key}
+      </p>
+      <button class="button copy-key" type="button" hidden>
+        <Copy size={18} aria-hidden="true" />
+        <span class="copy-label">Copiar chave Pix</span>
+      </button>
+      <p class="copy-status" role="status" aria-live="polite"></p>
+      <p class="thanks">
+        Cada ajuda faz diferença. Obrigado por estar com eles!
+      </p>
+    </section>
+  </div>
+</dialog>
+
+<noscript>
+  <style is:inline>
+    #contribuir:not([open]) {
+      display: block;
+      position: static;
+      margin: 32px auto;
+      max-height: none;
+    }
+    #contribuir .close-form {
+      display: none;
+    }
+  </style>
+</noscript>
+
+<script>
+  import { onPageLoad } from '../lib/page-lifecycle'
+
+  onPageLoad(() => {
+    const dialog = document.querySelector<HTMLDialogElement>('#contribuir')
+    if (!dialog) return
+
+    let feedbackTimer: number | undefined
+    let opener: HTMLElement | undefined
+    const copyButton = dialog.querySelector<HTMLButtonElement>('.copy-key')
+    const copyLabel = dialog.querySelector<HTMLElement>('.copy-label')
+    const status = dialog.querySelector<HTMLElement>('.copy-status')
+    const keyElement = dialog.querySelector<HTMLElement>('.pix-key')
+    const key = keyElement?.textContent?.trim()
+    const resetCopy = () => {
+      window.clearTimeout(feedbackTimer)
+      if (copyButton) copyButton.disabled = false
+      if (copyLabel) copyLabel.textContent = 'Copiar chave Pix'
+      if (status) status.textContent = ''
+    }
+
+    document
+      .querySelectorAll<HTMLButtonElement>('[data-open-pix]')
+      .forEach((button) => {
+        button.hidden = false
+        button.addEventListener('click', () => {
+          opener = button
+          dialog.showModal()
+        })
+      })
+
+    dialog.addEventListener('close', () => {
+      resetCopy()
+      if (opener?.closest('nav')?.inert) {
+        document.querySelector<HTMLButtonElement>('.menu-toggle')?.focus()
+      } else {
+        opener?.focus({ preventScroll: true })
+      }
+    })
+    dialog.addEventListener('click', (event) => {
+      const bounds = dialog.getBoundingClientRect()
+      if (
+        event.target === dialog &&
+        (event.clientX < bounds.left ||
+          event.clientX > bounds.right ||
+          event.clientY < bounds.top ||
+          event.clientY > bounds.bottom)
+      ) {
+        dialog.close()
+      }
+    })
+
+    if (copyButton && copyLabel && status && key && navigator.clipboard) {
+      copyButton.hidden = false
+      copyButton.addEventListener('click', async () => {
+        copyButton.disabled = true
+        try {
+          await navigator.clipboard.writeText(key)
+          if (!dialog.isConnected || !dialog.open) return
+          copyLabel.textContent = 'Chave Pix copiada'
+          status.textContent = 'Agora cole a chave no aplicativo do seu banco.'
+          feedbackTimer = window.setTimeout(resetCopy, 3000)
+        } catch {
+          copyButton.disabled = false
+          status.textContent = 'Selecione a chave acima e copie manualmente.'
+          keyElement?.focus()
+        }
+      })
+    }
+
+    return () => {
+      window.clearTimeout(feedbackTimer)
+      if (dialog.open) dialog.close()
+    }
+  })
+</script>
+
+<style>
+  dialog {
+    box-sizing: border-box;
+    width: min(860px, calc(100% - 32px));
+    max-height: calc(100dvh - 32px);
+    padding: 0;
+    border: 0;
+    border-radius: 28px;
+    color: var(--color-text);
+    background: var(--color-surface);
+    box-shadow: 0 24px 80px
+      color-mix(in srgb, var(--color-text) 25%, transparent);
+    overflow: auto;
+  }
+
+  dialog::backdrop {
+    background: color-mix(in srgb, var(--color-text) 60%, transparent);
+    backdrop-filter: blur(5px);
+  }
+
+  dialog[open] {
+    animation: appear 200ms ease-out;
+  }
+
+  .modal-content {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+  }
+
+  .close-form {
+    position: sticky;
+    top: 12px;
+    z-index: 1;
+    height: 0;
+    margin: 0;
+    padding-right: 12px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .close-button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    color: var(--color-primary);
+    background: var(--color-surface);
+    cursor: pointer;
+  }
+
+  .close-button:hover {
+    background: var(--color-soft);
+  }
+
+  .invitation {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 44px 36px;
+    color: var(--color-surface);
+    background: var(--color-primary);
+  }
+
+  .heart {
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 32px;
+    border: 1px solid currentColor;
+    border-radius: 20px;
+    transform: rotate(-8deg);
+  }
+
+  .eyebrow {
+    margin: 0 0 12px;
+    font-weight: 700;
+  }
+
+  h2 {
+    margin: 0 0 24px;
+    font-size: clamp(30px, 4vw, 40px);
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .frequency {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+    font-weight: 700;
+  }
+
+  .frequency span {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .invitation :global(.paw) {
+    position: absolute;
+    right: -24px;
+    bottom: -20px;
+    z-index: -1;
+    opacity: 0.12;
+    transform: rotate(-18deg);
+  }
+
+  .payment {
+    min-width: 0;
+    padding: 44px 32px 24px;
+    text-align: center;
+  }
+
+  h3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 0 8px;
+    color: var(--color-primary);
+    font-size: 24px;
+  }
+
+  .instructions,
+  .key-label,
+  .thanks,
+  .copy-status {
+    font-size: 14px;
+  }
+
+  .instructions,
+  .thanks {
+    color: var(--color-muted);
+  }
+
+  .qr-code {
+    display: block;
+    width: min(224px, 100%);
+    height: auto;
+    margin: 20px auto;
+  }
+
+  .key-label {
+    margin-bottom: 8px;
+  }
+
+  .pix-key {
+    padding: 12px;
+    border: 1px dashed var(--color-border);
+    border-radius: 12px;
+    background: var(--color-soft);
+    overflow-wrap: anywhere;
+    user-select: all;
+  }
+
+  .copy-key {
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .copy-status {
+    min-height: 1.6em;
+    margin-top: 8px;
+    color: var(--color-primary);
+  }
+
+  .thanks {
+    margin-top: 16px;
+  }
+
+  @keyframes appear {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 47.999rem) {
+    dialog {
+      border-radius: 20px;
+    }
+
+    .modal-content {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .invitation {
+      padding: 24px;
+      font-size: 14px;
+    }
+
+    .heart {
+      display: none;
+    }
+
+    h2 {
+      margin-bottom: 16px;
+      padding-right: 16px;
+      font-size: 28px;
+    }
+
+    .frequency {
+      margin-top: 16px;
+      padding-top: 12px;
+    }
+
+    .payment {
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+    }
+
+    .key-label {
+      margin-top: 16px;
+    }
+
+    .qr-code {
+      order: 1;
+    }
+
+    .thanks {
+      order: 2;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    dialog[open] {
+      animation: none;
+    }
+  }
+</style>
