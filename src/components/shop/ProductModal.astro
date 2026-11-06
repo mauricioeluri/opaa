@@ -167,6 +167,15 @@ const contactUrl = getWhatsAppUrl(
         `[data-open-product="${product.public_id}"]`
       )
       if (!opener) return
+      opener.closest('.product-card')?.addEventListener('click', (event) => {
+        if (
+          event.defaultPrevented ||
+          !(event.target instanceof Element) ||
+          event.target.closest('a, button')
+        )
+          return
+        opener.click()
+      })
       const availableVariants = product.variants.filter(
         (variant) => variant.stock_quantity !== 0
       )

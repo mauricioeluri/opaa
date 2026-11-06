@@ -139,7 +139,8 @@ const contactUrl = getWhatsAppUrl(
     outline-offset: 4px;
   }
 
-  .product-card:has(.open-product:hover, .open-product:focus-visible) h3 {
+  .product-card:hover h3,
+  .product-card:has(.open-product:focus-visible) h3 {
     text-decoration: underline;
     text-underline-offset: 4px;
   }

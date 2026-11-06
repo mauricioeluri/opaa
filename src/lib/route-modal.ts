@@ -39,10 +39,12 @@ function syncWithUrl() {
   const current = currentModal()
   if (current) freezePage()
   modals.forEach(({ dialog }) => {
-    if (dialog === current?.dialog) {
-      if (!dialog.open) dialog.showModal()
-    } else if (dialog.open) dialog.close()
+    if (dialog !== current?.dialog && dialog.open) dialog.close()
   })
+  if (current && !current.dialog.open) {
+    current.dialog.scrollTop = 0
+    current.dialog.showModal()
+  }
   if (!current) unfreezePage()
 }
 
@@ -53,11 +55,16 @@ function handleHistory(event: Event) {
   } else unfreezePage()
 }
 
-export function openRouteModal(path: string, opener?: HTMLElement) {
+export function openRouteModal(
+  path: string,
+  opener?: HTMLElement,
+  replace = false
+) {
   const entry = modals.get(path)
   if (!entry) return false
-  entry.opener = opener ?? entry.opener
-  history.pushState({ ...history.state, routeModal: true }, '', path)
+  entry.opener = opener ?? (replace ? currentModal()?.opener : entry.opener)
+  if (replace) history.replaceState(history.state, '', path)
+  else history.pushState({ ...history.state, routeModal: true }, '', path)
   syncWithUrl()
   return true
 }

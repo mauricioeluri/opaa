@@ -3,7 +3,6 @@ import { Cat, Dog, PawPrint } from '@lucide/astro'
 import type { getAllAnimals } from '../../lib/api'
 import { getAnimalLabel } from '../../lib/animal-label'
 import PhotoSlider from '../PhotoSlider.astro'
-import AnimalModal from './AnimalModal.astro'
 
 interface Props {
   animal: Awaited<ReturnType<typeof getAllAnimals>>[number]
@@ -48,7 +47,6 @@ const AnimalIcon =
     <p class="description">{animal.description}</p>
   </div>
 </article>
-{catalog && <AnimalModal animal={animal} />}
 
 <script>
   import { onPageLoad } from '../../lib/page-lifecycle'
@@ -58,6 +56,15 @@ const AnimalIcon =
     document
       .querySelectorAll<HTMLAnchorElement>('.animal-link')
       .forEach((link) => {
+        link.closest('.animal')?.addEventListener('click', (event) => {
+          if (
+            event.defaultPrevented ||
+            !(event.target instanceof Element) ||
+            event.target.closest('a, button')
+          )
+            return
+          link.click()
+        })
         link.addEventListener('click', (event) => {
           if (
             event.defaultPrevented ||
@@ -151,7 +158,7 @@ const AnimalIcon =
     outline-offset: 4px;
   }
 
-  .animal:hover:not(:has(.image-slider:hover)) .animal-link,
+  .animal:hover .animal-link,
   .animal-link:focus-visible {
     color: var(--color-primary-hover);
     text-decoration: underline;

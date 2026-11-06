@@ -91,15 +91,71 @@ const sizes =
           slider.querySelectorAll<HTMLButtonElement>('.dot')
         )
         const controls = slider.querySelector<HTMLElement>('.dots')
-        if (!photos || !controls) return
+        if (!photos) return
+
+        const controller = new AbortController()
+        const { signal } = controller
+        let pointerStart: { x: number; y: number } | undefined
+        let dragged = false
+        photos.addEventListener(
+          'pointerdown',
+          (event) => {
+            if (!event.isPrimary || event.button !== 0) return
+            pointerStart = { x: event.clientX, y: event.clientY }
+            dragged = false
+          },
+          { signal }
+        )
+        photos.addEventListener(
+          'pointermove',
+          (event) => {
+            if (
+              pointerStart &&
+              Math.hypot(
+                event.clientX - pointerStart.x,
+                event.clientY - pointerStart.y
+              ) > 8
+            )
+              dragged = true
+          },
+          { signal }
+        )
+        photos.addEventListener(
+          'pointerup',
+          () => {
+            pointerStart = undefined
+          },
+          { signal }
+        )
+        photos.addEventListener(
+          'pointercancel',
+          () => {
+            pointerStart = undefined
+            dragged = true
+          },
+          { signal }
+        )
+        photos.addEventListener(
+          'click',
+          (event) => {
+            if (dragged) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+            dragged = false
+          },
+          { signal }
+        )
+        if (!controls) {
+          cleanups.push(() => controller.abort())
+          return
+        }
 
         const slides = Array.from(
           photos.querySelectorAll<HTMLElement>('figure')
         )
         const clones: HTMLElement[] = []
         const automatic = slider.dataset.autoplay === 'true'
-        const controller = new AbortController()
-        const { signal } = controller
         let timer: number | undefined
         let settleTimer: number | undefined
         let activeIndex = 0

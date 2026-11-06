@@ -1,5 +1,5 @@
 ---
-import { X } from '@lucide/astro'
+import { ChevronLeft, ChevronRight, X } from '@lucide/astro'
 import BrandIcon from '../BrandIcon.astro'
 import PhotoSlider from '../PhotoSlider.astro'
 import { site } from '../../config/site'
@@ -10,17 +10,15 @@ import { getWhatsAppUrl } from '../../lib/whatsapp'
 
 interface Props {
   animal: Awaited<ReturnType<typeof getAvailableAnimals>>[number]
+  index: number
+  total: number
+  previous?: string
+  next?: string
 }
 
-const { animal } = Astro.props
+const { animal, index, total, previous, next } = Astro.props
 const label = getAnimalLabel(animal)
 const title = animal.name?.trim() || 'Ainda sem nome'
-const animalTypes: Record<string, string> = {
-  dog: 'Cachorro',
-  cat: 'Gato',
-  other: 'Outro animal',
-}
-const animalType = animalTypes[animal.type]
 const sex = animal.isMale ? 'Macho' : 'Fêmea'
 const ageGroup = animalAgeGroups[animal.ageGroup]
 const animalUrl = new URL(
@@ -29,7 +27,6 @@ const animalUrl = new URL(
 )
 const contactMessage = `Oi, pessoal! Me interessei por este animal. Podemos conversar sobre a adoção?\n\n${animalUrl.href}`
 const details = [
-  { label: 'Tipo de animal', value: animalType },
   { label: 'Sexo', value: sex },
   { label: 'Faixa etária', value: ageGroup },
   {
@@ -105,14 +102,38 @@ const details = [
       </noscript>
     </div>
   </div>
+  {total > 1 && (
+    <nav class="animal-navigation" aria-label="Navegar entre animais">
+      <div class="previous-animal">
+        {previous && (
+          <a href={`/animais/${previous}/`} data-animal-navigation>
+            <ChevronLeft size={18} aria-hidden="true" />
+            Animal anterior
+          </a>
+        )}
+      </div>
+      <span class="animal-count">
+        Animal {index + 1} de {total}
+      </span>
+      <div class="next-animal">
+        {next && (
+          <a href={`/animais/${next}/`} data-animal-navigation>
+            Próximo animal
+            <ChevronRight size={18} aria-hidden="true" />
+          </a>
+        )}
+      </div>
+    </nav>
+  )}
 </dialog>
 
 <script>
   import { onPageLoad } from '../../lib/page-lifecycle'
-  import { attachRouteModal } from '../../lib/route-modal'
+  import { attachRouteModal, openRouteModal } from '../../lib/route-modal'
 
   onPageLoad(() => {
     const cleanups: (() => void)[] = []
+    const controller = new AbortController()
     document
       .querySelectorAll<HTMLDialogElement>('.animal-modal')
       .forEach((dialog) => {
@@ -121,8 +142,34 @@ const details = [
         const close = dialog.querySelector<HTMLButtonElement>('.close-animal')
         if (close) close.hidden = false
         cleanups.push(attachRouteModal(dialog, path, '/animais/'))
+        dialog
+          .querySelectorAll<HTMLAnchorElement>('[data-animal-navigation]')
+          .forEach((link) => {
+            link.addEventListener(
+              'click',
+              (event) => {
+                if (
+                  event.defaultPrevented ||
+                  event.button !== 0 ||
+                  event.ctrlKey ||
+                  event.metaKey ||
+                  event.shiftKey ||
+                  event.altKey
+                )
+                  return
+                if (
+                  openRouteModal(new URL(link.href).pathname, undefined, true)
+                )
+                  event.preventDefault()
+              },
+              { signal: controller.signal }
+            )
+          })
       })
-    return () => cleanups.forEach((cleanup) => cleanup())
+    return () => {
+      controller.abort()
+      cleanups.forEach((cleanup) => cleanup())
+    }
   })
 </script>
 
@@ -181,18 +228,26 @@ const details = [
   }
 
   .gallery {
+    display: flex;
+    align-items: center;
     min-width: 0;
-    padding: 24px;
+    padding: 20px;
     background: var(--color-soft);
   }
 
+  .gallery :global(.image-slider) {
+    width: 100%;
+  }
+
   .gallery :global(.slider-animal .photos) {
-    height: clamp(280px, 45dvh, 420px);
+    height: clamp(280px, 52dvh, 480px);
     max-height: none;
     aspect-ratio: auto;
   }
 
   .animal-content {
+    display: flex;
+    flex-direction: column;
     padding: 32px 28px;
     min-width: 0;
     overflow-wrap: anywhere;
@@ -237,7 +292,41 @@ const details = [
     display: flex;
     width: fit-content;
     max-width: 100%;
+    margin-top: auto;
     margin-inline: auto;
+  }
+
+  .animal-navigation {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 8px 16px;
+    padding: 12px 20px;
+    border-top: 1px solid var(--color-border);
+    font-size: 14px;
+  }
+
+  .animal-navigation a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 44px;
+    color: var(--color-primary);
+    text-decoration: none;
+    text-underline-offset: 4px;
+  }
+
+  .animal-navigation a:hover {
+    text-decoration: underline;
+  }
+
+  .next-animal {
+    text-align: right;
+  }
+
+  .animal-count {
+    color: var(--color-muted);
+    text-align: center;
   }
 
   @media (max-width: 47.999rem) {
@@ -247,6 +336,24 @@ const details = [
 
     .animal-content {
       padding: 24px;
+    }
+
+    .gallery {
+      padding: 16px;
+    }
+
+    .gallery :global(.slider-animal .photos) {
+      height: clamp(220px, 38dvh, 340px);
+    }
+
+    .animal-navigation {
+      grid-template-columns: 1fr 1fr;
+      gap: 0 8px;
+      padding: 12px 16px;
+    }
+
+    .animal-count {
+      grid-area: 1 / 1 / 2 / -1;
     }
   }
 </style>
