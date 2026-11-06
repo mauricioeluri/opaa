@@ -1,5 +1,6 @@
 ---
 import ContentImage from './ContentImage.astro'
+import { getContentImage } from '../lib/content-image'
 
 interface Props {
   images: { id?: string; src: string; alt: string; caption?: string }[]
@@ -7,6 +8,7 @@ interface Props {
   variant?: 'hero' | 'animal' | 'product'
   autoplay?: boolean
   thumbnails?: boolean
+  sizes?: string
 }
 
 const {
@@ -15,15 +17,31 @@ const {
   variant = 'hero',
   autoplay = false,
   thumbnails = false,
+  sizes: imageSizes,
 } = Astro.props
 const sizes =
-  variant === 'hero'
-    ? '(max-width: 47.999rem) calc(100vw - 32px), 602px'
+  imageSizes ??
+  (variant === 'hero'
+    ? '(max-width: 47.999rem) calc(100vw - 32px), (max-width: 73rem) 52vw, 602px'
     : variant === 'product'
       ? '(max-width: 47.999rem) calc(100vw - 80px), 480px'
       : thumbnails
         ? '(max-width: 47.999rem) calc(100vw - 80px), 420px'
-        : '(max-width: 35rem) calc(100vw - 72px), 320px'
+        : '(max-width: 35rem) min(320px, calc(100vw - 72px)), 320px')
+const slides = await Promise.all(
+  images.map(async (image) => {
+    if (variant !== 'hero') return { ...image, sizes }
+    const source = await getContentImage(image.src)
+    // Cover crops need enough pixels for the image beyond the visible frame.
+    const cropScale = Math.max(1, source.width / source.height / (4 / 3))
+    return {
+      ...image,
+      sizes:
+        `(max-width: 35rem) calc(${100 * cropScale}vw - ${32 * cropScale}px), ` +
+        `(min-width: 48rem) and (max-width: 55rem) ${52 * cropScale}vw, ${sizes}`,
+    }
+  })
+)
 ---
 
 <div
@@ -35,16 +53,21 @@ const sizes =
 >
   <div
     class="photos"
+    role={images.length > 1 ? 'group' : undefined}
     tabindex={images.length > 1 ? 0 : undefined}
-    aria-label="Fotos; use as setas do teclado para navegar"
+    aria-label={
+      images.length > 1
+        ? 'Fotos; use as setas do teclado para navegar'
+        : undefined
+    }
   >
-    {images.map((image, index) => (
+    {slides.map((image, index) => (
       <figure data-image-id={image.id}>
         <ContentImage
           src={image.src}
           alt={image.alt}
           width={1200}
-          sizes={sizes}
+          sizes={image.sizes}
           loading="eager"
           fetchpriority={index === 0 && variant === 'hero' ? 'high' : 'auto'}
           draggable="false"

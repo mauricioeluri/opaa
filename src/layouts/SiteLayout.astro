@@ -22,6 +22,19 @@ type Props = ComponentProps<typeof SEO>
     <link rel="apple-touch-icon" href="/branding/opaa-apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
     <SEO {...Astro.props} />
+    <noscript>
+      <style is:inline>
+        #contribuir:not([open]) {
+          display: block;
+          position: static;
+          margin: 32px auto;
+          max-height: none;
+        }
+        #contribuir .close-form {
+          display: none;
+        }
+      </style>
+    </noscript>
     <script is:inline>
       // Modal history must be handled before ClientRouter starts a page swap.
       if (!window.__opaaModalHistory) {

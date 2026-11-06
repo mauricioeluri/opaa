@@ -33,6 +33,11 @@ const AnimalIcon =
   <PhotoSlider
     label={label}
     variant="animal"
+    sizes={
+      catalog
+        ? undefined
+        : '(max-width: 35rem) min(320px, calc(100vw - 72px)), 160px'
+    }
     images={images.map((src, index) => ({
       src,
       alt: `${label} — foto ${index + 1} de ${images.length}`,
