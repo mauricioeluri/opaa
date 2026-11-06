@@ -65,7 +65,9 @@ const categories = [...new Set(posts.map((post) => post.category))]
             aria-live="polite"
             aria-atomic="true"
           >
-            {posts.length === 1 ? '1 publicação' : `${posts.length} publicações`}
+            {posts.length === 1
+              ? '1 publicação'
+              : `${posts.length} publicações`}
           </p>
         </FilterPanel>
         <section

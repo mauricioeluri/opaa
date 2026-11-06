@@ -6,9 +6,8 @@ import { site } from '../config/site'
 const pathname = Astro.url.pathname.replace(/\/$/, '')
 const isHome = pathname === ''
 const items = [
-  { label: 'Animais', section: 'animais', page: '/animais' },
-  { label: 'Castração', section: 'castracao' },
-  { label: 'Comunicados', section: 'comunicados', page: '/comunicados' },
+  { label: 'Adoção', section: 'animais', page: '/animais' },
+  { label: 'Alertas', section: 'comunicados', page: '/comunicados' },
   { label: 'Novidades', section: 'novidades', page: '/publicacoes' },
   { label: 'Loja solidária', section: 'loja', page: '/loja' },
   {
@@ -54,8 +53,7 @@ const items = [
         <ul>
           {items.map((item) => {
             const isCurrentPage = pathname === item.page
-            const isDetailPage =
-              item.page && pathname.startsWith(`${item.page}/`)
+            const isDetailPage = pathname.startsWith(`${item.page}/`)
 
             return (
               <li>
@@ -63,14 +61,16 @@ const items = [
                   <span aria-current="page">{item.label}</span>
                 ) : (
                   <a
-                    href={
-                      !isHome && item.page
-                        ? `${item.page}/`
-                        : `/#${item.section}`
-                    }
+                    class:list={{ 'home-section': isHome }}
+                    href={isHome ? `/#${item.section}` : `${item.page}/`}
                     data-section={isHome ? item.section : undefined}
                     aria-current={isDetailPage ? 'location' : undefined}
                   >
+                    {item.label}
+                  </a>
+                )}
+                {isHome && (
+                  <a class="home-page" href={`${item.page}/`}>
                     {item.label}
                   </a>
                 )}
@@ -297,6 +297,10 @@ const items = [
     padding-block: 0;
   }
 
+  nav .home-page {
+    display: none;
+  }
+
   .menu-toggle {
     display: none;
   }
@@ -340,6 +344,14 @@ const items = [
   }
 
   @media (max-width: 63.999rem) {
+    nav .home-section {
+      display: none;
+    }
+
+    nav .home-page {
+      display: flex;
+    }
+
     .topbar {
       max-height: 100svh;
       overflow-y: auto;
