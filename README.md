@@ -1,5 +1,7 @@
 # OPAA Alegrete
 
+[Acesse o site](https://opaa-alegrete.d-w46wx.workers.dev/)
+
 Site da ONG para apresentar seu trabalho, divulgar animais para adoção e facilitar
 doações. Usa **Astro** para gerar HTML estático, **TypeScript** para verificar o
 código, **CSS** para os estilos e **pnpm** para instalar dependências e executar comandos.
