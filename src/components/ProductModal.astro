@@ -1,0 +1,453 @@
+---
+import { ImageOff, X } from '@lucide/astro'
+import { site } from '../config/site'
+import type { getProducts } from '../lib/api'
+import { formatPrice } from '../lib/format-price'
+import { getWhatsAppUrl } from '../lib/whatsapp'
+import BrandIcon from './BrandIcon.astro'
+import PhotoSlider from './PhotoSlider.astro'
+
+interface Props {
+  product: Awaited<ReturnType<typeof getProducts>>[number]
+}
+
+const { product } = Astro.props
+const initial =
+  product.variants.find((variant) => variant.stock_quantity !== 0) ??
+  product.variants[0]
+const productUrl = new URL(
+  `/loja/${product.public_id}/`,
+  Astro.site ?? Astro.url
+)
+const contactUrl = getWhatsAppUrl(
+  site.phone,
+  `Oi, pessoal! Gostaria de saber mais sobre ${product.name}.\n\n${productUrl.href}`
+)
+---
+
+<dialog
+  class="product-modal"
+  id={`detalhes-${product.public_id}`}
+  aria-labelledby={`product-${product.public_id}`}
+  data-product={JSON.stringify(product)}
+  data-product-url={productUrl.href}
+  data-contact-phone={site.phone}
+>
+  <form method="dialog" class="close-row">
+    <button class="close-product" type="submit" aria-label="Fechar produto" autofocus>
+      <X size={22} aria-hidden="true" />
+    </button>
+  </form>
+  <div class="modal-content">
+  <div class="gallery">
+    {product.images.length ? (
+      <PhotoSlider
+        images={product.images.map((image) => ({
+          ...image,
+          alt: `Foto de ${product.name}`,
+        }))}
+        label={`Fotos de ${product.name}`}
+        variant="product"
+      />
+    ) : (
+      <span class="photo-empty">
+        <ImageOff size={32} stroke-width={1.5} aria-hidden="true" />
+        Foto desta opção em breve
+      </span>
+    )}
+  </div>
+
+  <div class="product-body">
+    <div>
+      <h2 id={`product-${product.public_id}`}>{product.name}</h2>
+      <p class="description">{product.description}</p>
+    </div>
+    <p class="price-line">
+      <strong class="unit-price">
+        {initial ? formatPrice(initial.price) : 'Consulte'}
+      </strong>
+      <span>cada</span>
+    </p>
+
+    <form class="purchase" aria-label={`Escolher ${product.name}`} hidden>
+      <div class="options">
+        {product.options.map((option) => (
+          <label>
+            {option.name}
+            <select name={option.id}>
+              {option.values.map((value) => (
+                <option
+                  value={value.id}
+                  selected={initial?.option_value_ids.includes(value.id)}
+                >
+                  {value.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        ))}
+      </div>
+      <p class="stock" role="status" aria-live="polite" aria-atomic="true"></p>
+      <div class="quantity-row">
+        <label>
+          Quantidade
+          <input
+            class="quantity"
+            name="quantity"
+            type="number"
+            min="1"
+            step="1"
+            value="1"
+            required
+          />
+        </label>
+        <p class="total">Total <strong class="total-price"></strong></p>
+      </div>
+      <a
+        class="button order-link"
+        href={contactUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <BrandIcon src="/icons/whatsapp.svg" size={18} />
+        <span class="order-label">Pedir pelo WhatsApp</span>
+      </a>
+    </form>
+  </div>
+  </div>
+</dialog>
+
+<script>
+  import { navigate } from 'astro:transitions/client'
+  import type { getProducts } from '../lib/api'
+  import { formatPrice } from '../lib/format-price'
+  import { onPageLoad } from '../lib/page-lifecycle'
+  import { getWhatsAppUrl } from '../lib/whatsapp'
+
+  type Product = Awaited<ReturnType<typeof getProducts>>[number]
+
+  onPageLoad(() => {
+    const dialogs = Array.from(document.querySelectorAll<HTMLDialogElement>('.product-modal'))
+    let active = true
+    dialogs.forEach((dialog) => {
+      const data = dialog.dataset.product
+      const phone = dialog.dataset.contactPhone
+      const form = dialog.querySelector<HTMLFormElement>('.purchase')
+      const quantity = dialog.querySelector<HTMLInputElement>('.quantity')
+      const unitPrice = dialog.querySelector<HTMLElement>('.unit-price')
+      const totalPrice = dialog.querySelector<HTMLElement>('.total-price')
+      const stock = dialog.querySelector<HTMLElement>('.stock')
+      const order = dialog.querySelector<HTMLAnchorElement>('.order-link')
+      const orderLabel = dialog.querySelector<HTMLElement>('.order-label')
+      const slider = dialog.querySelector<HTMLElement>('.image-slider')
+      if (
+        !data || !phone || !form || !quantity || !unitPrice || !totalPrice ||
+        !stock || !order || !orderLabel
+      ) return
+
+      const product = JSON.parse(data) as Product
+      const opener = document.querySelector<HTMLButtonElement>(`[data-open-product="${product.public_id}"]`)
+      if (!opener) return
+      const availableVariants = product.variants.filter((variant) => variant.stock_quantity !== 0)
+      const selects = Array.from(form.querySelectorAll('select'))
+      const syncOptions = () => {
+        let candidates = availableVariants
+        selects.forEach((select, index) => {
+          const previous = select.value
+          const values = product.options[index].values.filter((value) =>
+            candidates.some((variant) => variant.option_value_ids.includes(value.id))
+          )
+          select.replaceChildren(...values.map((value) => new Option(value.name, value.id)))
+          select.value = values.some((value) => value.id === previous) ? previous : values[0]?.id ?? ''
+          select.disabled = values.length === 0
+          candidates = candidates.filter((variant) => variant.option_value_ids.includes(select.value))
+        })
+      }
+
+      const update = () => {
+        const selected = selects.map((select) => select.value)
+        const variant = availableVariants.find((item) => item.option_value_ids.length === selected.length && selected.every((id) => item.option_value_ids.includes(id)))
+        if (slider) {
+          const imageIds = JSON.stringify(variant?.image_ids ?? [])
+          if (slider.dataset.visibleImages !== imageIds) {
+            slider.dataset.visibleImages = imageIds
+            slider.dispatchEvent(new Event('photo-slider:filter'))
+          }
+        }
+
+        const available = variant && variant.stock_quantity !== 0
+        quantity.disabled = !available
+        order.hidden = !available
+        quantity.max = variant?.stock_quantity ? String(variant.stock_quantity) : ''
+        unitPrice.textContent = variant ? formatPrice(variant.price) : '—'
+        stock.textContent = availableVariants.length === 0
+          ? 'Produto esgotado no momento'
+          : !variant
+          ? 'Essa combinação não está disponível. Tente outra opção.'
+          : variant.stock_quantity === null
+            ? 'Consulte a disponibilidade pelo WhatsApp'
+            : `${variant.stock_quantity} ${variant.stock_quantity === 1 ? 'unidade disponível' : 'unidades disponíveis'}`
+
+        const amount = Number(quantity.value)
+        const valid = form.checkValidity() && Number.isInteger(amount) && amount >= 1
+        totalPrice.textContent = variant && available && valid ? formatPrice(variant.price * amount) : '—'
+        if (!variant || !available || !valid) return
+
+        const options = product.options.map((option) => {
+          const value = option.values.find((item) => selected.includes(item.id))
+          return `${option.name}: ${value?.name}`
+        })
+        orderLabel.textContent = variant.stock_quantity === null ? 'Consultar pelo WhatsApp' : 'Pedir pelo WhatsApp'
+        order.href = getWhatsAppUrl(phone, [
+          'Oi, pessoal! Gostaria de pedir:',
+          product.name,
+          ...options,
+          `Quantidade: ${amount}`,
+          `Total: ${formatPrice(variant.price * amount)}`,
+          '',
+          'Vocês confirmam a disponibilidade?',
+          dialog.dataset.productUrl,
+        ].join('\n'))
+      }
+
+      form.hidden = false
+      form.addEventListener('change', (event) => {
+        if (event.target instanceof HTMLSelectElement) {
+          quantity.value = '1'
+          syncOptions()
+        }
+        update()
+      })
+      quantity.addEventListener('input', update)
+      order.addEventListener('click', (event) => {
+        if (!form.reportValidity()) event.preventDefault()
+      })
+      form.addEventListener('submit', (event) => {
+        event.preventDefault()
+        if (!order.hidden && form.reportValidity()) order.click()
+      })
+      opener.hidden = false
+      opener.addEventListener('click', () => {
+        navigate(`/loja/${product.public_id}/`, {
+          state: { productModal: true },
+        })
+      })
+      dialog.addEventListener('close', () => {
+        if (!active) return
+        opener.focus({ preventScroll: true })
+        if (location.pathname !== `/loja/${product.public_id}/`) return
+        if (history.state?.productModal) {
+          history.back()
+        } else {
+          navigate('/loja/', { history: 'replace' })
+        }
+      })
+      dialog.addEventListener('click', (event) => {
+        const bounds = dialog.getBoundingClientRect()
+        if (event.target === dialog && (
+          event.clientX < bounds.left || event.clientX > bounds.right ||
+          event.clientY < bounds.top || event.clientY > bounds.bottom
+        )) dialog.close()
+      })
+      syncOptions()
+      update()
+      if (location.pathname === `/loja/${product.public_id}/`) {
+        dialog.showModal()
+      }
+    })
+
+    return () => {
+      active = false
+      dialogs.forEach((dialog) => { if (dialog.open) dialog.close() })
+    }
+  })
+</script>
+
+<style>
+  .product-modal {
+    box-sizing: border-box;
+    width: min(880px, calc(100% - 32px));
+    max-height: calc(100dvh - 32px);
+    padding: 0;
+    border: 0;
+    border-radius: 24px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    overflow: auto;
+    box-shadow: 0 24px 80px color-mix(in srgb, var(--color-text) 25%, transparent);
+  }
+
+  .product-modal::backdrop {
+    background: color-mix(in srgb, var(--color-text) 60%, transparent);
+    backdrop-filter: blur(5px);
+  }
+
+  .close-row {
+    position: sticky;
+    top: 12px;
+    z-index: 2;
+    display: flex;
+    justify-content: end;
+    height: 0;
+    margin: 0;
+    padding-right: 12px;
+  }
+
+  .close-product {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    background: var(--color-surface);
+    color: var(--color-primary);
+    cursor: pointer;
+  }
+
+  .modal-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  }
+
+  .gallery {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    padding: 24px;
+    background: var(--color-soft);
+    --product-photo-height: clamp(420px, 65dvh, 580px);
+  }
+
+  .gallery :global(.image-slider) {
+    width: 100%;
+  }
+
+  .photo-empty {
+    display: grid;
+    justify-items: center;
+    gap: 12px;
+    color: var(--color-muted);
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .product-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+    padding: 32px 28px;
+  }
+
+  h2 {
+    margin: 0 0 12px;
+    padding-right: 24px;
+    color: var(--color-primary);
+    font-size: 24px;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .description {
+    color: var(--color-muted);
+    font-size: 14px;
+  }
+
+  .price-line {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    color: var(--color-muted);
+    font-size: 14px;
+  }
+
+  .unit-price {
+    color: var(--color-primary);
+    font-size: 20px;
+  }
+
+  .purchase:not([hidden]) {
+    display: grid;
+    gap: 14px;
+    margin-top: auto;
+  }
+
+  .options {
+    display: grid;
+    gap: 12px;
+  }
+
+  label {
+    display: grid;
+    min-width: 0;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  select,
+  input {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-background);
+    color: var(--color-text);
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  .stock {
+    min-height: 1.6em;
+    color: var(--color-primary);
+    font-size: 14px;
+  }
+
+  .quantity-row {
+    display: grid;
+    grid-template-columns: 100px minmax(0, 1fr);
+    align-items: end;
+    gap: 16px;
+  }
+
+  .total {
+    text-align: right;
+    color: var(--color-muted);
+    font-size: 14px;
+  }
+
+  .total-price {
+    display: block;
+    color: var(--color-text);
+    font-size: 20px;
+  }
+
+  .order-link {
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  @media (max-width: 47.999rem) {
+    .modal-content {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .gallery {
+      padding: 24px;
+      --product-photo-height: clamp(280px, 55dvh, 420px);
+    }
+
+    .product-body {
+      padding: 24px;
+    }
+  }
+</style>

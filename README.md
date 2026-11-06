@@ -100,7 +100,7 @@ Em `products`, opções como cor e tamanho formam variantes com preço unitário
 centavos (`price`) e estoque (`stock_quantity`): `0` esgotado, `null` consultar.
 IDs são nanoids de 12 caracteres; fotos ficam em `/api/products/<id>.webp` e podem
 ser compartilhadas entre variantes. Use os registros do JSON como modelo.
-O cliente escolhe a variante e a quantidade e confirma o pedido pelo WhatsApp.
+Em `/loja/`, o produto abre um modal com opções em estoque, quantidade e pedido pelo WhatsApp.
 
 ## Contatos e doações
 

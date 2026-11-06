@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { indexingEnabled, indexablePaths } from '../config/seo'
-import { getAvailableAnimals } from '../lib/api'
+import { getAvailableAnimals, getProducts } from '../lib/api'
 
 export const GET: APIRoute = async ({ site }) => {
   if (indexingEnabled && !site)
@@ -18,6 +18,9 @@ export const GET: APIRoute = async ({ site }) => {
           ...indexablePaths,
           ...(await getAvailableAnimals()).map(
             (animal) => `/animais/${animal.public_id}/`
+          ),
+          ...(await getProducts()).map(
+            (product) => `/loja/${product.public_id}/`
           ),
         ]
           .map(

@@ -346,10 +346,6 @@
             {
               "id": "5jaDlG-y61BU",
               "name": "Azul royal"
-            },
-            {
-              "id": "j3lWfKXtP6l4",
-              "name": "Preto"
             }
           ]
         },
@@ -520,46 +516,6 @@
           "image_ids": [
             "_4xrTgBvFXqD"
           ]
-        },
-        {
-          "id": "JbNzDN1Njwk4",
-          "price": 7000,
-          "stock_quantity": 3,
-          "option_value_ids": [
-            "j3lWfKXtP6l4",
-            "9NJLLDGW2lsV"
-          ],
-          "image_ids": []
-        },
-        {
-          "id": "WpFbWPnTAa-r",
-          "price": 7000,
-          "stock_quantity": 6,
-          "option_value_ids": [
-            "j3lWfKXtP6l4",
-            "0Jg2F3ryDW21"
-          ],
-          "image_ids": []
-        },
-        {
-          "id": "UKriswZyg7C_",
-          "price": 7000,
-          "stock_quantity": 2,
-          "option_value_ids": [
-            "j3lWfKXtP6l4",
-            "7SJNDHqrunUx"
-          ],
-          "image_ids": []
-        },
-        {
-          "id": "DAq7j5e3OGO4",
-          "price": 7000,
-          "stock_quantity": null,
-          "option_value_ids": [
-            "j3lWfKXtP6l4",
-            "ebwZ_SPRNhs_"
-          ],
-          "image_ids": []
         }
       ]
     },

@@ -4,6 +4,10 @@ export async function getAllAnimals() {
   return data.animals
 }
 
+export async function getProducts() {
+  return data.products.filter((product) => product.active)
+}
+
 export async function getStories() {
   return [...data.stories].sort(
     (a, b) => Date.parse(b.published_at) - Date.parse(a.published_at)

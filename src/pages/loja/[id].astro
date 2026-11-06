@@ -1,0 +1,17 @@
+---
+import type { InferGetStaticPropsType } from 'astro'
+import ShopPage from '../../components/ShopPage.astro'
+import { getProducts } from '../../lib/api'
+
+export async function getStaticPaths() {
+  return (await getProducts()).map((product) => ({
+    params: { id: product.public_id },
+    props: { product },
+  }))
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>
+const { product } = Astro.props
+---
+
+<ShopPage product={product} />

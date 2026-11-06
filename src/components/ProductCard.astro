@@ -1,0 +1,138 @@
+---
+import { ImageOff } from '@lucide/astro'
+import { site } from '../config/site'
+import type { getProducts } from '../lib/api'
+import { formatPrice } from '../lib/format-price'
+import { getWhatsAppUrl } from '../lib/whatsapp'
+import PhotoSlider from './PhotoSlider.astro'
+import ProductModal from './ProductModal.astro'
+
+interface Props {
+  product: Awaited<ReturnType<typeof getProducts>>[number]
+}
+
+const { product } = Astro.props
+const availableVariants = product.variants.filter((item) => item.stock_quantity !== 0)
+const prices = (availableVariants.length ? availableVariants : product.variants)
+  .map((item) => item.price)
+const price = prices.length ? Math.min(...prices) : null
+const hasPriceRange = new Set(prices).size > 1
+const contactUrl = getWhatsAppUrl(
+  site.phone,
+  `Oi, pessoal! Gostaria de saber mais sobre ${product.name}.`
+)
+---
+
+<article class="product-card" id={`produto-${product.public_id}`}>
+  <div class="cover">
+    {product.images.length ? (
+      <PhotoSlider
+        images={product.images.map((image) => ({
+          ...image,
+          alt: `Foto de ${product.name}`,
+        }))}
+        label={`Fotos de ${product.name}`}
+        variant="product"
+        autoplay
+      />
+    ) : (
+      <ImageOff size={40} stroke-width={1.5} aria-label="Foto em breve" />
+    )}
+  </div>
+  <div class="preview">
+    <h3>{product.name}</h3>
+    <p class="preview-price">
+      {hasPriceRange && <span>A partir de </span>}
+      <strong>{price === null ? 'Consulte' : formatPrice(price)}</strong>
+    </p>
+    <button
+      class="open-product"
+      type="button"
+      data-open-product={product.public_id}
+      aria-haspopup="dialog"
+      aria-controls={`detalhes-${product.public_id}`}
+      aria-label={`Abrir ${product.name}`}
+      hidden
+    ></button>
+    <noscript>
+      <a class="button" href={contactUrl} target="_blank" rel="noopener noreferrer">
+        Consultar pelo WhatsApp
+      </a>
+    </noscript>
+  </div>
+</article>
+<ProductModal product={product} />
+
+<style>
+  .product-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    scroll-margin-top: 24px;
+    border: 1px solid transparent;
+    border-radius: 24px;
+    background: var(--color-surface);
+  }
+
+  .cover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 240px;
+    padding: 20px;
+    border-radius: 24px 24px 0 0;
+    background: var(--color-soft);
+    color: var(--color-primary);
+  }
+
+  .cover :global(.image-slider) {
+    z-index: 2;
+    width: 100%;
+  }
+
+  .preview {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+  }
+
+  h3 {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: 18px;
+  }
+
+  .preview-price {
+    margin: 0;
+    color: var(--color-primary);
+  }
+
+  .preview-price strong {
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  .open-product:not([hidden]) {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    padding: 0;
+    border: 0;
+    border-radius: 24px;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .open-product:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 4px;
+  }
+
+  .product-card:has(.open-product:hover, .open-product:focus-visible) h3 {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+</style>

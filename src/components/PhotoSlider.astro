@@ -1,8 +1,8 @@
 ---
 interface Props {
-  images: { src: string; alt: string; caption?: string }[]
+  images: { id?: string; src: string; alt: string; caption?: string }[]
   label: string
-  variant?: 'hero' | 'animal'
+  variant?: 'hero' | 'animal' | 'product'
   autoplay?: boolean
   thumbnails?: boolean
 }
@@ -29,7 +29,7 @@ const {
     aria-label="Fotos; use as setas do teclado para navegar"
   >
     {images.map((image, index) => (
-      <figure>
+      <figure data-image-id={image.id}>
         <img
           src={image.src}
           alt={image.alt}
@@ -54,6 +54,7 @@ const {
         <button
           type="button"
           class="dot"
+          data-image-id={image.id}
           aria-label={`Mostrar foto ${index + 1} de ${images.length}`}
           aria-current={index === 0 ? 'true' : 'false'}
         >
@@ -86,28 +87,51 @@ const {
         const automatic = slider.dataset.autoplay === 'true'
         let timer: number | undefined
         let drag: { x: number; scroll: number; index: number } | undefined
-        const current = () => Math.round(photos.scrollLeft / photos.clientWidth)
-        const moveTo = (index: number) =>
+        const visibleDots = () => dots.filter((dot) => !dot.hidden)
+        const current = () =>
+          Math.round(photos.scrollLeft / photos.clientWidth) || 0
+        const moveTo = (index: number) => {
+          if (visibleDots().length < 2) return
           photos.scrollTo({
-            left: ((index + dots.length) % dots.length) * photos.clientWidth,
+            left:
+              ((index + visibleDots().length) % visibleDots().length) *
+              photos.clientWidth,
             behavior: motion.matches ? 'instant' : 'smooth',
           })
+        }
         const updateTimer = () => {
           window.clearInterval(timer)
-          if (automatic && !drag && !document.hidden) {
+          if (automatic && visibleDots().length > 1 && !drag && !document.hidden) {
             timer = window.setInterval(() => moveTo(current() + 1), 6000)
           }
         }
 
         controls.hidden = false
         photos.style.touchAction = 'pan-y'
-        dots.forEach((dot, index) =>
-          dot.addEventListener('click', () => moveTo(index))
+        dots.forEach((dot) =>
+          dot.addEventListener('click', () => moveTo(visibleDots().indexOf(dot)))
         )
+        const filterImages = () => {
+          const ids = slider.dataset.visibleImages
+          const visibleIds: string[] | undefined = ids ? JSON.parse(ids) : undefined
+          slider.querySelectorAll<HTMLElement>('figure, .dot').forEach((item) => {
+            item.hidden = !!visibleIds && !visibleIds.includes(item.dataset.imageId || '')
+          })
+          controls.hidden = visibleDots().length < 2
+          if (visibleDots().length > 1) photos.tabIndex = 0
+          else photos.removeAttribute('tabindex')
+          photos.scrollTo({ left: 0, behavior: 'instant' })
+          visibleDots().forEach((dot, index) =>
+            dot.setAttribute('aria-current', String(index === 0))
+          )
+          updateTimer()
+        }
+        slider.addEventListener('photo-slider:filter', filterImages)
+        filterImages()
         photos.addEventListener(
           'scroll',
           () => {
-            dots.forEach((dot, index) =>
+            visibleDots().forEach((dot, index) =>
               dot.setAttribute('aria-current', String(index === current()))
             )
           },
@@ -120,7 +144,7 @@ const {
           }
         })
         photos.addEventListener('pointerdown', (event) => {
-          if (!event.isPrimary || event.button !== 0) return
+          if (!event.isPrimary || event.button !== 0 || visibleDots().length < 2) return
           window.clearInterval(timer)
           if (event.pointerType === 'mouse') event.preventDefault()
           drag = {
@@ -188,6 +212,31 @@ const {
 
   .photos.dragging {
     cursor: grabbing;
+  }
+
+  figure[hidden],
+  .dot[hidden] {
+    display: none;
+  }
+
+  .slider-product .photos {
+    height: var(--product-photo-height, 240px);
+  }
+
+  .slider-product figure:not([hidden]) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .slider-product .photos img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    aspect-ratio: auto;
+    object-fit: contain;
+    border-radius: 12px;
   }
 
   figure {
