@@ -1,0 +1,107 @@
+---
+import type { ShoppingBag } from '@lucide/astro'
+
+interface Props {
+  title: string
+  description: string
+  label: string
+  id?: string
+  icon?: typeof ShoppingBag
+  accentIcon?: typeof ShoppingBag
+}
+
+const { title, description, label, id, icon: Icon, accentIcon: AccentIcon } = Astro.props
+---
+
+<header class="page-header">
+  <div class="copy">
+    <span class="label">{label}</span>
+    <h1 id={id}>{title}</h1>
+    <p>{description}</p>
+    {Astro.slots.has('actions') && (
+      <div class="actions"><slot name="actions" /></div>
+    )}
+  </div>
+  {Icon && (
+    <div class="illustration" aria-hidden="true">
+      <Icon size={64} stroke-width={1.5} />
+      {AccentIcon && <AccentIcon class="accent" size={22} stroke-width={1.5} />}
+    </div>
+  )}
+</header>
+
+<style>
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    margin-bottom: 32px;
+    padding: 32px;
+    border-radius: 28px 8px 28px 8px;
+    background: var(--color-soft);
+  }
+
+  .copy {
+    min-width: 0;
+    max-width: 65ch;
+  }
+
+  h1 {
+    margin: 16px 0 12px;
+    color: var(--color-primary);
+    font-size: clamp(32px, 4vw, 44px);
+    overflow-wrap: break-word;
+  }
+
+  p {
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .label {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 4px;
+    background: var(--color-primary);
+    color: var(--color-surface);
+    font-size: 14px;
+    transform: rotate(-2deg);
+  }
+
+  .illustration {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 112px;
+    height: 112px;
+    border-radius: 24px;
+    background: var(--color-surface);
+    color: var(--color-primary);
+    transform: rotate(8deg);
+  }
+
+  .illustration :global(.accent) {
+    position: absolute;
+    top: 54px;
+    left: 45px;
+  }
+
+  .actions {
+    margin-top: 20px;
+  }
+
+  @media (max-width: 47.999rem) {
+    .page-header {
+      flex-direction: column;
+      align-items: start;
+      gap: 24px;
+      padding: 24px;
+    }
+
+    .illustration {
+      display: none;
+    }
+  }
+</style>

@@ -1,5 +1,6 @@
 ---
 import { PawPrint } from '@lucide/astro'
+import PageHeader from '../components/PageHeader.astro'
 import AnimalCard from '../components/AnimalCard.astro'
 import { site } from '../config/site'
 import SiteLayout from '../layouts/SiteLayout.astro'
@@ -14,16 +15,12 @@ const animals = await getAvailableAnimals()
   description="Conheça os animais disponíveis para adoção na OPAA Alegrete. Encontre um novo amigo e fale com a ONG para saber mais."
 >
   <main class="animal-listing">
-    <header class="intro">
-      <div>
-        <h1>Uma amizade começa por aqui</h1>
-        <p>
-          Conheça os animais disponíveis para adoção. Seu novo amigo pode estar
-          nesta lista!
-        </p>
-      </div>
-      <PawPrint size={80} stroke-width={1.5} aria-hidden="true" />
-    </header>
+    <PageHeader
+      label="Animais para adoção"
+      title="Uma amizade começa por aqui"
+      description="Conheça os animais disponíveis para adoção. Seu novo amigo pode estar nesta lista!"
+      icon={PawPrint}
+    />
 
     {animals.length > 0 && (
       <form class="filters" aria-label="Filtrar animais para adoção" hidden>
@@ -123,33 +120,8 @@ const animals = await getAvailableAnimals()
     padding: 80px 24px 64px;
   }
 
-  .intro {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 32px;
-    padding: 32px;
-    border-radius: 24px;
-    background: var(--color-soft);
-    color: var(--color-primary);
-  }
-
-  .intro :global(svg) {
-    flex-shrink: 0;
-  }
-
   p {
     margin: 0;
-  }
-
-  h1 {
-    margin: 0 0 16px;
-    font-size: clamp(32px, 4vw, 44px);
-  }
-
-  .intro p:last-child {
-    max-width: 60ch;
-    color: var(--color-text);
   }
 
   .filters:not([hidden]) {
@@ -206,14 +178,6 @@ const animals = await getAvailableAnimals()
   @media (max-width: 47.999rem) {
     main {
       padding: 32px 16px 48px;
-    }
-
-    .intro {
-      padding: 24px;
-    }
-
-    .intro :global(svg) {
-      display: none;
     }
   }
 </style>

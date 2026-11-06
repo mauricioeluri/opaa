@@ -1,4 +1,6 @@
 ---
+import { Heart } from '@lucide/astro'
+import PageHeader from '../components/PageHeader.astro'
 import BrandIcon from '../components/BrandIcon.astro'
 import { site } from '../config/site'
 import SiteLayout from '../layouts/SiteLayout.astro'
@@ -18,15 +20,14 @@ const contactUrl = getWhatsAppUrl(
   description="Fotos, carinho e momentos felizes de quem faz parte da história da OPAA Alegrete. Compartilhe a sua também!"
 >
   <main>
-    <header class="intro">
-      <div>
-        <h1>Histórias felizes</h1>
-        <p>
-          Cada vida transformada é uma nova página na nossa história. Seu animal
-          faz parte dela? Conte pra gente!
-        </p>
-      </div>
+    <PageHeader
+      label="Histórias felizes"
+      title="Cada vida, uma nova página"
+      description="Veja por onde andam os animais que receberam nosso cuidado. Tem uma história com a OPAA? Conte pra gente!"
+      icon={Heart}
+    >
       <a
+        slot="actions"
         class="button"
         href={contactUrl}
         target="_blank"
@@ -35,7 +36,7 @@ const contactUrl = getWhatsAppUrl(
         <BrandIcon src="/icons/whatsapp.svg" size={20} />
         Envie sua história
       </a>
-    </header>
+    </PageHeader>
 
     {stories.length > 0 ? (
       <section class="stories" aria-label="Últimas histórias felizes">
@@ -96,33 +97,8 @@ const contactUrl = getWhatsAppUrl(
     padding: 80px 24px 64px;
   }
 
-  .intro {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    margin-bottom: 32px;
-    padding: 32px;
-    border-radius: 24px;
-    background: var(--color-soft);
-  }
-
-  h1 {
-    margin: 0 0 12px;
-    color: var(--color-primary);
-    font-size: clamp(32px, 4vw, 44px);
-  }
-
   p {
     margin: 0;
-  }
-
-  .intro p {
-    max-width: 52ch;
-  }
-
-  .button {
-    flex-shrink: 0;
   }
 
   .stories {
@@ -340,12 +316,6 @@ const contactUrl = getWhatsAppUrl(
   @media (max-width: 47.999rem) {
     main {
       padding: 32px 16px 48px;
-    }
-
-    .intro {
-      flex-direction: column;
-      align-items: start;
-      padding: 24px;
     }
   }
 </style>

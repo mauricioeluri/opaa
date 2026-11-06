@@ -1,0 +1,14 @@
+---
+import Notices from '../components/Notices.astro'
+import { site } from '../config/site'
+import SiteLayout from '../layouts/SiteLayout.astro'
+---
+
+<SiteLayout
+  title={`Comunicados e alertas | ${site.name}`}
+  description="Confira os comunicados e alertas da OPAA Alegrete, com avisos e orientações para a comunidade."
+>
+  <main>
+    <Notices showAll />
+  </main>
+</SiteLayout>

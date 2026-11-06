@@ -2,51 +2,76 @@
 import { ArrowUpRight, ChevronDown, Megaphone, Pin } from '@lucide/astro'
 import { getNotices } from '../lib/api'
 import { formatDate } from '../lib/format-date'
+import PageHeader from './PageHeader.astro'
 
-const notices = (await getNotices()).slice(0, 6)
+interface Props {
+  showAll?: boolean
+}
+
+const { showAll = false } = Astro.props
+const allNotices = await getNotices()
+const notices = showAll ? allNotices : allNotices.slice(0, 6)
 ---
 
-{notices.length > 0 && (
-  <section class="notices" id="comunicados" aria-labelledby="notices-title">
-    <header>
-      <div>
-        <p class="eyebrow">Para a comunidade</p>
-        <h2 id="notices-title">Comunicados e alertas</h2>
-      </div>
-      <a
-        class="view-all"
-        href="#"
-        aria-label="Ver todos os comunicados e alertas"
-      >
-        Ver todos
-        <ArrowUpRight size={18} aria-hidden="true" />
-      </a>
-    </header>
-    <div class="notice-list">
-      {notices.map((notice) => (
-        <details>
-          <summary>
-            <span class="notice-icon">
-              {notice.isPinned ? (
-                <Pin size={22} aria-label="Fixado" role="img" />
-              ) : (
-                <Megaphone size={22} aria-hidden="true" />
-              )}
-            </span>
-            <span class="notice-copy">
-              <span class="metadata">
-                <time datetime={notice.published_at}>
-                  {formatDate(notice.published_at)}
-                </time>
+{(showAll || notices.length > 0) && (
+  <section
+    class:list={['notices', { 'full-page': showAll }]}
+    id="comunicados"
+    aria-labelledby="notices-title"
+  >
+    {showAll ? (
+      <PageHeader
+        id="notices-title"
+        label="Comunicados e alertas"
+        title="Informação também é cuidado"
+        description="Avisos e orientações da OPAA. Toque em um título para ler o comunicado."
+        icon={Megaphone}
+      />
+    ) : (
+      <header>
+        <div>
+          <p class="eyebrow">Para a comunidade</p>
+          <h2 id="notices-title">Comunicados e alertas</h2>
+        </div>
+        <a
+          class="view-all"
+          href="/comunicados/"
+          aria-label="Ver todos os comunicados e alertas"
+        >
+          Ver todos
+          <ArrowUpRight size={18} aria-hidden="true" />
+        </a>
+      </header>
+    )}
+    {notices.length > 0 ? (
+      <div class="notice-list">
+        {notices.map((notice) => (
+          <details>
+            <summary>
+              <span class="notice-icon">
+                {notice.isPinned ? (
+                  <Pin size={22} aria-label="Fixado" role="img" />
+                ) : (
+                  <Megaphone size={22} aria-hidden="true" />
+                )}
               </span>
-              <span class="notice-title">{notice.title}</span>
-            </span>
-            <ChevronDown class="chevron" size={20} aria-hidden="true" />
-          </summary>
-          <p class="notice-body">{notice.body}</p>
-        </details>
-      ))}
-    </div>
+              <span class="notice-copy">
+                <span class="metadata">
+                  <time datetime={notice.published_at}>
+                    {formatDate(notice.published_at)}
+                  </time>
+                </span>
+                <span class="notice-title">{notice.title}</span>
+              </span>
+              <ChevronDown class="chevron" size={20} aria-hidden="true" />
+            </summary>
+            <p class="notice-body">{notice.body}</p>
+          </details>
+        ))}
+      </div>
+    ) : (
+      <p>Nenhum comunicado por aqui no momento.</p>
+    )}
   </section>
 )}
 
@@ -55,6 +80,10 @@ const notices = (await getNotices()).slice(0, 6)
     max-width: 1120px;
     margin-inline: auto;
     padding: 0 24px var(--section-gap);
+  }
+
+  .full-page {
+    padding-block: 80px 64px;
   }
 
   header {
@@ -173,6 +202,10 @@ const notices = (await getNotices()).slice(0, 6)
   @media (max-width: 35rem) {
     .notices {
       padding-inline: 16px;
+    }
+
+    .full-page {
+      padding-block: 32px 48px;
     }
 
     .notice-list {

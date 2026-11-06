@@ -108,6 +108,10 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
 
 ## Interface
 
+- Nas páginas de listagem, usar `PageHeader.astro`: `label` identifica a página
+  na etiqueta pequena, `title` traz uma chamada acolhedora e emocional no título
+  grande e `description` explica o conteúdo. Evitar repetir a mesma ideia nos três.
+  Passar o ícone por `icon` e ações pelo slot `actions`, quando necessários.
 - Seguir obrigatoriamente o [kit de marca](docs/brand-guide.md) em toda criação
   ou alteração visual, sem exigir que o usuário repita essas orientações.
   Consultar o guia e `src/styles/global.css` antes de editar a interface.
