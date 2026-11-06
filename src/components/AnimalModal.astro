@@ -1,0 +1,237 @@
+---
+import { X } from '@lucide/astro'
+import BrandIcon from './BrandIcon.astro'
+import PhotoSlider from './PhotoSlider.astro'
+import { site } from '../config/site'
+import type { getAvailableAnimals } from '../lib/api'
+import { animalAgeGroups, getAnimalLabel } from '../lib/animal-label'
+import { getWhatsAppUrl } from '../lib/whatsapp'
+
+interface Props {
+  animal: Awaited<ReturnType<typeof getAvailableAnimals>>[number]
+}
+
+const { animal } = Astro.props
+const label = getAnimalLabel(animal)
+const title = animal.name?.trim() || 'Ainda sem nome'
+const animalTypes: Record<string, string> = {
+  dog: 'Cachorro',
+  cat: 'Gato',
+  other: 'Outro animal',
+}
+const animalType = animalTypes[animal.type]
+const sex = animal.isMale ? 'Macho' : 'Fêmea'
+const ageGroup = animalAgeGroups[animal.ageGroup]
+const publishedDate = new Intl.DateTimeFormat('pt-BR', {
+  timeZone: 'America/Sao_Paulo',
+}).format(new Date(animal.published_at))
+const animalUrl = new URL(
+  `/animais/${animal.public_id}/`,
+  Astro.site ?? Astro.url
+)
+const contactMessage = `Oi, pessoal! Me interessei por este animal. Podemos conversar sobre a adoção?\n\n${animalUrl.href}`
+const details = [
+  { label: 'Tipo de animal', value: animalType },
+  { label: 'Sexo', value: sex },
+  { label: 'Faixa etária', value: ageGroup },
+  {
+    label: 'Idade',
+    value: animal.age
+      ? `${animal.isAgeApproximate ? '≈ ' : ''}${animal.age}`
+      : null,
+  },
+  { label: 'Raça', value: animal.breed },
+  {
+    label: 'Castração',
+    value: animal.neutered ? 'Sim' : 'Não',
+  },
+  { label: 'Vacinas', value: animal.vaccinations },
+  { label: 'Publicado em', value: publishedDate },
+].filter((detail) => detail.value?.trim())
+---
+
+<dialog class="animal-modal" aria-labelledby="animal-title" data-animal-path={`/animais/${animal.public_id}/`} open>
+  <form method="dialog" class="close-row">
+    <button class="close-animal" type="submit" aria-label="Fechar animal" autofocus hidden>
+      <X size={22} aria-hidden="true" />
+    </button>
+  </form>
+    <div class="modal-content">
+      <div class="gallery">
+        <PhotoSlider
+          label={`Fotos de ${label}`}
+          variant="animal"
+          thumbnails
+          images={animal.images.map((src, index) => ({
+            src,
+            alt: `${label} — foto ${index + 1} de ${animal.images.length}`,
+          }))}
+        />
+      </div>
+
+      <div class="animal-content">
+        <p class="status">Disponível para adoção</p>
+        <h2 id="animal-title">{title}</h2>
+        <dl>
+          {details.map((detail) => (
+            <div>
+              <dt>{detail.label}</dt>
+              <dd>{detail.value}</dd>
+            </div>
+          ))}
+        </dl>
+        <p class="description">{animal.description}</p>
+        <a
+          class="button"
+          href={getWhatsAppUrl(site.phone, contactMessage)}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <BrandIcon src="/icons/whatsapp.svg" size={20} />
+          Falar com a OPAA pelo WhatsApp
+        </a>
+        <noscript><a href="/animais/">Ver todos os animais</a></noscript>
+      </div>
+    </div>
+</dialog>
+
+<script>
+  import { onPageLoad } from '../lib/page-lifecycle'
+  import { attachRouteModal } from '../lib/route-modal'
+
+  onPageLoad(() => {
+    const dialog = document.querySelector<HTMLDialogElement>('.animal-modal')
+    const path = dialog?.dataset.animalPath
+    if (!dialog || !path) return
+    const close = dialog.querySelector<HTMLButtonElement>('.close-animal')
+    if (close) close.hidden = false
+    return attachRouteModal(dialog, path, '/animais/')
+  })
+</script>
+
+<style>
+  .animal-modal {
+    box-sizing: border-box;
+    width: min(880px, calc(100% - 32px));
+    max-height: calc(100dvh - 32px);
+    padding: 0;
+    border: 0;
+    border-radius: 24px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    overflow: auto;
+    box-shadow: 0 24px 80px
+      color-mix(in srgb, var(--color-text) 25%, transparent);
+  }
+
+  .animal-modal::backdrop {
+    background: color-mix(in srgb, var(--color-text) 60%, transparent);
+    backdrop-filter: blur(5px);
+  }
+
+  .close-row {
+    position: sticky;
+    top: 12px;
+    z-index: 2;
+    display: flex;
+    justify-content: end;
+    height: 0;
+    margin: 0;
+    padding-right: 12px;
+  }
+
+  .close-animal {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    background: var(--color-surface);
+    color: var(--color-primary);
+    cursor: pointer;
+  }
+
+
+  .close-animal[hidden] {
+    display: none;
+  }
+
+  .modal-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  }
+
+  .gallery {
+    min-width: 0;
+    padding: 24px;
+    background: var(--color-soft);
+  }
+
+  .gallery :global(.slider-animal .photos) {
+    height: clamp(280px, 45dvh, 420px);
+    max-height: none;
+    aspect-ratio: auto;
+  }
+
+  .animal-content {
+    padding: 32px 28px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .status {
+    margin: 0 0 12px;
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  h2 {
+    margin: 0;
+    padding-right: 24px;
+    color: var(--color-primary);
+    font-size: 32px;
+  }
+
+  dl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 32px;
+    margin: 24px 0 0;
+  }
+
+  dt {
+    color: var(--color-muted);
+    font-size: 14px;
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .description {
+    margin: 24px 0;
+    white-space: pre-line;
+  }
+
+  .button:not([hidden]) {
+    display: flex;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+  }
+
+
+  @media (max-width: 47.999rem) {
+    .modal-content {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .animal-content {
+      padding: 24px;
+    }
+  }
+</style>

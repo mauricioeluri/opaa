@@ -1,0 +1,197 @@
+---
+import { PawPrint } from '@lucide/astro'
+import PageHeader from './PageHeader.astro'
+import AnimalCard from './AnimalCard.astro'
+import AnimalModal from './AnimalModal.astro'
+import { site } from '../config/site'
+import SiteLayout from '../layouts/SiteLayout.astro'
+import { getAvailableAnimals } from '../lib/api'
+import { animalAgeGroups } from '../lib/animal-label'
+
+interface Props {
+  animal?: Awaited<ReturnType<typeof getAvailableAnimals>>[number]
+}
+
+const { animal } = Astro.props
+const animals = await getAvailableAnimals()
+---
+
+<SiteLayout
+  title={`${animal ? animal.name?.trim() || 'Ainda sem nome' : 'Animais disponíveis para adoção'} | ${site.name}`}
+  description={animal?.description ?? 'Conheça os animais disponíveis para adoção na OPAA Alegrete. Encontre um novo amigo e fale com a ONG para saber mais.'}
+  image={animal?.images[0]}
+  imageAlt={animal ? animal.name?.trim() || 'Animal disponível para adoção' : undefined}
+>
+  <main class="animal-listing">
+    <PageHeader
+      label="Animais para adoção"
+      title="Uma amizade começa por aqui"
+      description="Conheça os animais disponíveis para adoção. Seu novo amigo pode estar nesta lista!"
+      icon={PawPrint}
+    />
+
+    {animals.length > 0 && (
+      <form class="filters" aria-label="Filtrar animais para adoção" hidden>
+        <label>
+          Tipo de animal
+          <select name="animalType">
+            <option value="">Todos</option>
+            <option value="dog">Cães</option>
+            <option value="cat">Gatos</option>
+            <option value="other">Outros</option>
+          </select>
+        </label>
+        <label>
+          Sexo
+          <select name="male">
+            <option value="">Todos</option>
+            <option value="false">Fêmeas</option>
+            <option value="true">Machos</option>
+          </select>
+        </label>
+        <label>
+          Faixa etária
+          <select name="ageGroup">
+            <option value="">Todas</option>
+            {Object.entries(animalAgeGroups).map(([value, label]) => (
+              <option value={value}>{label}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Castração
+          <select name="neutered">
+            <option value="">Todos</option>
+            <option value="true">Castrados</option>
+            <option value="false">Não castrados</option>
+          </select>
+        </label>
+      </form>
+    )}
+
+    <p class="result-count" role="status" aria-live="polite" aria-atomic="true">
+      {animals.length === 1
+        ? '1 animal disponível'
+        : `${animals.length} animais disponíveis`}
+    </p>
+    <section class="cards" aria-label="Animais disponíveis para adoção">
+      {animals.map((animal) => (
+        <AnimalCard animal={animal} catalog />
+      ))}
+    </section>
+    <p class="empty-state" hidden={animals.length > 0}>
+      {animals.length === 0
+        ? 'No momento, não temos animais disponíveis por aqui. Volte para conferir as novidades!'
+        : 'Nenhum animal encontrado com esses filtros. Que tal tentar de outro jeito?'}
+    </p>
+  </main>
+  {animal && <AnimalModal animal={animal} />}
+</SiteLayout>
+
+<script>
+  import { onPageLoad } from '../lib/page-lifecycle'
+
+  onPageLoad(() => {
+    const listing = document.querySelector<HTMLElement>('.animal-listing')
+    const form = listing?.querySelector<HTMLFormElement>('.filters')
+    const count = listing?.querySelector<HTMLElement>('.result-count')
+    const empty = listing?.querySelector<HTMLElement>('.empty-state')
+    if (listing && form && count && empty) {
+      const filters = Array.from(form.querySelectorAll('select'))
+      const cards = Array.from(listing.querySelectorAll<HTMLElement>('.animal'))
+      const update = () => {
+        let visible = 0
+        cards.forEach((element) => {
+          element.hidden = filters.some(
+            (filter) =>
+              filter.value !== '' &&
+              element.dataset[filter.name] !== filter.value
+          )
+          if (!element.hidden) visible++
+        })
+        count.textContent =
+          visible === 1
+            ? '1 animal encontrado'
+            : `${visible} animais encontrados`
+        empty.hidden = visible > 0
+      }
+      filters.forEach((filter) => {
+        const value = history.state?.animalFilters?.[filter.name]
+        if (typeof value === 'string') filter.value = value
+      })
+      update()
+      form.hidden = false
+      form.addEventListener('submit', (event) => event.preventDefault())
+      form.addEventListener('change', update)
+    }
+  })
+</script>
+
+<style>
+  main {
+    max-width: 1120px;
+    margin-inline: auto;
+    padding: 80px 24px 64px;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .filters:not([hidden]) {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  label {
+    display: grid;
+    gap: 8px;
+    flex: 1 1 160px;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  select {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 48px;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    color: var(--color-text);
+    background: var(--color-surface);
+    font-weight: 400;
+  }
+
+  .result-count {
+    margin: 24px 0 16px;
+    font-size: 14px;
+    color: var(--color-muted);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    grid-auto-rows: 1fr;
+    align-items: stretch;
+    gap: 24px;
+  }
+
+  .empty-state:not([hidden]) {
+    padding: 32px;
+    border: 1px dashed var(--color-border);
+    border-radius: 16px;
+    text-align: center;
+    color: var(--color-muted);
+  }
+
+  @media (max-width: 47.999rem) {
+    main {
+      padding: 32px 16px 48px;
+    }
+  }
+</style>

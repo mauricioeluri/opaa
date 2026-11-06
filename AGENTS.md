@@ -179,8 +179,8 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   padrão nem completar dados desconhecidos no site.
 - A API informa o tipo em `type`: `dog`, `cat` ou `other`. A interface apresenta
   cães, gatos e outros, sem limitar textos e listagens somente a cães.
-- Cards levam a `/animais/public_id/`. A página individual mostra todas as fotos
-  e a descrição completa; o contato sobre o animal pelo WhatsApp fica nessa página.
+- Cards abrem o modal em `/animais/public_id/`, com todas as fotos e descrição
+  completa. O contato sobre o animal pelo WhatsApp fica nesse modal.
   Seu título usa apenas o nome ou “Ainda sem nome”; sexo e faixa etária ficam nos detalhes.
 - Na landing page, mostrar no máximo dois animais disponíveis, respeitando a
   ordenação de fixados e data. Sem disponíveis, ocultar a seção

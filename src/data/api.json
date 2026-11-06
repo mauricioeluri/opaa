@@ -39,6 +39,82 @@
       ],
       "type": "dog",
       "isPinned": false
+    },
+    {
+      "public_id": "XrN4I4nC--ya",
+      "published_at": "2025-11-25",
+      "name": null,
+      "ageGroup": "puppy",
+      "age": null,
+      "isAgeApproximate": false,
+      "isMale": true,
+      "breed": null,
+      "neutered": false,
+      "vaccinations": null,
+      "description": "Filhote encontrado, à procura de um lar. Castração garantida pela OPAA.",
+      "available": true,
+      "images": [
+        "/api/animals/WFD-r0YFqrpg.webp"
+      ],
+      "type": "dog",
+      "isPinned": false
+    },
+    {
+      "public_id": "ncwZlsQBTlTo",
+      "published_at": "2025-11-25",
+      "name": null,
+      "ageGroup": "puppy",
+      "age": null,
+      "isAgeApproximate": false,
+      "isMale": true,
+      "breed": null,
+      "neutered": false,
+      "vaccinations": null,
+      "description": "Filhote encontrado, à procura de um lar. Castração garantida pela OPAA.",
+      "available": true,
+      "images": [
+        "/api/animals/8bdDXKYoOkUv.webp"
+      ],
+      "type": "dog",
+      "isPinned": false
+    },
+    {
+      "public_id": "QGuy9nhw61Dq",
+      "published_at": "2025-11-25",
+      "name": null,
+      "ageGroup": "puppy",
+      "age": null,
+      "isAgeApproximate": false,
+      "isMale": false,
+      "breed": null,
+      "neutered": false,
+      "vaccinations": null,
+      "description": "Filhote encontrada, à procura de um lar. Castração garantida pela OPAA.",
+      "available": true,
+      "images": [
+        "/api/animals/pf5Ix_d4RBG_.webp"
+      ],
+      "type": "dog",
+      "isPinned": false
+    },
+    {
+      "public_id": "RZEMLcsKH8Dd",
+      "published_at": "2025-11-25",
+      "name": null,
+      "ageGroup": "puppy",
+      "age": null,
+      "isAgeApproximate": false,
+      "isMale": false,
+      "breed": null,
+      "neutered": false,
+      "vaccinations": null,
+      "description": "Filhote encontrada, à procura de um lar. Castração garantida pela OPAA.",
+      "available": true,
+      "images": [
+        "/api/animals/tsDr3nENwgDO.webp"
+      ],
+      "type": "dog",
+      "isPinned": false
     }
   ],
   "posts": [

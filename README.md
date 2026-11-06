@@ -56,7 +56,7 @@ Use fotos reais, sem filtros de IA, e informações confirmadas pela ONG.
 A home mostra até dois disponíveis, com fixados primeiro e depois por data, ou oculta a
 seção quando não houver nenhum. `/animais/` lista todos, com filtros locais.
 Os cards mostram até duas fotos e três linhas de descrição; levam a
-`/animais/public_id/`, com todas as fotos, texto completo e contato pelo WhatsApp.
+`/animais/public_id/`, que abre um modal com todas as fotos, texto completo e WhatsApp.
 A mensagem inclui o link do animal.
 
 | Campo                          | Como preencher                                                                   |

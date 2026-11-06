@@ -134,6 +134,7 @@ const contactUrl = getWhatsAppUrl(
   import type { getProducts } from '../lib/api'
   import { formatPrice } from '../lib/format-price'
   import { onPageLoad } from '../lib/page-lifecycle'
+  import { attachRouteModal } from '../lib/route-modal'
   import { getWhatsAppUrl } from '../lib/whatsapp'
 
   type Product = Awaited<ReturnType<typeof getProducts>>[number]
@@ -142,7 +143,7 @@ const contactUrl = getWhatsAppUrl(
     const dialogs = Array.from(
       document.querySelectorAll<HTMLDialogElement>('.product-modal')
     )
-    let active = true
+    const cleanups: (() => void)[] = []
     dialogs.forEach((dialog) => {
       const data = dialog.dataset.product
       const phone = dialog.dataset.contactPhone
@@ -280,43 +281,15 @@ const contactUrl = getWhatsAppUrl(
       opener.hidden = false
       opener.addEventListener('click', () => {
         navigate(`/loja/${product.public_id}/`, {
-          state: { productModal: true },
+          state: { routeModal: true },
         })
-      })
-      dialog.addEventListener('close', () => {
-        if (!active) return
-        opener.focus({ preventScroll: true })
-        if (location.pathname !== `/loja/${product.public_id}/`) return
-        if (history.state?.productModal) {
-          history.back()
-        } else {
-          navigate('/loja/', { history: 'replace' })
-        }
-      })
-      dialog.addEventListener('click', (event) => {
-        const bounds = dialog.getBoundingClientRect()
-        if (
-          event.target === dialog &&
-          (event.clientX < bounds.left ||
-            event.clientX > bounds.right ||
-            event.clientY < bounds.top ||
-            event.clientY > bounds.bottom)
-        )
-          dialog.close()
       })
       syncOptions()
       update()
-      if (location.pathname === `/loja/${product.public_id}/`) {
-        dialog.showModal()
-      }
+      cleanups.push(attachRouteModal(dialog, `/loja/${product.public_id}/`, '/loja/', opener))
     })
 
-    return () => {
-      active = false
-      dialogs.forEach((dialog) => {
-        if (dialog.open) dialog.close()
-      })
-    }
+    return () => cleanups.forEach((cleanup) => cleanup())
   })
 </script>
 

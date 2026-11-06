@@ -48,6 +48,33 @@ const AnimalIcon =
   </div>
 </article>
 
+<script>
+  import { navigate } from 'astro:transitions/client'
+  import { onPageLoad } from '../lib/page-lifecycle'
+
+  onPageLoad(() => {
+    document.querySelectorAll<HTMLAnchorElement>('.animal-link').forEach((link) => {
+      if (history.state?.animalFocus === link.getAttribute('href')) {
+        link.focus({ preventScroll: true })
+      }
+      link.addEventListener('click', (event) => {
+        if (
+          event.defaultPrevented || event.button !== 0 || event.ctrlKey ||
+          event.metaKey || event.shiftKey || event.altKey
+        ) return
+        event.preventDefault()
+        const form = document.querySelector<HTMLFormElement>('.animal-listing .filters')
+        history.replaceState({
+          ...history.state,
+          animalFocus: link.getAttribute('href'),
+          animalFilters: form ? Object.fromEntries(new FormData(form)) : undefined,
+        }, '')
+        navigate(link.href, { state: { routeModal: true } })
+      })
+    })
+  })
+</script>
+
 <style>
   .animal {
     position: relative;
