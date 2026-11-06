@@ -34,86 +34,98 @@ const contactUrl = getWhatsAppUrl(
   data-contact-phone={site.phone}
 >
   <form method="dialog" class="close-row">
-    <button class="close-product" type="submit" aria-label="Fechar produto" autofocus>
+    <button
+      class="close-product"
+      type="submit"
+      aria-label="Fechar produto"
+      autofocus
+    >
       <X size={22} aria-hidden="true" />
     </button>
   </form>
   <div class="modal-content">
-  <div class="gallery">
-    {product.images.length ? (
-      <PhotoSlider
-        images={product.images.map((image) => ({
-          ...image,
-          alt: `Foto de ${product.name}`,
-        }))}
-        label={`Fotos de ${product.name}`}
-        variant="product"
-      />
-    ) : (
-      <span class="photo-empty">
-        <ImageOff size={32} stroke-width={1.5} aria-hidden="true" />
-        Foto desta opção em breve
-      </span>
-    )}
-  </div>
-
-  <div class="product-body">
-    <div>
-      <h2 id={`product-${product.public_id}`}>{product.name}</h2>
-      <p class="description">{product.description}</p>
+    <div class="gallery">
+      {product.images.length ? (
+        <PhotoSlider
+          images={product.images.map((image) => ({
+            ...image,
+            alt: `Foto de ${product.name}`,
+          }))}
+          label={`Fotos de ${product.name}`}
+          variant="product"
+        />
+      ) : (
+        <span class="photo-empty">
+          <ImageOff size={32} stroke-width={1.5} aria-hidden="true" />
+          Foto desta opção em breve
+        </span>
+      )}
     </div>
-    <p class="price-line">
-      <strong class="unit-price">
-        {initial ? formatPrice(initial.price) : 'Consulte'}
-      </strong>
-      <span>cada</span>
-    </p>
 
-    <form class="purchase" aria-label={`Escolher ${product.name}`} hidden>
-      <div class="options">
-        {product.options.map((option) => (
+    <div class="product-body">
+      <div>
+        <h2 id={`product-${product.public_id}`}>{product.name}</h2>
+        <p class="description">{product.description}</p>
+      </div>
+      <p class="price-line">
+        <strong class="unit-price">
+          {initial ? formatPrice(initial.price) : 'Consulte'}
+        </strong>
+        <span>cada</span>
+      </p>
+
+      <form class="purchase" aria-label={`Escolher ${product.name}`} hidden>
+        <div class="options">
+          {product.options.map((option) => (
+            <label>
+              {option.name}
+              <select name={option.id}>
+                {option.values.map((value) => (
+                  <option
+                    value={value.id}
+                    selected={initial?.option_value_ids.includes(value.id)}
+                  >
+                    {value.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ))}
+        </div>
+        <p
+          class="stock"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        ></p>
+        <div class="quantity-row">
           <label>
-            {option.name}
-            <select name={option.id}>
-              {option.values.map((value) => (
-                <option
-                  value={value.id}
-                  selected={initial?.option_value_ids.includes(value.id)}
-                >
-                  {value.name}
-                </option>
-              ))}
-            </select>
+            Quantidade
+            <input
+              class="quantity"
+              name="quantity"
+              type="number"
+              min="1"
+              step="1"
+              value="1"
+              required
+            />
           </label>
-        ))}
-      </div>
-      <p class="stock" role="status" aria-live="polite" aria-atomic="true"></p>
-      <div class="quantity-row">
-        <label>
-          Quantidade
-          <input
-            class="quantity"
-            name="quantity"
-            type="number"
-            min="1"
-            step="1"
-            value="1"
-            required
-          />
-        </label>
-        <p class="total">Total <strong class="total-price"></strong></p>
-      </div>
-      <a
-        class="button order-link"
-        href={contactUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <BrandIcon src="/icons/whatsapp.svg" size={18} />
-        <span class="order-label">Pedir pelo WhatsApp</span>
-      </a>
-    </form>
-  </div>
+          <p class="total">
+            Total <strong class="total-price"></strong>
+          </p>
+        </div>
+        <a
+          class="button order-link"
+          href={contactUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <BrandIcon src="/icons/whatsapp.svg" size={18} />
+          <span class="order-label">Pedir pelo WhatsApp</span>
+        </a>
+      </form>
+    </div>
   </div>
 </dialog>
 
@@ -127,7 +139,9 @@ const contactUrl = getWhatsAppUrl(
   type Product = Awaited<ReturnType<typeof getProducts>>[number]
 
   onPageLoad(() => {
-    const dialogs = Array.from(document.querySelectorAll<HTMLDialogElement>('.product-modal'))
+    const dialogs = Array.from(
+      document.querySelectorAll<HTMLDialogElement>('.product-modal')
+    )
     let active = true
     dialogs.forEach((dialog) => {
       const data = dialog.dataset.product
@@ -141,32 +155,56 @@ const contactUrl = getWhatsAppUrl(
       const orderLabel = dialog.querySelector<HTMLElement>('.order-label')
       const slider = dialog.querySelector<HTMLElement>('.image-slider')
       if (
-        !data || !phone || !form || !quantity || !unitPrice || !totalPrice ||
-        !stock || !order || !orderLabel
-      ) return
+        !data ||
+        !phone ||
+        !form ||
+        !quantity ||
+        !unitPrice ||
+        !totalPrice ||
+        !stock ||
+        !order ||
+        !orderLabel
+      )
+        return
 
       const product = JSON.parse(data) as Product
-      const opener = document.querySelector<HTMLButtonElement>(`[data-open-product="${product.public_id}"]`)
+      const opener = document.querySelector<HTMLButtonElement>(
+        `[data-open-product="${product.public_id}"]`
+      )
       if (!opener) return
-      const availableVariants = product.variants.filter((variant) => variant.stock_quantity !== 0)
+      const availableVariants = product.variants.filter(
+        (variant) => variant.stock_quantity !== 0
+      )
       const selects = Array.from(form.querySelectorAll('select'))
       const syncOptions = () => {
         let candidates = availableVariants
         selects.forEach((select, index) => {
           const previous = select.value
           const values = product.options[index].values.filter((value) =>
-            candidates.some((variant) => variant.option_value_ids.includes(value.id))
+            candidates.some((variant) =>
+              variant.option_value_ids.includes(value.id)
+            )
           )
-          select.replaceChildren(...values.map((value) => new Option(value.name, value.id)))
-          select.value = values.some((value) => value.id === previous) ? previous : values[0]?.id ?? ''
+          select.replaceChildren(
+            ...values.map((value) => new Option(value.name, value.id))
+          )
+          select.value = values.some((value) => value.id === previous)
+            ? previous
+            : (values[0]?.id ?? '')
           select.disabled = values.length === 0
-          candidates = candidates.filter((variant) => variant.option_value_ids.includes(select.value))
+          candidates = candidates.filter((variant) =>
+            variant.option_value_ids.includes(select.value)
+          )
         })
       }
 
       const update = () => {
         const selected = selects.map((select) => select.value)
-        const variant = availableVariants.find((item) => item.option_value_ids.length === selected.length && selected.every((id) => item.option_value_ids.includes(id)))
+        const variant = availableVariants.find(
+          (item) =>
+            item.option_value_ids.length === selected.length &&
+            selected.every((id) => item.option_value_ids.includes(id))
+        )
         if (slider) {
           const imageIds = JSON.stringify(variant?.image_ids ?? [])
           if (slider.dataset.visibleImages !== imageIds) {
@@ -178,36 +216,49 @@ const contactUrl = getWhatsAppUrl(
         const available = variant && variant.stock_quantity !== 0
         quantity.disabled = !available
         order.hidden = !available
-        quantity.max = variant?.stock_quantity ? String(variant.stock_quantity) : ''
+        quantity.max = variant?.stock_quantity
+          ? String(variant.stock_quantity)
+          : ''
         unitPrice.textContent = variant ? formatPrice(variant.price) : '—'
-        stock.textContent = availableVariants.length === 0
-          ? 'Produto esgotado no momento'
-          : !variant
-          ? 'Essa combinação não está disponível. Tente outra opção.'
-          : variant.stock_quantity === null
-            ? 'Consulte a disponibilidade pelo WhatsApp'
-            : `${variant.stock_quantity} ${variant.stock_quantity === 1 ? 'unidade disponível' : 'unidades disponíveis'}`
+        stock.textContent =
+          availableVariants.length === 0
+            ? 'Produto esgotado no momento'
+            : !variant
+              ? 'Essa combinação não está disponível. Tente outra opção.'
+              : variant.stock_quantity === null
+                ? 'Consulte a disponibilidade pelo WhatsApp'
+                : `${variant.stock_quantity} ${variant.stock_quantity === 1 ? 'unidade disponível' : 'unidades disponíveis'}`
 
         const amount = Number(quantity.value)
-        const valid = form.checkValidity() && Number.isInteger(amount) && amount >= 1
-        totalPrice.textContent = variant && available && valid ? formatPrice(variant.price * amount) : '—'
+        const valid =
+          form.checkValidity() && Number.isInteger(amount) && amount >= 1
+        totalPrice.textContent =
+          variant && available && valid
+            ? formatPrice(variant.price * amount)
+            : '—'
         if (!variant || !available || !valid) return
 
         const options = product.options.map((option) => {
           const value = option.values.find((item) => selected.includes(item.id))
           return `${option.name}: ${value?.name}`
         })
-        orderLabel.textContent = variant.stock_quantity === null ? 'Consultar pelo WhatsApp' : 'Pedir pelo WhatsApp'
-        order.href = getWhatsAppUrl(phone, [
-          'Oi, pessoal! Gostaria de pedir:',
-          product.name,
-          ...options,
-          `Quantidade: ${amount}`,
-          `Total: ${formatPrice(variant.price * amount)}`,
-          '',
-          'Vocês confirmam a disponibilidade?',
-          dialog.dataset.productUrl,
-        ].join('\n'))
+        orderLabel.textContent =
+          variant.stock_quantity === null
+            ? 'Consultar pelo WhatsApp'
+            : 'Pedir pelo WhatsApp'
+        order.href = getWhatsAppUrl(
+          phone,
+          [
+            'Oi, pessoal! Gostaria de pedir:',
+            product.name,
+            ...options,
+            `Quantidade: ${amount}`,
+            `Total: ${formatPrice(variant.price * amount)}`,
+            '',
+            'Vocês confirmam a disponibilidade?',
+            dialog.dataset.productUrl,
+          ].join('\n')
+        )
       }
 
       form.hidden = false
@@ -244,10 +295,14 @@ const contactUrl = getWhatsAppUrl(
       })
       dialog.addEventListener('click', (event) => {
         const bounds = dialog.getBoundingClientRect()
-        if (event.target === dialog && (
-          event.clientX < bounds.left || event.clientX > bounds.right ||
-          event.clientY < bounds.top || event.clientY > bounds.bottom
-        )) dialog.close()
+        if (
+          event.target === dialog &&
+          (event.clientX < bounds.left ||
+            event.clientX > bounds.right ||
+            event.clientY < bounds.top ||
+            event.clientY > bounds.bottom)
+        )
+          dialog.close()
       })
       syncOptions()
       update()
@@ -258,7 +313,9 @@ const contactUrl = getWhatsAppUrl(
 
     return () => {
       active = false
-      dialogs.forEach((dialog) => { if (dialog.open) dialog.close() })
+      dialogs.forEach((dialog) => {
+        if (dialog.open) dialog.close()
+      })
     }
   })
 </script>
@@ -274,7 +331,8 @@ const contactUrl = getWhatsAppUrl(
     background: var(--color-surface);
     color: var(--color-text);
     overflow: auto;
-    box-shadow: 0 24px 80px color-mix(in srgb, var(--color-text) 25%, transparent);
+    box-shadow: 0 24px 80px
+      color-mix(in srgb, var(--color-text) 25%, transparent);
   }
 
   .product-modal::backdrop {

@@ -10,7 +10,14 @@ interface Props {
   accentIcon?: typeof ShoppingBag
 }
 
-const { title, description, label, id, icon: Icon, accentIcon: AccentIcon } = Astro.props
+const {
+  title,
+  description,
+  label,
+  id,
+  icon: Icon,
+  accentIcon: AccentIcon,
+} = Astro.props
 ---
 
 <header class="page-header">
@@ -19,7 +26,9 @@ const { title, description, label, id, icon: Icon, accentIcon: AccentIcon } = As
     <h1 id={id}>{title}</h1>
     <p>{description}</p>
     {Astro.slots.has('actions') && (
-      <div class="actions"><slot name="actions" /></div>
+      <div class="actions">
+        <slot name="actions" />
+      </div>
     )}
   </div>
   {Icon && (

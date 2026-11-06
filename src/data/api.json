@@ -17,7 +17,8 @@
         "/api/animals/jsmxV48OYOJe.webp",
         "/api/animals/CTLPGIUPXU-u.webp"
       ],
-      "type": "dog"
+      "type": "dog",
+      "isPinned": false
     },
     {
       "public_id": "B6tQ9nR3xL8m",
@@ -36,10 +37,41 @@
         "/api/animals/UuK8K1-lz0Vx.webp",
         "/api/animals/etiDluvlxc2H.webp"
       ],
-      "type": "dog"
+      "type": "dog",
+      "isPinned": false
     }
   ],
   "posts": [
+    {
+      "slug": "cuidar-tambem-e-aprender",
+      "title": "Cuidar também é aprender",
+      "description": "Palestras e ações que aproximam a comunidade.",
+      "body": "Palestras e ações que aproximam a comunidade.",
+      "category": "community",
+      "published_at": "2026-11-05",
+      "isPinned": false,
+      "images": []
+    },
+    {
+      "slug": "comunidade-reunida-pela-causa",
+      "title": "Comunidade reunida pela causa",
+      "description": "Encontros que ajudam a manter esse cuidado vivo.",
+      "body": "Encontros que ajudam a manter esse cuidado vivo.",
+      "category": "campaign",
+      "published_at": "2026-11-04",
+      "isPinned": false,
+      "images": []
+    },
+    {
+      "slug": "o-que-construimos-juntos",
+      "title": "O que construímos juntos",
+      "description": "Acompanhe as ações e a prestação de contas.",
+      "body": "Acompanhe as ações e a prestação de contas.",
+      "category": "transparency",
+      "published_at": "2026-11-03",
+      "isPinned": false,
+      "images": []
+    },
     {
       "slug": "conheca-o-trabalho-da-opaa",
       "title": "Conheça o trabalho da OPAA Alegrete",
@@ -47,7 +79,8 @@
       "category": "community",
       "published_at": "2026-11-01T12:00:00-03:00",
       "isPinned": false,
-      "images": ["/branding/opaa-logo.svg"]
+      "images": ["/branding/opaa-logo.svg"],
+      "description": "Conheça o trabalho da OPAA Alegrete e as formas de ajudar."
     }
   ],
   "notices": [
@@ -112,42 +145,48 @@
       "published_at": "2026-11-05",
       "description": "Fumaça foi resgatado de maus-tratos em janeiro de 2024 e adotado em seguida. Recebemos hoje uma foto dele, saudável e de banho tomado!",
       "beforeImage": null,
-      "afterImage": "/api/stories/EFPEWmo_TTHM.webp"
+      "afterImage": "/api/stories/EFPEWmo_TTHM.webp",
+      "isPinned": false
     },
     {
       "name": "Tunico",
       "published_at": "2026-11-04",
       "description": "Tunico foi encontrado ainda filhote, muito magrinho, na estrada entre Dom Pedrito e Bagé. Hoje está gordinho e feliz!",
       "beforeImage": "/api/stories/gVFxPto1tThQ.webp",
-      "afterImage": "/api/stories/FtOUoC7iDPuN.webp"
+      "afterImage": "/api/stories/FtOUoC7iDPuN.webp",
+      "isPinned": false
     },
     {
       "name": "Maia",
       "published_at": "2026-09-14",
       "description": "Maia foi encontrada em uma caixinha com outros filhotes no bairro Capão do Angico. Ela foi adotada pela Leonarda.",
       "beforeImage": "/api/stories/6dZxOZr_XaAC.webp",
-      "afterImage": "/api/stories/y7ZlB0E_KXZN.webp"
+      "afterImage": "/api/stories/y7ZlB0E_KXZN.webp",
+      "isPinned": false
     },
     {
       "name": "Melado",
       "published_at": "2026-09-13",
       "description": "Melado foi resgatado com um olho machucado. Equipe de Veterinários da URCAMP e voluntários, juntamente com estudantes, realizaram cirurgia e amputaram um olho. Encontra-se recuperado e bem tratado pela ONG OPAA. Irá desfilar dia 20 de setembro no PIQUETE da URCAMP como símbolo de superação. Também representa as pessoas que se unem para fazer o bem e dar vida digna a estes seres de luz. Aplaudam muito o Melado, ele merece.",
       "beforeImage": "/api/stories/WLpl84ZSSil6.webp",
-      "afterImage": "/api/stories/zQ9jWaEfbkP1.webp"
+      "afterImage": "/api/stories/zQ9jWaEfbkP1.webp",
+      "isPinned": false
     },
     {
       "name": "Pitty",
       "published_at": "2026-09-12",
       "description": "Pitty foi encontrada sozinha perto de uma estrada, ainda filhote. Recebeu cuidados, foi castrada e hoje mora em uma propriedade rural.",
       "beforeImage": "/api/stories/nDsF3r5F3YDm.webp",
-      "afterImage": "/api/stories/f6SfWZbmgIZ3.webp"
+      "afterImage": "/api/stories/f6SfWZbmgIZ3.webp",
+      "isPinned": false
     },
     {
       "name": "Mingau",
       "published_at": "2026-09-11",
       "description": "Mingau foi um dos animais adotados na feira de adoções promovida pela Mundo Mais Animal Veterinária e PetShop em parceria com a ONG OPAA.",
       "beforeImage": "/api/stories/a4m7ChySYVD_.webp",
-      "afterImage": "/api/stories/pDhMLX8nzAAC.webp"
+      "afterImage": "/api/stories/pDhMLX8nzAAC.webp",
+      "isPinned": false
     }
   ],
   "products": [
@@ -213,101 +252,57 @@
           "id": "GUWJuvJ8EX_s",
           "price": 7000,
           "stock_quantity": 3,
-          "option_value_ids": [
-            "atYKXdyragPL",
-            "rQpjX1XR9Rgc"
-          ],
-          "image_ids": [
-            "O5zixBqin629",
-            "0b1Yv4lOSq6v"
-          ]
+          "option_value_ids": ["atYKXdyragPL", "rQpjX1XR9Rgc"],
+          "image_ids": ["O5zixBqin629", "0b1Yv4lOSq6v"]
         },
         {
           "id": "D8d9N7WhfjRV",
           "price": 7000,
           "stock_quantity": 5,
-          "option_value_ids": [
-            "atYKXdyragPL",
-            "V6_K_yd6K31t"
-          ],
-          "image_ids": [
-            "O5zixBqin629",
-            "0b1Yv4lOSq6v"
-          ]
+          "option_value_ids": ["atYKXdyragPL", "V6_K_yd6K31t"],
+          "image_ids": ["O5zixBqin629", "0b1Yv4lOSq6v"]
         },
         {
           "id": "ZDlmtz2d6qcK",
           "price": 7000,
           "stock_quantity": 2,
-          "option_value_ids": [
-            "atYKXdyragPL",
-            "w7wSJBaueg32"
-          ],
-          "image_ids": [
-            "O5zixBqin629",
-            "0b1Yv4lOSq6v"
-          ]
+          "option_value_ids": ["atYKXdyragPL", "w7wSJBaueg32"],
+          "image_ids": ["O5zixBqin629", "0b1Yv4lOSq6v"]
         },
         {
           "id": "Ocr_jyZc_Uvs",
           "price": 7000,
           "stock_quantity": 0,
-          "option_value_ids": [
-            "atYKXdyragPL",
-            "9mHCXZo9XXqu"
-          ],
-          "image_ids": [
-            "O5zixBqin629",
-            "0b1Yv4lOSq6v"
-          ]
+          "option_value_ids": ["atYKXdyragPL", "9mHCXZo9XXqu"],
+          "image_ids": ["O5zixBqin629", "0b1Yv4lOSq6v"]
         },
         {
           "id": "T8FXwXGTdLSu",
           "price": 7000,
           "stock_quantity": 0,
-          "option_value_ids": [
-            "NzAljpZs6TXr",
-            "rQpjX1XR9Rgc"
-          ],
-          "image_ids": [
-            "Q-O4PsUvZl50"
-          ]
+          "option_value_ids": ["NzAljpZs6TXr", "rQpjX1XR9Rgc"],
+          "image_ids": ["Q-O4PsUvZl50"]
         },
         {
           "id": "FjHPui5W_btl",
           "price": 7000,
           "stock_quantity": 4,
-          "option_value_ids": [
-            "NzAljpZs6TXr",
-            "V6_K_yd6K31t"
-          ],
-          "image_ids": [
-            "Q-O4PsUvZl50"
-          ]
+          "option_value_ids": ["NzAljpZs6TXr", "V6_K_yd6K31t"],
+          "image_ids": ["Q-O4PsUvZl50"]
         },
         {
           "id": "nhI0H7zbFlih",
           "price": 7000,
           "stock_quantity": 6,
-          "option_value_ids": [
-            "NzAljpZs6TXr",
-            "w7wSJBaueg32"
-          ],
-          "image_ids": [
-            "Q-O4PsUvZl50"
-          ]
+          "option_value_ids": ["NzAljpZs6TXr", "w7wSJBaueg32"],
+          "image_ids": ["Q-O4PsUvZl50"]
         },
         {
           "id": "wSypMulO9NEQ",
           "price": 7000,
           "stock_quantity": 2,
-          "option_value_ids": [
-            "NzAljpZs6TXr",
-            "9mHCXZo9XXqu"
-          ],
-          "image_ids": [
-            "Q-O4PsUvZl50"
-          ]
+          "option_value_ids": ["NzAljpZs6TXr", "9mHCXZo9XXqu"],
+          "image_ids": ["Q-O4PsUvZl50"]
         }
       ]
     },
@@ -377,145 +372,85 @@
           "id": "s4bPD2mqBeQR",
           "price": 7000,
           "stock_quantity": 4,
-          "option_value_ids": [
-            "dLwewhsqMACT",
-            "9NJLLDGW2lsV"
-          ],
-          "image_ids": [
-            "GQh1iK-_W8Zl"
-          ]
+          "option_value_ids": ["dLwewhsqMACT", "9NJLLDGW2lsV"],
+          "image_ids": ["GQh1iK-_W8Zl"]
         },
         {
           "id": "jLNP47pwQ5-N",
           "price": 7000,
           "stock_quantity": 7,
-          "option_value_ids": [
-            "dLwewhsqMACT",
-            "0Jg2F3ryDW21"
-          ],
-          "image_ids": [
-            "GQh1iK-_W8Zl"
-          ]
+          "option_value_ids": ["dLwewhsqMACT", "0Jg2F3ryDW21"],
+          "image_ids": ["GQh1iK-_W8Zl"]
         },
         {
           "id": "EaB6J2y2pm8-",
           "price": 7000,
           "stock_quantity": 3,
-          "option_value_ids": [
-            "dLwewhsqMACT",
-            "7SJNDHqrunUx"
-          ],
-          "image_ids": [
-            "GQh1iK-_W8Zl"
-          ]
+          "option_value_ids": ["dLwewhsqMACT", "7SJNDHqrunUx"],
+          "image_ids": ["GQh1iK-_W8Zl"]
         },
         {
           "id": "z2bSVZTLTtQ-",
           "price": 7000,
           "stock_quantity": 1,
-          "option_value_ids": [
-            "dLwewhsqMACT",
-            "ebwZ_SPRNhs_"
-          ],
-          "image_ids": [
-            "GQh1iK-_W8Zl"
-          ]
+          "option_value_ids": ["dLwewhsqMACT", "ebwZ_SPRNhs_"],
+          "image_ids": ["GQh1iK-_W8Zl"]
         },
         {
           "id": "zHyScVlP7aiJ",
           "price": 7000,
           "stock_quantity": 2,
-          "option_value_ids": [
-            "gX2sO6GkWjVv",
-            "9NJLLDGW2lsV"
-          ],
-          "image_ids": [
-            "sgflyBjAbQsT"
-          ]
+          "option_value_ids": ["gX2sO6GkWjVv", "9NJLLDGW2lsV"],
+          "image_ids": ["sgflyBjAbQsT"]
         },
         {
           "id": "P45jPp5eZHx8",
           "price": 7000,
           "stock_quantity": 0,
-          "option_value_ids": [
-            "gX2sO6GkWjVv",
-            "0Jg2F3ryDW21"
-          ],
-          "image_ids": [
-            "sgflyBjAbQsT"
-          ]
+          "option_value_ids": ["gX2sO6GkWjVv", "0Jg2F3ryDW21"],
+          "image_ids": ["sgflyBjAbQsT"]
         },
         {
           "id": "e8Nl0ImbvOna",
           "price": 7000,
           "stock_quantity": 5,
-          "option_value_ids": [
-            "gX2sO6GkWjVv",
-            "7SJNDHqrunUx"
-          ],
-          "image_ids": [
-            "sgflyBjAbQsT"
-          ]
+          "option_value_ids": ["gX2sO6GkWjVv", "7SJNDHqrunUx"],
+          "image_ids": ["sgflyBjAbQsT"]
         },
         {
           "id": "JOS-H_X9NvtH",
           "price": 7000,
           "stock_quantity": 3,
-          "option_value_ids": [
-            "gX2sO6GkWjVv",
-            "ebwZ_SPRNhs_"
-          ],
-          "image_ids": [
-            "sgflyBjAbQsT"
-          ]
+          "option_value_ids": ["gX2sO6GkWjVv", "ebwZ_SPRNhs_"],
+          "image_ids": ["sgflyBjAbQsT"]
         },
         {
           "id": "QHbMD73S3JXG",
           "price": 7000,
           "stock_quantity": 1,
-          "option_value_ids": [
-            "5jaDlG-y61BU",
-            "9NJLLDGW2lsV"
-          ],
-          "image_ids": [
-            "_4xrTgBvFXqD"
-          ]
+          "option_value_ids": ["5jaDlG-y61BU", "9NJLLDGW2lsV"],
+          "image_ids": ["_4xrTgBvFXqD"]
         },
         {
           "id": "L7ykc4mtmSMe",
           "price": 7000,
           "stock_quantity": 3,
-          "option_value_ids": [
-            "5jaDlG-y61BU",
-            "0Jg2F3ryDW21"
-          ],
-          "image_ids": [
-            "_4xrTgBvFXqD"
-          ]
+          "option_value_ids": ["5jaDlG-y61BU", "0Jg2F3ryDW21"],
+          "image_ids": ["_4xrTgBvFXqD"]
         },
         {
           "id": "rxF22H0N1tq0",
           "price": 7000,
           "stock_quantity": 4,
-          "option_value_ids": [
-            "5jaDlG-y61BU",
-            "7SJNDHqrunUx"
-          ],
-          "image_ids": [
-            "_4xrTgBvFXqD"
-          ]
+          "option_value_ids": ["5jaDlG-y61BU", "7SJNDHqrunUx"],
+          "image_ids": ["_4xrTgBvFXqD"]
         },
         {
           "id": "eZXKs1EeMFvG",
           "price": 7000,
           "stock_quantity": 0,
-          "option_value_ids": [
-            "5jaDlG-y61BU",
-            "ebwZ_SPRNhs_"
-          ],
-          "image_ids": [
-            "_4xrTgBvFXqD"
-          ]
+          "option_value_ids": ["5jaDlG-y61BU", "ebwZ_SPRNhs_"],
+          "image_ids": ["_4xrTgBvFXqD"]
         }
       ]
     },
@@ -551,23 +486,15 @@
           "id": "T5PHUYliQvOv",
           "price": 1000,
           "stock_quantity": 18,
-          "option_value_ids": [
-            "yLt2BxNFSXUm"
-          ],
-          "image_ids": [
-            "reLNMIDzq-Pr"
-          ]
+          "option_value_ids": ["yLt2BxNFSXUm"],
+          "image_ids": ["reLNMIDzq-Pr"]
         },
         {
           "id": "CLZVDT6HnuFd",
           "price": 1000,
           "stock_quantity": 11,
-          "option_value_ids": [
-            "tPEnq3nXGbPy"
-          ],
-          "image_ids": [
-            "reLNMIDzq-Pr"
-          ]
+          "option_value_ids": ["tPEnq3nXGbPy"],
+          "image_ids": ["reLNMIDzq-Pr"]
         }
       ]
     }

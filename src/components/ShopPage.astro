@@ -16,7 +16,10 @@ const products = await getProducts()
 
 <SiteLayout
   title={`${product?.name ?? 'Loja solidária'} | ${site.name}`}
-  description={product?.description ?? 'Conheça os produtos da loja solidária da OPAA Alegrete. Sua compra ajuda a cuidar dos animais.'}
+  description={
+    product?.description ??
+    'Conheça os produtos da loja solidária da OPAA Alegrete. Sua compra ajuda a cuidar dos animais.'
+  }
   image={product?.images[0]?.src}
   imageAlt={product ? `Foto de ${product.name}` : undefined}
 >

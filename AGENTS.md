@@ -144,12 +144,17 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   Referenciar logos e ícones diretamente nos componentes. Não incluir mensalidade
   ou QR Code Pix na API. Novos campos exigem necessidade concreta.
 - Posts do blog ficam em `posts`, identificados pelo `slug`, sem `public_id` ou
-  `expires_at`. Não aplicar essa regra aos identificadores dos animais.
+  `expires_at`, com `title`, `description` (resumo), `body` (texto com parágrafos),
+  `category`, `published_at`, `isPinned` e `images`. A home exibe até três.
+  Não aplicar essa regra aos identificadores dos animais.
+- Animais, posts, comunicados e histórias usam `isPinned` booleano: fixados primeiro,
+  depois `published_at` decrescente dentro de cada grupo, antes de limitar a home.
+  Só comunicados mostram ícone de fixado. Não fixar registros sem solicitação.
 - Produtos usam nanoids de 12 caracteres nos IDs e nomes das fotos WebP.
   Seguir o JSON existente: opções formam variantes com preço e estoque próprios,
   referenciando a galeria compartilhada. Pedidos encaminham ao WhatsApp.
 - Histórias ficam em `stories`, sem identificador, com `name`, `description`,
-  `published_at`, `afterImage` obrigatória e `beforeImage` como caminho ou `null`.
+  `published_at`, `isPinned`, `afterImage` obrigatória e `beforeImage` como caminho ou `null`.
   O site gera o alt com nome e foto atual/anterior. A home mostra até seis fotos
   atuais; `/historias-felizes/` reúne todas por data decrescente, sem carrossel ou
   páginas individuais. Preservar o layout de papel aprovado.
@@ -174,8 +179,8 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
 - Cards levam a `/animais/public_id/`. A página individual mostra todas as fotos
   e a descrição completa; o contato sobre o animal pelo WhatsApp fica nessa página.
   Seu título usa apenas o nome ou “Ainda sem nome”; sexo e faixa etária ficam nos detalhes.
-- Na landing page, mostrar no máximo os dois animais disponíveis publicados mais
-  recentemente, por `published_at` decrescente. Sem disponíveis, ocultar a seção
+- Na landing page, mostrar no máximo dois animais disponíveis, respeitando a
+  ordenação de fixados e data. Sem disponíveis, ocultar a seção
   inteira. Não limitar a
   consulta compartilhada `getAllAnimals()`, usada pelas demais páginas.
 - Comunicados ficam em `notices`, separados dos posts do blog, com apenas `title`,

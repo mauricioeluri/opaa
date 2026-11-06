@@ -12,9 +12,12 @@ interface Props {
 }
 
 const { product } = Astro.props
-const availableVariants = product.variants.filter((item) => item.stock_quantity !== 0)
-const prices = (availableVariants.length ? availableVariants : product.variants)
-  .map((item) => item.price)
+const availableVariants = product.variants.filter(
+  (item) => item.stock_quantity !== 0
+)
+const prices = (
+  availableVariants.length ? availableVariants : product.variants
+).map((item) => item.price)
 const price = prices.length ? Math.min(...prices) : null
 const hasPriceRange = new Set(prices).size > 1
 const contactUrl = getWhatsAppUrl(
@@ -55,7 +58,12 @@ const contactUrl = getWhatsAppUrl(
       hidden
     ></button>
     <noscript>
-      <a class="button" href={contactUrl} target="_blank" rel="noopener noreferrer">
+      <a
+        class="button"
+        href={contactUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         Consultar pelo WhatsApp
       </a>
     </noscript>

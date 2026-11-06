@@ -30,7 +30,6 @@ recomendadas pelo projeto.
 | `src/layouts/SiteLayout.astro` | Estrutura comum, topbar, footer e SEO.                     |
 | `src/config/site.ts`           | Contatos, Pix, informações da ONG, redes sociais e slides. |
 | `src/data/api.json`            | Animais, histórias, comunicados, posts e produtos.         |
-| `src/data/home.ts`             | Chamadas das próximas seções.                              |
 | `src/lib/`                     | Consultas aos dados e funções compartilhadas.              |
 | `src/styles/global.css`        | Cores, fontes, foco e classe `.button`.                    |
 | `public/`                      | Imagens, logos e PDF do kit de marca.                      |
@@ -54,7 +53,7 @@ Use fotos reais, sem filtros de IA, e informações confirmadas pela ONG.
 
 ### Animais
 
-A home mostra até dois disponíveis, por `published_at` decrescente, ou oculta a
+A home mostra até dois disponíveis, com fixados primeiro e depois por data, ou oculta a
 seção quando não houver nenhum. `/animais/` lista todos, com filtros locais.
 Os cards mostram até duas fotos e três linhas de descrição; levam a
 `/animais/public_id/`, com todas as fotos, texto completo e contato pelo WhatsApp.
@@ -83,7 +82,7 @@ ou “Ainda sem nome”.
 `beforeImage` com o caminho da foto anterior ou `null`. Não há identificador público.
 O site gera os textos alternativos com o nome e a indicação de foto atual ou anterior.
 A home mostra até seis fotos atuais; `/historias-felizes/` reúne todas as histórias,
-das mais recentes às mais antigas, sem páginas individuais ou carrossel.
+com fixados primeiro e depois por data, sem páginas individuais ou carrossel.
 “Envie sua história” abre o WhatsApp, sem formulário ou envio pelo site.
 
 ### Comunicados e posts
@@ -91,8 +90,11 @@ das mais recentes às mais antigas, sem páginas individuais ou carrossel.
 `notices` contém apenas `title`, `body`, `published_at` (`AAAA-MM-DD`) e `isPinned`.
 A home mostra até seis: fixados primeiro, por data decrescente dentro de cada grupo.
 Sem avisos, a seção desaparece. O texto abre ao clicar, inclusive sem JavaScript.
-Não há imagens ou páginas individuais. “Ver todos” aponta para `#` enquanto a página não existe.
-Posts do blog ficam separados em `posts`, identificados por `slug`, sem `public_id` ou `expires_at`.
+Não há imagens ou páginas individuais. `/comunicados/` reúne todos os avisos.
+Posts ficam em `posts`: `slug`, `title`, `description` (resumo), `body` (texto com
+parágrafos), `category`, `published_at`, `isPinned` e `images`. A home mostra até três,
+com fixados primeiro e depois por data. Categorias: `community`, `campaign` e `transparency`.
+Animais, histórias e comunicados seguem essa mesma ordenação; só comunicados mostram o ícone de fixado.
 
 ### Produtos
 

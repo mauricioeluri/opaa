@@ -101,7 +101,12 @@ const {
         }
         const updateTimer = () => {
           window.clearInterval(timer)
-          if (automatic && visibleDots().length > 1 && !drag && !document.hidden) {
+          if (
+            automatic &&
+            visibleDots().length > 1 &&
+            !drag &&
+            !document.hidden
+          ) {
             timer = window.setInterval(() => moveTo(current() + 1), 6000)
           }
         }
@@ -109,14 +114,21 @@ const {
         controls.hidden = false
         photos.style.touchAction = 'pan-y'
         dots.forEach((dot) =>
-          dot.addEventListener('click', () => moveTo(visibleDots().indexOf(dot)))
+          dot.addEventListener('click', () =>
+            moveTo(visibleDots().indexOf(dot))
+          )
         )
         const filterImages = () => {
           const ids = slider.dataset.visibleImages
-          const visibleIds: string[] | undefined = ids ? JSON.parse(ids) : undefined
-          slider.querySelectorAll<HTMLElement>('figure, .dot').forEach((item) => {
-            item.hidden = !!visibleIds && !visibleIds.includes(item.dataset.imageId || '')
-          })
+          const visibleIds: string[] | undefined = ids
+            ? JSON.parse(ids)
+            : undefined
+          slider
+            .querySelectorAll<HTMLElement>('figure, .dot')
+            .forEach((item) => {
+              item.hidden =
+                !!visibleIds && !visibleIds.includes(item.dataset.imageId || '')
+            })
           controls.hidden = visibleDots().length < 2
           if (visibleDots().length > 1) photos.tabIndex = 0
           else photos.removeAttribute('tabindex')
@@ -144,7 +156,12 @@ const {
           }
         })
         photos.addEventListener('pointerdown', (event) => {
-          if (!event.isPrimary || event.button !== 0 || visibleDots().length < 2) return
+          if (
+            !event.isPrimary ||
+            event.button !== 0 ||
+            visibleDots().length < 2
+          )
+            return
           window.clearInterval(timer)
           if (event.pointerType === 'mouse') event.preventDefault()
           drag = {

@@ -1,48 +1,53 @@
 ---
 import { ArrowUpRight, PawPrint, Shirt, Stethoscope } from '@lucide/astro'
-import { highlights } from '../data/home'
-import { getStories } from '../lib/api'
+import { getPosts, getStories } from '../lib/api'
+import { postCategories } from '../lib/post-category'
 
+const posts = (await getPosts()).slice(0, 3)
 const stories = (await getStories()).slice(0, 6)
 ---
 
 <div class="community">
-  <section id="novidades" aria-labelledby="news-title">
-    <header>
-      <div>
-        <p class="eyebrow">Para ficar por dentro</p>
-        <h2 id="news-title">Acontece na OPAA</h2>
-      </div>
-      <a class="section-link" href="#">
-        Ver publicações
-        <ArrowUpRight size={18} aria-hidden="true" />
-      </a>
-    </header>
-    <div class="highlights">
-      {highlights.map((highlight) => (
-        <a class="highlight" href="#">
-          {highlight.image ? (
-            <img
-              class="cover"
-              src={highlight.image.src}
-              alt={highlight.image.alt}
-              width="480"
-              height="300"
-              loading="lazy"
-              decoding="async"
-            />
-          ) : (
-            <span class="illustration" aria-hidden="true">
-              <Stethoscope size={48} stroke-width={1.5} />
-            </span>
-          )}
-          <p class="category">{highlight.category}</p>
-          <h3>{highlight.title}</h3>
-          <p class="description">{highlight.description}</p>
+  {posts.length > 0 && (
+    <section id="novidades" aria-labelledby="news-title">
+      <header>
+        <div>
+          <p class="eyebrow">Para ficar por dentro</p>
+          <h2 id="news-title">Acontece na OPAA</h2>
+        </div>
+        <a class="section-link" href="#">
+          Ver publicações
+          <ArrowUpRight size={18} aria-hidden="true" />
         </a>
-      ))}
-    </div>
-  </section>
+      </header>
+      <div class="highlights">
+        {posts.map((post) => (
+          <a class="highlight" href="#">
+            {post.images[0] ? (
+              <img
+                class="cover"
+                src={post.images[0]}
+                alt={post.title}
+                width="480"
+                height="300"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <span class="illustration" aria-hidden="true">
+                <Stethoscope size={48} stroke-width={1.5} />
+              </span>
+            )}
+            <p class="category">
+              {postCategories[post.category] ?? 'Publicações'}
+            </p>
+            <h3>{post.title}</h3>
+            <p class="description">{post.description}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
 
   <section class="shop" id="loja" aria-labelledby="shop-title">
     <a class="shop-card" href="/loja/" aria-labelledby="shop-title">
