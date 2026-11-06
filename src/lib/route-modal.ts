@@ -74,34 +74,43 @@ export function attachRouteModal(
   }
   const entry = { dialog, opener }
   modals.set(path, entry)
-  let active = true
-  dialog.addEventListener('close', () => {
-    if (!active || currentModal()?.dialog !== dialog) return
-    entry.opener?.focus({ preventScroll: true })
-    if (history.state?.routeModal) history.back()
-    else {
-      unfreezePage()
-      navigate(returnPath, { history: 'replace' })
-    }
-  })
-  dialog.addEventListener('click', (event) => {
-    const bounds = dialog.getBoundingClientRect()
-    if (
-      event.target === dialog &&
-      (event.clientX < bounds.left ||
-        event.clientX > bounds.right ||
-        event.clientY < bounds.top ||
-        event.clientY > bounds.bottom)
-    )
-      dialog.close()
-  })
+  const controller = new AbortController()
+  const { signal } = controller
+  dialog.addEventListener(
+    'close',
+    () => {
+      if (currentModal()?.dialog !== dialog) return
+      entry.opener?.focus({ preventScroll: true })
+      if (history.state?.routeModal) history.back()
+      else {
+        unfreezePage()
+        navigate(returnPath, { history: 'replace' })
+      }
+    },
+    { signal }
+  )
+  dialog.addEventListener(
+    'click',
+    (event) => {
+      const bounds = dialog.getBoundingClientRect()
+      if (
+        event.target === dialog &&
+        (event.clientX < bounds.left ||
+          event.clientX > bounds.right ||
+          event.clientY < bounds.top ||
+          event.clientY > bounds.bottom)
+      )
+        dialog.close()
+    },
+    { signal }
+  )
   dialog.removeAttribute('open')
   if (currentModal()?.dialog === dialog) {
     freezePage()
     dialog.showModal()
   }
   return () => {
-    active = false
+    controller.abort()
     modals.delete(path)
     if (dialog.open) dialog.close()
     if (modals.size === 0) {

@@ -165,7 +165,7 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   O site gera o alt com nome e foto atual/anterior. A home mostra até seis fotos
   atuais; `/historias-felizes/` reúne todas por data decrescente, sem carrossel ou
   páginas individuais. Preservar o layout de papel aprovado.
-- Centralizar contatos e textos compartilhados quando reutilizados. Não criar
+- Centralizar textos compartilhados quando reutilizados. Não criar
   sistema de configuração ou editor para cada informação.
 - Animais não têm campo `title`. Sem nome, usar `name: null`. A apresentação
   dos cards combina nome (quando houver), sexo e faixa etária com `getAnimalLabel()`;
@@ -178,7 +178,7 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   (`vaccinations`, texto ou `null`) só aparecem nos detalhes quando informadas.
   Não presumir vacinação completa nem status de castração desconhecido. Preferir
   a inferência de tipos do JSON. Os cards exibem até duas
-  fotos de `images`; a página individual permite ver todas. Sem foto, a fonte
+  fotos de `images`; o modal permite ver todas. Sem foto, a fonte
   informa `/api/animals/default.webp`. Não escolher imagem
   padrão nem completar dados desconhecidos no site.
 - A API informa o tipo em `type`: `dog`, `cat` ou `other`. A interface apresenta

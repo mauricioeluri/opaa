@@ -25,7 +25,7 @@ recomendadas pelo projeto.
 
 | Arquivo ou pasta               | Conteúdo                                                   |
 | ------------------------------ | ---------------------------------------------------------- |
-| `src/pages/`                   | Landing page, animais, histórias felizes e página 404.     |
+| `src/pages/`                   | Páginas públicas, rotas de detalhes e página 404.          |
 | `src/components/`              | Partes reutilizáveis da interface e suas interações.       |
 | `src/layouts/SiteLayout.astro` | Estrutura comum, topbar, footer e SEO.                     |
 | `src/config/site.ts`           | Contatos, Pix, informações da ONG, redes sociais e slides. |
@@ -54,11 +54,13 @@ Os slides iniciais são `public/images/slide-1.jpg` e `slide-2.jpg`. Para trocá
 substitua os arquivos e confira `src`, `caption` e `alt` em `site.heroSlides`.
 Os registros de animais ainda são demonstrativos.
 Use fotos reais, sem filtros de IA, e informações confirmadas pela ONG.
+Animais, histórias, comunicados e posts usam `isPinned`: fixados primeiro e depois
+`published_at` decrescente dentro de cada grupo. Só comunicados exibem o ícone de fixado.
 
 ### Animais
 
-A home mostra até dois disponíveis, com fixados primeiro e depois por data, ou oculta a
-seção quando não houver nenhum. `/animais/` lista todos, com filtros locais.
+A home mostra até dois disponíveis ou oculta a seção quando não houver nenhum.
+`/animais/` lista todos, com filtros locais.
 Os cards mostram até duas fotos e três linhas de descrição; levam a
 `/animais/public_id/`, que abre um modal com todas as fotos, texto completo e WhatsApp.
 A mensagem inclui o link do animal.
@@ -86,22 +88,21 @@ ou “Ainda sem nome”.
 `beforeImage` com o caminho da foto anterior ou `null`. Não há identificador público.
 O site gera os textos alternativos com o nome e a indicação de foto atual ou anterior.
 A home mostra até seis fotos atuais; `/historias-felizes/` reúne todas as histórias,
-com fixados primeiro e depois por data, sem páginas individuais ou carrossel.
+sem páginas individuais ou carrossel.
 “Envie sua história” abre o WhatsApp, sem formulário ou envio pelo site.
 
 ### Comunicados e posts
 
 `notices` contém apenas `title`, `body`, `published_at` (`AAAA-MM-DD`) e `isPinned`.
-A home mostra até seis: fixados primeiro, por data decrescente dentro de cada grupo.
+A home mostra até seis.
 Sem avisos, a seção desaparece. O texto abre ao clicar, inclusive sem JavaScript.
 Não há imagens ou páginas individuais. `/comunicados/` reúne todos os avisos.
 Posts ficam em `posts`: `slug`, `title`, `body` (texto original com
-parágrafos), `category`, `published_at`, `isPinned` e `images`. A home mostra até três,
-com fixados primeiro e depois por data. Categorias: `community`, `campaign`, `transparency` e `care`.
+parágrafos), `category`, `published_at`, `isPinned` e `images`. A home mostra até três.
+Categorias: `community`, `campaign`, `transparency` e `care`.
 A prévia mostra o próprio texto, limitado a três linhas com reticências.
 `/publicacoes/` reúne todos os posts, com uma imagem por artigo e filtros no navegador.
 Cada card abre `/publicacoes/slug/`, com texto completo e imagem em tamanho grande.
-Animais, histórias e comunicados seguem essa mesma ordenação; só comunicados mostram o ícone de fixado.
 
 ### Produtos
 
@@ -132,7 +133,7 @@ Antes de entregar, rode `pnpm check-all`, revise as correções e confira no cel
 Agentes seguem também os limites do [AGENTS.md](AGENTS.md).
 O GitHub está integrado à Cloudflare: enviar à `main` pode publicar automaticamente.
 Combine o envio com a equipe. Para domínio e indexação, consulte `.env.example` e
-[docs/SEO.md](docs/SEO.md). Alguns links ainda usam `#` até as páginas ficarem prontas.
+[docs/SEO.md](docs/SEO.md).
 
 ## Combinados da equipe
 

@@ -5,6 +5,7 @@ import PhotoSlider from '../PhotoSlider.astro'
 import { site } from '../../config/site'
 import type { getAvailableAnimals } from '../../lib/api'
 import { animalAgeGroups, getAnimalLabel } from '../../lib/animal-label'
+import { formatDate } from '../../lib/format-date'
 import { getWhatsAppUrl } from '../../lib/whatsapp'
 
 interface Props {
@@ -22,9 +23,6 @@ const animalTypes: Record<string, string> = {
 const animalType = animalTypes[animal.type]
 const sex = animal.isMale ? 'Macho' : 'Fêmea'
 const ageGroup = animalAgeGroups[animal.ageGroup]
-const publishedDate = new Intl.DateTimeFormat('pt-BR', {
-  timeZone: 'America/Sao_Paulo',
-}).format(new Date(animal.published_at))
 const animalUrl = new URL(
   `/animais/${animal.public_id}/`,
   Astro.site ?? Astro.url
@@ -46,7 +44,7 @@ const details = [
     value: animal.neutered ? 'Sim' : 'Não',
   },
   { label: 'Vacinas', value: animal.vaccinations },
-  { label: 'Publicado em', value: publishedDate },
+  { label: 'Publicado em', value: formatDate(animal.published_at) },
 ].filter((detail) => detail.value?.trim())
 ---
 

@@ -93,7 +93,9 @@ const sizes =
         const controls = slider.querySelector<HTMLElement>('.dots')
         if (!photos || !controls) return
 
-        const slides = Array.from(photos.querySelectorAll<HTMLElement>('figure'))
+        const slides = Array.from(
+          photos.querySelectorAll<HTMLElement>('figure')
+        )
         const clones: HTMLElement[] = []
         const automatic = slider.dataset.autoplay === 'true'
         const controller = new AbortController()

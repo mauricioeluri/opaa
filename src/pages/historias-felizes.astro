@@ -56,7 +56,6 @@ const contactUrl = getWhatsAppUrl(
                         src={story.beforeImage}
                         alt={`Foto anterior de ${story.name}`}
                         width={960}
-                        sizes="(max-width: 60rem) 45vw, 240px"
                         loading={index < 2 ? 'eager' : 'lazy'}
                         decoding="async"
                       />
@@ -70,11 +69,6 @@ const contactUrl = getWhatsAppUrl(
                       src={story.afterImage}
                       alt={`Foto atual de ${story.name}`}
                       width={960}
-                      sizes={
-                        story.beforeImage
-                          ? '(max-width: 60rem) 45vw, 240px'
-                          : '(max-width: 60rem) 90vw, 480px'
-                      }
                       loading={index < 2 ? 'eager' : 'lazy'}
                       decoding="async"
                     />

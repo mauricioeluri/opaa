@@ -1,12 +1,11 @@
 ---
 import type { InferGetStaticPropsType } from 'astro'
-import { imageMetadata } from 'astro/assets/utils'
 import { ArrowLeft } from '@lucide/astro'
-import { readFile } from 'node:fs/promises'
 import ContentImage from '../../components/ContentImage.astro'
 import { site } from '../../config/site'
 import SiteLayout from '../../layouts/SiteLayout.astro'
 import { getPosts } from '../../lib/api'
+import { getContentImage } from '../../lib/content-image'
 import { formatDate } from '../../lib/format-date'
 import { postCategories } from '../../lib/post-category'
 
@@ -20,9 +19,7 @@ export async function getStaticPaths() {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>
 const { post } = Astro.props
 const image = post.images[0]
-const dimensions = image
-  ? await imageMetadata(await readFile(`public${image}`), image)
-  : undefined
+const dimensions = image ? await getContentImage(image) : undefined
 const portrait = dimensions && dimensions.height > dimensions.width
 const description = post.body.replace(/\s+/g, ' ').trim().slice(0, 160)
 ---

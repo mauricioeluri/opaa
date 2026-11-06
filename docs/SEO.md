@@ -8,10 +8,10 @@ pesquisas no Google.
 
 - `src/config/site.ts`: título, descrição, contatos, endereço e redes sociais.
 - `src/config/seo.ts`: indexação e rotas do sitemap.
-- Páginas dos animais disponíveis entram automaticamente no sitemap.
+- Animais disponíveis, produtos ativos e publicações entram automaticamente no sitemap.
 - `src/components/SEO.astro`: implementação dos metadados.
 - `public/branding/opaa-social.png`: prévia de compartilhamento (1200 × 630).
-- Páginas individuais usam a primeira foto do animal na prévia. O WhatsApp decide
+- Rotas de detalhes usam a primeira foto do item na prévia. O WhatsApp decide
   se exibe a imagem; a página e a foto precisam estar acessíveis publicamente.
 
 ## Publicação
