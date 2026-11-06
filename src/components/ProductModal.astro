@@ -130,11 +130,10 @@ const contactUrl = getWhatsAppUrl(
 </dialog>
 
 <script>
-  import { navigate } from 'astro:transitions/client'
   import type { getProducts } from '../lib/api'
   import { formatPrice } from '../lib/format-price'
   import { onPageLoad } from '../lib/page-lifecycle'
-  import { attachRouteModal } from '../lib/route-modal'
+  import { attachRouteModal, openRouteModal } from '../lib/route-modal'
   import { getWhatsAppUrl } from '../lib/whatsapp'
 
   type Product = Awaited<ReturnType<typeof getProducts>>[number]
@@ -280,9 +279,7 @@ const contactUrl = getWhatsAppUrl(
       })
       opener.hidden = false
       opener.addEventListener('click', () => {
-        navigate(`/loja/${product.public_id}/`, {
-          state: { routeModal: true },
-        })
+        openRouteModal(`/loja/${product.public_id}/`, opener)
       })
       syncOptions()
       update()

@@ -50,7 +50,7 @@ const details = [
 ].filter((detail) => detail.value?.trim())
 ---
 
-<dialog class="animal-modal" aria-labelledby="animal-title" data-animal-path={`/animais/${animal.public_id}/`} open>
+<dialog class="animal-modal" aria-labelledby={`animal-title-${animal.public_id}`} data-animal-path={`/animais/${animal.public_id}/`} open={Astro.url.pathname.replace(/\/?$/, '/') === `/animais/${animal.public_id}/`}>
   <form method="dialog" class="close-row">
     <button class="close-animal" type="submit" aria-label="Fechar animal" autofocus hidden>
       <X size={22} aria-hidden="true" />
@@ -71,7 +71,7 @@ const details = [
 
       <div class="animal-content">
         <p class="status">Disponível para adoção</p>
-        <h2 id="animal-title">{title}</h2>
+        <h2 id={`animal-title-${animal.public_id}`}>{title}</h2>
         <dl>
           {details.map((detail) => (
             <div>
@@ -100,12 +100,15 @@ const details = [
   import { attachRouteModal } from '../lib/route-modal'
 
   onPageLoad(() => {
-    const dialog = document.querySelector<HTMLDialogElement>('.animal-modal')
-    const path = dialog?.dataset.animalPath
-    if (!dialog || !path) return
-    const close = dialog.querySelector<HTMLButtonElement>('.close-animal')
-    if (close) close.hidden = false
-    return attachRouteModal(dialog, path, '/animais/')
+    const cleanups: (() => void)[] = []
+    document.querySelectorAll<HTMLDialogElement>('.animal-modal').forEach((dialog) => {
+      const path = dialog.dataset.animalPath
+      if (!path) return
+      const close = dialog.querySelector<HTMLButtonElement>('.close-animal')
+      if (close) close.hidden = false
+      cleanups.push(attachRouteModal(dialog, path, '/animais/'))
+    })
+    return () => cleanups.forEach((cleanup) => cleanup())
   })
 </script>
 

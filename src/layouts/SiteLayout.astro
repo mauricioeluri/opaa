@@ -22,6 +22,16 @@ type Props = ComponentProps<typeof SEO>
     <link rel="apple-touch-icon" href="/branding/opaa-apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
     <SEO {...Astro.props} />
+    <script is:inline>
+      // Modal history must be handled before ClientRouter starts a page swap.
+      if (!window.__opaaModalHistory) {
+        window.__opaaModalHistory = true
+        window.addEventListener('popstate', (event) => {
+          const modalHistory = new Event('route-modal:history', { cancelable: true })
+          if (!window.dispatchEvent(modalHistory)) event.stopImmediatePropagation()
+        }, true)
+      }
+    </script>
     <ClientRouter fallback="swap" />
   </head>
   <body id="inicio">

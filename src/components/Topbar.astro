@@ -103,6 +103,7 @@ const items = [
       })
 
       const updateScrollState = () => {
+        if (document.body.style.position === 'fixed') return
         header.dataset.scrolled = String(window.scrollY > 40)
         const atBottom =
           window.scrollY + window.innerHeight >=

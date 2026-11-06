@@ -2,7 +2,6 @@
 import { PawPrint } from '@lucide/astro'
 import PageHeader from './PageHeader.astro'
 import AnimalCard from './AnimalCard.astro'
-import AnimalModal from './AnimalModal.astro'
 import { site } from '../config/site'
 import SiteLayout from '../layouts/SiteLayout.astro'
 import { getAvailableAnimals } from '../lib/api'
@@ -85,7 +84,6 @@ const animals = await getAvailableAnimals()
         : 'Nenhum animal encontrado com esses filtros. Que tal tentar de outro jeito?'}
     </p>
   </main>
-  {animal && <AnimalModal animal={animal} />}
 </SiteLayout>
 
 <script>
@@ -115,10 +113,6 @@ const animals = await getAvailableAnimals()
             : `${visible} animais encontrados`
         empty.hidden = visible > 0
       }
-      filters.forEach((filter) => {
-        const value = history.state?.animalFilters?.[filter.name]
-        if (typeof value === 'string') filter.value = value
-      })
       update()
       form.hidden = false
       form.addEventListener('submit', (event) => event.preventDefault())
