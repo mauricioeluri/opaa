@@ -42,7 +42,7 @@ const stories = (await getStories()).slice(0, 6)
               {postCategories[post.category] ?? 'Publicações'}
             </p>
             <h3>{post.title}</h3>
-            <p class="description">{post.description}</p>
+            <p class="description">{post.body}</p>
           </a>
         ))}
       </div>
@@ -153,11 +153,15 @@ const stories = (await getStories()).slice(0, 6)
 
   .highlights {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: 24px;
   }
 
   .highlight {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    column-gap: 24px;
+    align-content: start;
     min-width: 0;
     color: inherit;
     text-decoration: none;
@@ -166,11 +170,13 @@ const stories = (await getStories()).slice(0, 6)
   .cover,
   .illustration {
     display: flex;
+    grid-row: 1 / 4;
     width: 100%;
     height: auto;
     aspect-ratio: 8 / 5;
     border-radius: 16px;
-    object-fit: cover;
+    object-fit: contain;
+    background: var(--color-soft);
   }
 
   .illustration {
@@ -194,17 +200,21 @@ const stories = (await getStories()).slice(0, 6)
   }
 
   .category {
-    margin-top: 12px;
     color: var(--color-primary);
     font-size: 12px;
   }
 
   h3 {
-    margin: 8px 0;
+    margin: 4px 0 8px;
     font-size: 20px;
   }
 
   .description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
     color: var(--color-muted);
     font-size: 14px;
   }
@@ -383,16 +393,12 @@ const stories = (await getStories()).slice(0, 6)
     }
 
     .highlight {
-      display: grid;
-      grid-template-columns: 88px minmax(0, 1fr);
+      grid-template-columns: 112px minmax(0, 1fr);
       column-gap: 16px;
-      align-content: start;
     }
 
     .cover,
     .illustration {
-      grid-row: 1 / 4;
-      aspect-ratio: 1;
       border-radius: 12px;
     }
 

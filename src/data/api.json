@@ -43,44 +43,37 @@
   ],
   "posts": [
     {
-      "slug": "cuidar-tambem-e-aprender",
-      "title": "Cuidar também é aprender",
-      "description": "Palestras e ações que aproximam a comunidade.",
-      "body": "Palestras e ações que aproximam a comunidade.",
-      "category": "community",
-      "published_at": "2026-11-05",
-      "isPinned": false,
-      "images": []
-    },
-    {
-      "slug": "comunidade-reunida-pela-causa",
-      "title": "Comunidade reunida pela causa",
-      "description": "Encontros que ajudam a manter esse cuidado vivo.",
-      "body": "Encontros que ajudam a manter esse cuidado vivo.",
-      "category": "campaign",
-      "published_at": "2026-11-04",
-      "isPinned": false,
-      "images": []
-    },
-    {
-      "slug": "o-que-construimos-juntos",
-      "title": "O que construímos juntos",
-      "description": "Acompanhe as ações e a prestação de contas.",
-      "body": "Acompanhe as ações e a prestação de contas.",
+      "slug": "relatorio-de-servicos-janeiro-julho-2026",
+      "title": "Relatório de serviços de janeiro a julho de 2026",
+      "body": "🐾 Relatório de Serviços | Janeiro a Julho de 2026 🐾\n\n🐶🐈 Com muito compromisso, dedicação e o apoio da nossa comunidade, seguimos transformando a vida de centenas de animais e de suas famílias.\n\n🗓️ Entre 01/01/2026 e 31/07/2026, a ONG OPAA realizou 1.896 atendimentos, incluindo:\n\n🐾 955 atendimentos clínicos;\n🐾 85 atendimentos de emergência (plantão);\n🐾 218 cirurgias;\n🐾 331 castrações por meio de verba pública;\n🐾 142 castrações a baixo custo;\n🐾 162 adoções.\n\n🔢 Cada número representa uma vida acolhida, tratada, protegida e uma nova oportunidade para quem mais precisa.\n\n🤝🏻 Agradecemos a todos que caminham ao nosso lado. Vocês fazem parte de cada conquista.\n\n✅ Seguimos firmes em nossa missão de promover o bem-estar animal, oferecendo atendimento a animais em situação de rua e a animais de famílias cadastradas no CadÚnico.\n\n❤️‍🩹 Juntos, continuaremos fazendo a diferença.",
       "category": "transparency",
-      "published_at": "2026-11-03",
+      "published_at": "2026-08-01",
       "isPinned": false,
-      "images": []
+      "images": [
+        "/api/blog/_GnKq4FALI6l.webp"
+      ]
     },
     {
-      "slug": "conheca-o-trabalho-da-opaa",
-      "title": "Conheça o trabalho da OPAA Alegrete",
-      "body": "Desde março de 2009, a OPAA atua pela proteção animal em Alegrete, com resgates, castrações e mutirões de vacinação. Você pode ajudar como associado, com contribuição de R$ 20 por mês, voluntário ou lar temporário. Entre em contato pelo telefone (55) 99984-4045 ou pelo e-mail alegreteongopaa@gmail.com. Publicação de exemplo para desenvolvimento; a data é ilustrativa.",
+      "slug": "visita-centro-protecao-animais-urcamp",
+      "title": "Parceria com a URCAMP no cuidado aos animais",
+      "body": "Hoje a ONG OPAA esteve visitando o Centro de Proteção dos Animais Domingas Faraco. Equipe de estudantes estavam acompanhando castrações realizadas por professores da URCAMP. É muito bom ver as parcerias funcionando. Obrigada pelo empenho de todos que lutam para o bem dos animais e manutenção do Canil.",
       "category": "community",
-      "published_at": "2026-11-01T12:00:00-03:00",
+      "published_at": "2026-10-29",
       "isPinned": false,
-      "images": ["/branding/opaa-logo.svg"],
-      "description": "Conheça o trabalho da OPAA Alegrete e as formas de ajudar."
+      "images": [
+        "/api/blog/-_5jQiW6UuMK.webp"
+      ]
+    },
+    {
+      "slug": "sete-felinos-castrados-chipados-alegrete",
+      "title": "Sete gatos castrados e microchipados",
+      "body": "Dia de castração no Centro de Proteção dos Animais de Alegrete. Sete felinos castrados e chipados pela Dra. Adriana Stigger. Transporte realizado pela Equipe de Voluntários da OPAA e Clínica Mundo + Animal., amanhã mais cinco. A lista de espera é grande, mas confiamos na sensibilidade dos nossos Vereadores, que cientes da gravidade e da necessidade de castrar os animais, vão destinar recursos para que este trabalho possa acontecer. Temos uma lista com aproximadamente 1000 animais esperando. Inscrições pelo fone (55)999844045.",
+      "category": "care",
+      "published_at": "2026-10-15",
+      "isPinned": false,
+      "images": [
+        "/api/blog/SncyPf0EN9xN.webp"
+      ]
     }
   ],
   "notices": [

@@ -48,7 +48,7 @@ em `public/images/`. Os caminhos públicos não incluem `public`, por exemplo:
 
 Os slides iniciais são `public/images/slide-1.jpg` e `slide-2.jpg`. Para trocá-los,
 substitua os arquivos e confira `src`, `caption` e `alt` em `site.heroSlides`.
-Os registros de animais e o exemplo de post ainda são demonstrativos.
+Os registros de animais ainda são demonstrativos.
 Use fotos reais, sem filtros de IA, e informações confirmadas pela ONG.
 
 ### Animais
@@ -91,9 +91,10 @@ com fixados primeiro e depois por data, sem páginas individuais ou carrossel.
 A home mostra até seis: fixados primeiro, por data decrescente dentro de cada grupo.
 Sem avisos, a seção desaparece. O texto abre ao clicar, inclusive sem JavaScript.
 Não há imagens ou páginas individuais. `/comunicados/` reúne todos os avisos.
-Posts ficam em `posts`: `slug`, `title`, `description` (resumo), `body` (texto com
+Posts ficam em `posts`: `slug`, `title`, `body` (texto original com
 parágrafos), `category`, `published_at`, `isPinned` e `images`. A home mostra até três,
-com fixados primeiro e depois por data. Categorias: `community`, `campaign` e `transparency`.
+com fixados primeiro e depois por data. Categorias: `community`, `campaign`, `transparency` e `care`.
+A prévia mostra o próprio texto, limitado a três linhas com reticências.
 Animais, histórias e comunicados seguem essa mesma ordenação; só comunicados mostram o ícone de fixado.
 
 ### Produtos

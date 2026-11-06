@@ -144,8 +144,9 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   Referenciar logos e ícones diretamente nos componentes. Não incluir mensalidade
   ou QR Code Pix na API. Novos campos exigem necessidade concreta.
 - Posts do blog ficam em `posts`, identificados pelo `slug`, sem `public_id` ou
-  `expires_at`, com `title`, `description` (resumo), `body` (texto com parágrafos),
+  `expires_at`, com `title`, `body` (texto original com parágrafos),
   `category`, `published_at`, `isPinned` e `images`. A home exibe até três.
+  A prévia usa o próprio `body`, limitado a três linhas com reticências por CSS.
   Não aplicar essa regra aos identificadores dos animais.
 - Animais, posts, comunicados e histórias usam `isPinned` booleano: fixados primeiro,
   depois `published_at` decrescente dentro de cada grupo, antes de limitar a home.
