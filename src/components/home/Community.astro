@@ -1,7 +1,7 @@
 ---
 import { ArrowUpRight, PawPrint, Shirt, Stethoscope } from '@lucide/astro'
-import { getPosts, getStories } from '../lib/api'
-import { postCategories } from '../lib/post-category'
+import { getPosts, getStories } from '../../lib/api'
+import { postCategories } from '../../lib/post-category'
 
 const posts = (await getPosts()).slice(0, 3)
 const stories = (await getStories()).slice(0, 6)

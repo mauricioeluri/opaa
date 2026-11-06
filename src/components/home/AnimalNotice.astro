@@ -1,8 +1,20 @@
 ---
-import { ArrowUpRight, Megaphone, Search, ShieldAlert, X } from '@lucide/astro'
-import { site } from '../config/site'
-import { getWhatsAppUrl } from '../lib/whatsapp'
+import {
+  ArrowUpRight,
+  Megaphone,
+  Search,
+  ShieldAlert,
+  Siren,
+  X,
+} from '@lucide/astro'
+import { site } from '../../config/site'
+import { formatPhone } from '../../lib/format-phone'
+import { getWhatsAppUrl } from '../../lib/whatsapp'
 
+const emergencyUrl = getWhatsAppUrl(
+  site.emergencyPhone,
+  'Oi, pessoal! Preciso informar uma urgência envolvendo um animal.'
+)
 const reportsUrl = getWhatsAppUrl(
   site.phone,
   'Oi, pessoal! Gostaria de informar uma situação de maus-tratos a um animal.'
@@ -30,6 +42,14 @@ const lostAnimalUrl = getWhatsAppUrl(
         <X size={20} aria-hidden="true" />
       </button>
     </header>
+    <a href={emergencyUrl} target="_blank" rel="noopener noreferrer">
+      <Siren size={18} aria-hidden="true" />
+      <span>
+        Urgência com um animal
+        <small>{formatPhone(site.emergencyPhone)}</small>
+      </span>
+      <ArrowUpRight size={18} aria-hidden="true" />
+    </a>
     <a href={reportsUrl} target="_blank" rel="noopener noreferrer">
       <ShieldAlert size={18} aria-hidden="true" />
       <span>Informar maus-tratos</span>
@@ -45,7 +65,7 @@ const lostAnimalUrl = getWhatsAppUrl(
 </details>
 
 <script>
-  import { onPageLoad } from '../lib/page-lifecycle'
+  import { onPageLoad } from '../../lib/page-lifecycle'
 
   onPageLoad(() => {
     const notice = document.querySelector<HTMLDetailsElement>('.animal-notice')
@@ -179,6 +199,12 @@ const lostAnimalUrl = getWhatsAppUrl(
 
   a span {
     flex: 1;
+  }
+
+  small {
+    display: block;
+    color: var(--color-muted);
+    font-size: 12px;
   }
 
   .animal-notice :global(svg) {

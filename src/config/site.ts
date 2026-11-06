@@ -4,6 +4,7 @@ export const site = {
   cnpj: '10.825.728/0001-06',
   email: 'alegreteongopaa@gmail.com',
   phone: '+5555999844045',
+  emergencyPhone: '+5555999175896',
   pixKey: 'alegreteongopaa@gmail.com',
   description:
     'Desde março de 2009, a OPAA atua pela proteção animal em Alegrete, RS, com resgates, castração e vacinação. Ajude como sócio, voluntário ou lar temporário.',
@@ -14,14 +15,6 @@ export const site = {
     addressCountry: 'BR',
     postalCode: '97541-160',
   },
-  openingHours: [
-    {
-      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      opens: '13:30',
-      closes: '18:00',
-    },
-    { dayOfWeek: ['Saturday', 'Sunday'] },
-  ],
   title: 'OPAA Alegrete | Proteção animal em Alegrete, RS',
   slogan: 'Juntos pela proteção animal',
   facebook: 'ong.opaa',

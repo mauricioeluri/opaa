@@ -1,10 +1,10 @@
 ---
 import { Heart, ShoppingBag } from '@lucide/astro'
-import PageHeader from './PageHeader.astro'
+import PageHeader from '../PageHeader.astro'
 import ProductCard from './ProductCard.astro'
-import { site } from '../config/site'
-import SiteLayout from '../layouts/SiteLayout.astro'
-import { getProducts } from '../lib/api'
+import { site } from '../../config/site'
+import SiteLayout from '../../layouts/SiteLayout.astro'
+import { getProducts } from '../../lib/api'
 
 interface Props {
   product?: Awaited<ReturnType<typeof getProducts>>[number]

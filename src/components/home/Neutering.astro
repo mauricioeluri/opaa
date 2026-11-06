@@ -1,8 +1,8 @@
 ---
 import { Stethoscope } from '@lucide/astro'
-import { site } from '../config/site'
-import { getWhatsAppUrl } from '../lib/whatsapp'
-import BrandIcon from './BrandIcon.astro'
+import { site } from '../../config/site'
+import { getWhatsAppUrl } from '../../lib/whatsapp'
+import BrandIcon from '../BrandIcon.astro'
 
 const contactUrl = getWhatsAppUrl(
   site.phone,

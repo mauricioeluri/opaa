@@ -131,8 +131,11 @@ const contactUrl = getWhatsAppUrl(
     );
     background-position: 0 10px;
     filter: drop-shadow(
-      2px 5px 3px color-mix(in srgb, var(--color-primary) 10%, transparent)
-    );
+        0 2px 2px color-mix(in srgb, var(--color-text) 14%, transparent)
+      )
+      drop-shadow(
+        3px 8px 8px color-mix(in srgb, var(--color-text) 18%, transparent)
+      );
   }
 
   figure::before {
@@ -281,7 +284,9 @@ const contactUrl = getWhatsAppUrl(
     max-width: 100%;
     max-height: 280px;
     outline: 4px solid var(--color-surface);
-    box-shadow: 0 2px 5px color-mix(in srgb, var(--color-text) 17%, transparent);
+    box-shadow:
+      0 0 5px 2px color-mix(in srgb, var(--color-text) 26%, transparent),
+      0 0 12px 3px color-mix(in srgb, var(--color-text) 24%, transparent);
   }
 
   figcaption {

@@ -1,11 +1,11 @@
 ---
 import { ImageOff, X } from '@lucide/astro'
-import { site } from '../config/site'
-import type { getProducts } from '../lib/api'
-import { formatPrice } from '../lib/format-price'
-import { getWhatsAppUrl } from '../lib/whatsapp'
-import BrandIcon from './BrandIcon.astro'
-import PhotoSlider from './PhotoSlider.astro'
+import { site } from '../../config/site'
+import type { getProducts } from '../../lib/api'
+import { formatPrice } from '../../lib/format-price'
+import { getWhatsAppUrl } from '../../lib/whatsapp'
+import BrandIcon from '../BrandIcon.astro'
+import PhotoSlider from '../PhotoSlider.astro'
 
 interface Props {
   product: Awaited<ReturnType<typeof getProducts>>[number]
@@ -130,11 +130,11 @@ const contactUrl = getWhatsAppUrl(
 </dialog>
 
 <script>
-  import type { getProducts } from '../lib/api'
-  import { formatPrice } from '../lib/format-price'
-  import { onPageLoad } from '../lib/page-lifecycle'
-  import { attachRouteModal, openRouteModal } from '../lib/route-modal'
-  import { getWhatsAppUrl } from '../lib/whatsapp'
+  import type { getProducts } from '../../lib/api'
+  import { formatPrice } from '../../lib/format-price'
+  import { onPageLoad } from '../../lib/page-lifecycle'
+  import { attachRouteModal, openRouteModal } from '../../lib/route-modal'
+  import { getWhatsAppUrl } from '../../lib/whatsapp'
 
   type Product = Awaited<ReturnType<typeof getProducts>>[number]
 
@@ -283,7 +283,14 @@ const contactUrl = getWhatsAppUrl(
       })
       syncOptions()
       update()
-      cleanups.push(attachRouteModal(dialog, `/loja/${product.public_id}/`, '/loja/', opener))
+      cleanups.push(
+        attachRouteModal(
+          dialog,
+          `/loja/${product.public_id}/`,
+          '/loja/',
+          opener
+        )
+      )
     })
 
     return () => cleanups.forEach((cleanup) => cleanup())

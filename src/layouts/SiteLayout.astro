@@ -7,7 +7,7 @@ import SEO from '../components/SEO.astro'
 import Topbar from '../components/Topbar.astro'
 import PixModal from '../components/PixModal.astro'
 import Footer from '../components/Footer.astro'
-import AnimalNotice from '../components/AnimalNotice.astro'
+import AnimalNotice from '../components/home/AnimalNotice.astro'
 
 type Props = ComponentProps<typeof SEO>
 ---
@@ -26,10 +26,17 @@ type Props = ComponentProps<typeof SEO>
       // Modal history must be handled before ClientRouter starts a page swap.
       if (!window.__opaaModalHistory) {
         window.__opaaModalHistory = true
-        window.addEventListener('popstate', (event) => {
-          const modalHistory = new Event('route-modal:history', { cancelable: true })
-          if (!window.dispatchEvent(modalHistory)) event.stopImmediatePropagation()
-        }, true)
+        window.addEventListener(
+          'popstate',
+          (event) => {
+            const modalHistory = new Event('route-modal:history', {
+              cancelable: true,
+            })
+            if (!window.dispatchEvent(modalHistory))
+              event.stopImmediatePropagation()
+          },
+          true
+        )
       }
     </script>
     <ClientRouter fallback="swap" />

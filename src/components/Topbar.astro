@@ -3,6 +3,7 @@ import { Menu, X } from '@lucide/astro'
 import { site } from '../config/site'
 
 const pathname = Astro.url.pathname.replace(/\/$/, '')
+const isHome = pathname === ''
 const items = [
   { label: 'Animais', section: 'animais', page: '/animais' },
   { label: 'Castração', section: 'castracao' },
@@ -19,11 +20,7 @@ const items = [
 
 <header class="topbar">
   <div class="container">
-    <a
-      class="brand"
-      href="/#inicio"
-      aria-label={`${site.name} — página inicial`}
-    >
+    <a class="brand" href="/" aria-label={`${site.name} — página inicial`}>
       <img src="/branding/opaa-logo.svg" alt="" width="48" height="48" />
       <span>{site.name}</span>
     </a>
@@ -59,8 +56,12 @@ const items = [
                   <span aria-current="page">{item.label}</span>
                 ) : (
                   <a
-                    href={isDetailPage ? `${item.page}/` : `/#${item.section}`}
-                    data-section={item.section}
+                    href={
+                      !isHome && item.page
+                        ? `${item.page}/`
+                        : `/#${item.section}`
+                    }
+                    data-section={isHome ? item.section : undefined}
                     aria-current={isDetailPage ? 'location' : undefined}
                   >
                     {item.label}
@@ -92,6 +93,27 @@ const items = [
     const header = document.querySelector<HTMLElement>('.topbar')
     const toggle = header?.querySelector<HTMLButtonElement>('.menu-toggle')
     const navigation = header?.querySelector<HTMLElement>('nav')
+    const brand = header?.querySelector<HTMLAnchorElement>('.brand')
+
+    brand?.addEventListener('click', (event) => {
+      if (
+        location.pathname !== '/' ||
+        event.button !== 0 ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.shiftKey ||
+        event.altKey
+      )
+        return
+      event.preventDefault()
+      history.replaceState(history.state, '', '/')
+      window.scrollTo({
+        top: 0,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'instant'
+          : 'smooth',
+      })
+    })
 
     if (header && toggle && navigation) {
       const desktop = window.matchMedia('(min-width: 64rem)')

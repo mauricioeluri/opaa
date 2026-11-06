@@ -35,6 +35,8 @@ recomendadas pelo projeto.
 | `public/`                      | Imagens, logos e PDF do kit de marca.                      |
 
 Um arquivo `.astro` reúne HTML, CSS e preparação dos dados entre `---`.
+Em `src/components/`, as pastas `home`, `animals`, `shop` e `notices` agrupam os
+componentes por área; os compartilhados ficam na raiz.
 A navegação usa `ClientRouter` para trocar páginas sem recarregar o site inteiro.
 Scripts usam `onPageLoad()` de `src/lib/page-lifecycle.ts`, com limpeza de timers
 e listeners globais ao sair. A barra de navegação indica etapas, não bytes baixados.

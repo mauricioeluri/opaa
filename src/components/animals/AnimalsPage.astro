@@ -1,11 +1,11 @@
 ---
 import { PawPrint } from '@lucide/astro'
-import PageHeader from './PageHeader.astro'
+import PageHeader from '../PageHeader.astro'
 import AnimalCard from './AnimalCard.astro'
-import { site } from '../config/site'
-import SiteLayout from '../layouts/SiteLayout.astro'
-import { getAvailableAnimals } from '../lib/api'
-import { animalAgeGroups } from '../lib/animal-label'
+import { site } from '../../config/site'
+import SiteLayout from '../../layouts/SiteLayout.astro'
+import { getAvailableAnimals } from '../../lib/api'
+import { animalAgeGroups } from '../../lib/animal-label'
 
 interface Props {
   animal?: Awaited<ReturnType<typeof getAvailableAnimals>>[number]
@@ -17,9 +17,14 @@ const animals = await getAvailableAnimals()
 
 <SiteLayout
   title={`${animal ? animal.name?.trim() || 'Ainda sem nome' : 'Animais disponíveis para adoção'} | ${site.name}`}
-  description={animal?.description ?? 'Conheça os animais disponíveis para adoção na OPAA Alegrete. Encontre um novo amigo e fale com a ONG para saber mais.'}
+  description={
+    animal?.description ??
+    'Conheça os animais disponíveis para adoção na OPAA Alegrete. Encontre um novo amigo e fale com a ONG para saber mais.'
+  }
   image={animal?.images[0]}
-  imageAlt={animal ? animal.name?.trim() || 'Animal disponível para adoção' : undefined}
+  imageAlt={
+    animal ? animal.name?.trim() || 'Animal disponível para adoção' : undefined
+  }
 >
   <main class="animal-listing">
     <PageHeader
@@ -87,7 +92,7 @@ const animals = await getAvailableAnimals()
 </SiteLayout>
 
 <script>
-  import { onPageLoad } from '../lib/page-lifecycle'
+  import { onPageLoad } from '../../lib/page-lifecycle'
 
   onPageLoad(() => {
     const listing = document.querySelector<HTMLElement>('.animal-listing')

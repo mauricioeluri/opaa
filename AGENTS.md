@@ -63,6 +63,8 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
 
 - Usar PascalCase para componentes e layouts Astro; kebab-case para demais
   arquivos novos e rotas. Seguir convenções existentes em cada área.
+- Agrupar componentes específicos em `components/home`, `animals`, `shop` ou
+  `notices`; manter componentes compartilhados na raiz de `components`.
 - Dois espaços, aspas simples, sem ponto e vírgula e finais de linha LF, seguindo
   `.prettierrc` e `eslint.config.mjs`.
 - Manter `astro/tsconfigs/strict`. Não usar `any`, desativar regras ou suprimir
@@ -137,7 +139,7 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   evitar deslocamentos de layout.
 - Usar links para navegação e botões para ações. Não criar links sem destino,
   controles sem função ou mensagens de sucesso sem uma ação concluída.
-- Centralizar contatos, Pix, dados institucionais, SEO, endereço, horários e redes
+- Centralizar contatos, Pix, dados institucionais, SEO, endereço e redes
   sociais em `site`, de `src/config/site.ts`, sem cópias na API. `phone` é o número
   internacional usado nos links de chamadas e WhatsApp; `email` e `pixKey` são
   campos separados. Slides ficam em `site.heroSlides`, com imagem, legenda e alt.

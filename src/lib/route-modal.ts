@@ -13,7 +13,11 @@ const currentModal = () => modals.get(location.pathname.replace(/\/?$/, '/'))
 
 function freezePage() {
   if (frozen) return
-  frozen = { x: scrollX, y: scrollY, style: document.body.getAttribute('style') }
+  frozen = {
+    x: scrollX,
+    y: scrollY,
+    style: document.body.getAttribute('style'),
+  }
   Object.assign(document.body.style, {
     position: 'fixed',
     top: `-${frozen.y}px`,
@@ -84,9 +88,12 @@ export function attachRouteModal(
     const bounds = dialog.getBoundingClientRect()
     if (
       event.target === dialog &&
-      (event.clientX < bounds.left || event.clientX > bounds.right ||
-        event.clientY < bounds.top || event.clientY > bounds.bottom)
-    ) dialog.close()
+      (event.clientX < bounds.left ||
+        event.clientX > bounds.right ||
+        event.clientY < bounds.top ||
+        event.clientY > bounds.bottom)
+    )
+      dialog.close()
   })
   dialog.removeAttribute('open')
   if (currentModal()?.dialog === dialog) {
