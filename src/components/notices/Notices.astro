@@ -29,10 +29,9 @@ const notices = showAll ? allNotices : allNotices.slice(0, 6)
       />
     ) : (
       <header>
-        <div>
-          <p class="eyebrow">Para a comunidade</p>
-          <h2 id="notices-title">Comunicados e alertas</h2>
-        </div>
+        <h2 id="notices-title">
+          <a class="heading-link" href="/comunicados/">Comunicados e alertas</a>
+        </h2>
         <a
           class="view-all"
           href="/comunicados/"
@@ -88,18 +87,10 @@ const notices = showAll ? allNotices : allNotices.slice(0, 6)
 
   header {
     display: flex;
-    align-items: end;
+    align-items: center;
     justify-content: space-between;
     gap: 16px;
     margin-bottom: 12px;
-  }
-
-  .eyebrow {
-    margin: 0 0 4px;
-    color: var(--color-primary);
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.03em;
   }
 
   h2 {
@@ -197,6 +188,12 @@ const notices = showAll ? allNotices : allNotices.slice(0, 6)
     margin: 0;
     padding: 0 0 16px 40px;
     white-space: pre-line;
+  }
+
+  @media (max-width: 47.999rem) {
+    .view-all {
+      display: none;
+    }
   }
 
   @media (max-width: 35rem) {

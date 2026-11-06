@@ -1,3 +1,0 @@
-* Arrumar bug dos sliders
-* Ver para fazer página dos sorteios do site
-* Última limpeza e refatoração

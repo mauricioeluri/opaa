@@ -1,4 +1,6 @@
 ---
+import ContentImage from './ContentImage.astro'
+
 interface Props {
   images: { id?: string; src: string; alt: string; caption?: string }[]
   label: string
@@ -14,6 +16,14 @@ const {
   autoplay = false,
   thumbnails = false,
 } = Astro.props
+const sizes =
+  variant === 'hero'
+    ? '(max-width: 47.999rem) calc(100vw - 32px), 602px'
+    : variant === 'product'
+      ? '(max-width: 47.999rem) calc(100vw - 80px), 480px'
+      : thumbnails
+        ? '(max-width: 47.999rem) calc(100vw - 80px), 420px'
+        : '(max-width: 35rem) calc(100vw - 72px), 320px'
 ---
 
 <div
@@ -30,14 +40,13 @@ const {
   >
     {images.map((image, index) => (
       <figure data-image-id={image.id}>
-        <img
+        <ContentImage
           src={image.src}
           alt={image.alt}
-          width="1200"
-          height={variant === 'animal' ? 1200 : 675}
-          loading={
-            index === 0 && (variant === 'hero' || thumbnails) ? 'eager' : 'lazy'
-          }
+          width={1200}
+          sizes={sizes}
+          loading="eager"
+          fetchpriority={index === 0 && variant === 'hero' ? 'high' : 'auto'}
           draggable="false"
         />
         {image.caption && (
@@ -59,7 +68,7 @@ const {
           aria-current={index === 0 ? 'true' : 'false'}
         >
           {thumbnails && (
-            <img src={image.src} alt="" width="64" height="64" loading="lazy" />
+            <ContentImage src={image.src} alt="" width={64} loading="eager" />
           )}
         </button>
       ))}
@@ -84,20 +93,67 @@ const {
         const controls = slider.querySelector<HTMLElement>('.dots')
         if (!photos || !controls) return
 
+        const slides = Array.from(photos.querySelectorAll<HTMLElement>('figure'))
+        const clones: HTMLElement[] = []
         const automatic = slider.dataset.autoplay === 'true'
+        const controller = new AbortController()
+        const { signal } = controller
         let timer: number | undefined
+        let settleTimer: number | undefined
+        let activeIndex = 0
+        let movement = 0
+        let width = photos.clientWidth
         let drag: { x: number; scroll: number; index: number } | undefined
         const visibleDots = () => dots.filter((dot) => !dot.hidden)
+        const imageAt = (index: number) =>
+          photos.querySelectorAll<HTMLImageElement>('figure:not([hidden]) img')[
+            index + 1
+          ]
+        const wrap = (index: number) => {
+          const count = visibleDots().length
+          return count ? ((index % count) + count) % count : 0
+        }
         const current = () =>
-          Math.round(photos.scrollLeft / photos.clientWidth) || 0
-        const moveTo = (index: number) => {
-          if (visibleDots().length < 2) return
+          photos.clientWidth && visibleDots().length > 1
+            ? wrap(Math.round(photos.scrollLeft / photos.clientWidth) - 1)
+            : activeIndex
+        const reposition = () => {
           photos.scrollTo({
             left:
-              ((index + visibleDots().length) % visibleDots().length) *
+              (activeIndex + (visibleDots().length > 1 ? 1 : 0)) *
               photos.clientWidth,
+            behavior: 'instant',
+          })
+        }
+        const settle = () => {
+          if (drag || !photos.clientWidth || visibleDots().length < 2) return
+          const position = photos.scrollLeft / photos.clientWidth
+          // Replace an edge copy with its identical original after the animation.
+          if (
+            Math.abs(position) < 0.01 ||
+            Math.abs(position - visibleDots().length - 1) < 0.01
+          ) {
+            activeIndex = current()
+            reposition()
+          }
+        }
+        const moveTo = async (index: number) => {
+          if (visibleDots().length < 2) return
+          const request = ++movement
+          try {
+            await imageAt(index)?.decode()
+          } catch {
+            return
+          }
+          if (request !== movement || signal.aborted) return
+          if (index >= 0 && index < visibleDots().length) settle()
+          activeIndex = wrap(index)
+          photos.scrollTo({
+            left: (index + 1) * photos.clientWidth,
             behavior: motion.matches ? 'instant' : 'smooth',
           })
+          window.clearTimeout(settleTimer)
+          settleTimer = window.setTimeout(settle, 120)
         }
         const updateTimer = () => {
           window.clearInterval(timer)
@@ -113,69 +169,118 @@ const {
 
         controls.hidden = false
         photos.style.touchAction = 'pan-y'
+        // Keep native snapping from interrupting the controlled drag animation.
+        photos.style.scrollSnapType = 'none'
         dots.forEach((dot) =>
-          dot.addEventListener('click', () =>
-            moveTo(visibleDots().indexOf(dot))
+          dot.addEventListener(
+            'click',
+            () => {
+              moveTo(visibleDots().indexOf(dot))
+              updateTimer()
+            },
+            { signal }
           )
         )
         const filterImages = () => {
+          movement++
           const ids = slider.dataset.visibleImages
           const visibleIds: string[] | undefined = ids
             ? JSON.parse(ids)
             : undefined
-          slider
-            .querySelectorAll<HTMLElement>('figure, .dot')
-            .forEach((item) => {
-              item.hidden =
-                !!visibleIds && !visibleIds.includes(item.dataset.imageId || '')
+          clones.forEach((clone) => clone.remove())
+          clones.length = 0
+          const items = [...slides, ...dots]
+          items.forEach((item) => {
+            item.hidden =
+              !!visibleIds && !visibleIds.includes(item.dataset.imageId || '')
+          })
+          const visibleSlides = slides.filter((slide) => !slide.hidden)
+          if (visibleSlides.length > 1) {
+            const edges = [
+              visibleSlides[visibleSlides.length - 1],
+              visibleSlides[0],
+            ]
+            edges.forEach((slide, index) => {
+              const clone = slide.cloneNode(true) as HTMLElement
+              clone.setAttribute('aria-hidden', 'true')
+              clone.inert = true
+              clone.querySelector('img')?.setAttribute('fetchpriority', 'auto')
+              if (index === 0) photos.prepend(clone)
+              else photos.append(clone)
+              clones.push(clone)
             })
+          }
           controls.hidden = visibleDots().length < 2
           if (visibleDots().length > 1) photos.tabIndex = 0
           else photos.removeAttribute('tabindex')
-          photos.scrollTo({ left: 0, behavior: 'instant' })
+          activeIndex = 0
+          reposition()
           visibleDots().forEach((dot, index) =>
             dot.setAttribute('aria-current', String(index === 0))
           )
           updateTimer()
         }
-        slider.addEventListener('photo-slider:filter', filterImages)
+        slider.addEventListener('photo-slider:filter', filterImages, { signal })
         filterImages()
         photos.addEventListener(
           'scroll',
           () => {
+            activeIndex = current()
             visibleDots().forEach((dot, index) =>
-              dot.setAttribute('aria-current', String(index === current()))
+              dot.setAttribute('aria-current', String(index === activeIndex))
             )
+            window.clearTimeout(settleTimer)
+            settleTimer = window.setTimeout(settle, 120)
           },
-          { passive: true }
+          { passive: true, signal }
         )
-        photos.addEventListener('keydown', (event) => {
-          if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-            event.preventDefault()
-            moveTo(current() + (event.key === 'ArrowRight' ? 1 : -1))
-          }
-        })
-        photos.addEventListener('pointerdown', (event) => {
-          if (
-            !event.isPrimary ||
-            event.button !== 0 ||
-            visibleDots().length < 2
-          )
-            return
-          window.clearInterval(timer)
-          if (event.pointerType === 'mouse') event.preventDefault()
-          drag = {
-            x: event.clientX,
-            scroll: photos.scrollLeft,
-            index: current(),
-          }
-          photos.setPointerCapture(event.pointerId)
-          photos.style.scrollSnapType = 'none'
-          photos.classList.add('dragging')
-        })
-        photos.addEventListener('pointermove', (event) => {
-          if (drag) photos.scrollLeft = drag.scroll + drag.x - event.clientX
-        })
+        photos.addEventListener('scrollend', settle, { signal })
+        photos.addEventListener(
+          'keydown',
+          (event) => {
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+              event.preventDefault()
+              moveTo(current() + (event.key === 'ArrowRight' ? 1 : -1))
+              updateTimer()
+            }
+          },
+          { signal }
+        )
+        photos.addEventListener(
+          'pointerdown',
+          (event) => {
+            if (
+              !event.isPrimary ||
+              event.button !== 0 ||
+              visibleDots().length < 2
+            )
+              return
+            window.clearInterval(timer)
+            movement++
+            if (event.pointerType === 'mouse') event.preventDefault()
+            photos.scrollTo({ left: photos.scrollLeft, behavior: 'instant' })
+            settle()
+            drag = {
+              x: event.clientX,
+              scroll: photos.scrollLeft,
+              index: current(),
+            }
+            photos.setPointerCapture(event.pointerId)
+            photos.classList.add('dragging')
+          },
+          { signal }
+        )
+        photos.addEventListener(
+          'pointermove',
+          (event) => {
+            if (!drag) return
+            const distance = drag.x - event.clientX
+            const next = imageAt(drag.index + Math.sign(distance))
+            if (next && (!next.complete || !next.naturalWidth)) return
+            photos.scrollLeft = drag.scroll + distance
+          },
+          { signal }
+        )
         const endDrag = (event: PointerEvent) => {
           if (drag) {
             const distance = drag.x - event.clientX
@@ -186,22 +291,30 @@ const {
                 : 0
             const index = drag.index + step
             drag = undefined
-            photos.style.scrollSnapType = ''
             photos.classList.remove('dragging')
             moveTo(index)
           }
           updateTimer()
         }
-        photos.addEventListener('pointerup', endDrag)
-        photos.addEventListener('pointercancel', endDrag)
+        photos.addEventListener('pointerup', endDrag, { signal })
+        photos.addEventListener('pointercancel', endDrag, { signal })
+        const resize = new ResizeObserver(() => {
+          if (!photos.clientWidth || width === photos.clientWidth) return
+          width = photos.clientWidth
+          reposition()
+        })
+        resize.observe(photos)
         if (automatic) {
-          document.addEventListener('visibilitychange', updateTimer)
-          cleanups.push(() => {
-            window.clearInterval(timer)
-            document.removeEventListener('visibilitychange', updateTimer)
-          })
+          document.addEventListener('visibilitychange', updateTimer, { signal })
           updateTimer()
         }
+        cleanups.push(() => {
+          controller.abort()
+          resize.disconnect()
+          window.clearInterval(timer)
+          window.clearTimeout(settleTimer)
+          clones.forEach((clone) => clone.remove())
+        })
       })
 
     return () => cleanups.forEach((cleanup) => cleanup())

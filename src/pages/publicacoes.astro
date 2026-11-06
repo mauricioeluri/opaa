@@ -1,6 +1,7 @@
 ---
 import { ArrowUpRight, BookOpen, Search } from '@lucide/astro'
 import PageHeader from '../components/PageHeader.astro'
+import ContentImage from '../components/ContentImage.astro'
 import { site } from '../config/site'
 import SiteLayout from '../layouts/SiteLayout.astro'
 import { getPosts } from '../lib/api'
@@ -77,10 +78,12 @@ const categories = [...new Set(posts.map((post) => post.category))]
             >
               <a class="post-link" href={`/publicacoes/${post.slug}/`}>
                 {post.images[0] && (
-                  <img
+                  <ContentImage
                     class="cover"
                     src={post.images[0]}
                     alt={post.title}
+                    width={320}
+                    sizes="(max-width: 35rem) 88px, 120px"
                     loading="lazy"
                     decoding="async"
                   />

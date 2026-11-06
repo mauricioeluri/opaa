@@ -2,6 +2,7 @@
 import { ArrowUpRight, PawPrint, Shirt, Stethoscope } from '@lucide/astro'
 import { getPosts, getStories } from '../../lib/api'
 import { postCategories } from '../../lib/post-category'
+import ContentImage from '../ContentImage.astro'
 
 const posts = (await getPosts()).slice(0, 3)
 const stories = (await getStories()).slice(0, 6)
@@ -11,10 +12,9 @@ const stories = (await getStories()).slice(0, 6)
   {posts.length > 0 && (
     <section id="novidades" aria-labelledby="news-title">
       <header>
-        <div>
-          <p class="eyebrow">Para ficar por dentro</p>
-          <h2 id="news-title">Acontece na OPAA</h2>
-        </div>
+        <h2 id="news-title">
+          <a class="heading-link" href="/publicacoes/">Acontece na OPAA</a>
+        </h2>
         <a class="section-link" href="/publicacoes/">
           Ver publicações
           <ArrowUpRight size={18} aria-hidden="true" />
@@ -24,12 +24,12 @@ const stories = (await getStories()).slice(0, 6)
         {posts.map((post) => (
           <a class="highlight" href={`/publicacoes/${post.slug}/`}>
             {post.images[0] ? (
-              <img
+              <ContentImage
                 class="cover"
                 src={post.images[0]}
                 alt={post.title}
-                width="480"
-                height="300"
+                width={480}
+                sizes="(max-width: 35rem) 112px, 180px"
                 loading="lazy"
                 decoding="async"
               />
@@ -71,7 +71,9 @@ const stories = (await getStories()).slice(0, 6)
 
   <section id="historias-felizes" aria-labelledby="stories-title">
     <header>
-      <h2 id="stories-title">Histórias felizes</h2>
+      <h2 id="stories-title">
+        <a class="heading-link" href="/historias-felizes/">Histórias felizes</a>
+      </h2>
       <a class="section-link" href="/historias-felizes/">
         Ver todas as histórias
         <ArrowUpRight size={18} aria-hidden="true" />
@@ -79,17 +81,23 @@ const stories = (await getStories()).slice(0, 6)
     </header>
     <div class="photo-album">
       {stories.map((story) => (
-        <figure class="photo-print">
-          <img
-            src={story.afterImage}
-            alt={`Foto atual de ${story.name}`}
-            width="180"
-            height="180"
-            loading="lazy"
-            decoding="async"
-          />
-          <figcaption>{story.name}</figcaption>
-        </figure>
+        <a
+          class="photo-print"
+          href="/historias-felizes/"
+          aria-label={`Ver histórias felizes — ${story.name}`}
+        >
+          <figure>
+            <ContentImage
+              src={story.afterImage}
+              alt={`Foto atual de ${story.name}`}
+              width={360}
+              sizes="(max-width: 35rem) 30vw, 160px"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>{story.name}</figcaption>
+          </figure>
+        </a>
       ))}
     </div>
   </section>
@@ -109,7 +117,7 @@ const stories = (await getStories()).slice(0, 6)
   header {
     display: flex;
     flex-wrap: wrap;
-    align-items: end;
+    align-items: center;
     justify-content: space-between;
     gap: 8px 16px;
     margin-bottom: 16px;
@@ -121,17 +129,9 @@ const stories = (await getStories()).slice(0, 6)
     font-size: clamp(24px, 3vw, 32px);
   }
 
-  .eyebrow,
   .category,
   .description {
     margin: 0;
-  }
-
-  .eyebrow {
-    margin-bottom: 4px;
-    color: var(--color-primary);
-    font-size: 14px;
-    font-weight: 700;
   }
 
   .section-link {
@@ -315,6 +315,11 @@ const stories = (await getStories()).slice(0, 6)
     border-radius: 4px;
     background: var(--color-surface);
     box-shadow: 0 4px 8px color-mix(in srgb, var(--color-text) 12%, transparent);
+    text-decoration: none;
+  }
+
+  .photo-print figure {
+    margin: 0;
   }
 
   .photo-print:nth-child(3n + 1) {
@@ -358,6 +363,12 @@ const stories = (await getStories()).slice(0, 6)
     font-weight: 700;
     text-align: center;
     overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 47.999rem) {
+    .section-link {
+      display: none;
+    }
   }
 
   @media (max-width: 45rem) {

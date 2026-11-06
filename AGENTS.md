@@ -137,6 +137,8 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   sentido e a fluidez; não remover mecanicamente pontuação necessária à leitura.
 - Preservar proporções de imagens e informar dimensões quando conhecidas para
   evitar deslocamentos de layout.
+  Usar `ContentImage.astro` para otimizar fotos locais sem mover os originais
+  de `public/api/` ou `public/images/` nem ampliar além da resolução original.
 - Usar links para navegação e botões para ações. Não criar links sem destino,
   controles sem função ou mensagens de sucesso sem uma ação concluída.
 - Centralizar contatos, Pix, dados institucionais, SEO, endereço e redes
@@ -182,7 +184,8 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
 - A API informa o tipo em `type`: `dog`, `cat` ou `other`. A interface apresenta
   cães, gatos e outros, sem limitar textos e listagens somente a cães.
 - Cards abrem o modal em `/animais/public_id/`, com todas as fotos e descrição
-  completa. O contato sobre o animal pelo WhatsApp fica nesse modal.
+  completa. Na home, o link carrega a listagem com o modal aberto.
+  O contato sobre o animal pelo WhatsApp fica nesse modal.
   Seu título usa apenas o nome ou “Ainda sem nome”; sexo e faixa etária ficam nos detalhes.
 - Na landing page, mostrar no máximo dois animais disponíveis, respeitando a
   ordenação de fixados e data. Sem disponíveis, ocultar a seção

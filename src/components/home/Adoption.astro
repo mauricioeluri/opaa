@@ -9,8 +9,9 @@ const animals = (await getAvailableAnimals()).slice(0, 2)
 {animals.length > 0 && (
   <section class="adoption" id="animais" aria-labelledby="adoption-title">
     <header>
-      <p class="eyebrow">Adoção responsável</p>
-      <h2 id="adoption-title">Seu novo amigo pode estar aqui</h2>
+      <h2 id="adoption-title">
+        <a class="heading-link" href="/animais/">Adoção responsável</a>
+      </h2>
     </header>
 
     <div class="cards">
@@ -35,14 +36,6 @@ const animals = (await getAvailableAnimals()).slice(0, 2)
 
   header {
     margin-bottom: 24px;
-  }
-
-  .eyebrow {
-    margin: 0 0 8px;
-    color: var(--color-primary);
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.03em;
   }
 
   h2 {

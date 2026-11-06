@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets'
 import { Menu, X } from '@lucide/astro'
 import { site } from '../config/site'
 
@@ -21,7 +22,13 @@ const items = [
 <header class="topbar">
   <div class="container">
     <a class="brand" href="/" aria-label={`${site.name} — página inicial`}>
-      <img src="/branding/opaa-logo.svg" alt="" width="48" height="48" />
+      <Image
+        src="/branding/opaa-logo.svg"
+        alt=""
+        width={48}
+        height={48}
+        loading="eager"
+      />
       <span>{site.name}</span>
     </a>
 

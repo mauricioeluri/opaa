@@ -2,6 +2,7 @@
 import { Heart } from '@lucide/astro'
 import PageHeader from '../components/PageHeader.astro'
 import BrandIcon from '../components/BrandIcon.astro'
+import ContentImage from '../components/ContentImage.astro'
 import { site } from '../config/site'
 import SiteLayout from '../layouts/SiteLayout.astro'
 import { getStories } from '../lib/api'
@@ -51,9 +52,11 @@ const contactUrl = getWhatsAppUrl(
                   <div class="photo">
                     <span class="photo-label">Antes</span>
                     <span class="photo-mount">
-                      <img
+                      <ContentImage
                         src={story.beforeImage}
                         alt={`Foto anterior de ${story.name}`}
+                        width={960}
+                        sizes="(max-width: 60rem) 45vw, 240px"
                         loading={index < 2 ? 'eager' : 'lazy'}
                         decoding="async"
                       />
@@ -63,9 +66,15 @@ const contactUrl = getWhatsAppUrl(
                 <div class="photo">
                   {story.beforeImage && <span class="photo-label">Hoje</span>}
                   <span class="photo-mount">
-                    <img
+                    <ContentImage
                       src={story.afterImage}
                       alt={`Foto atual de ${story.name}`}
+                      width={960}
+                      sizes={
+                        story.beforeImage
+                          ? '(max-width: 60rem) 45vw, 240px'
+                          : '(max-width: 60rem) 90vw, 480px'
+                      }
                       loading={index < 2 ? 'eager' : 'lazy'}
                       decoding="async"
                     />

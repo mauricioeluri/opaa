@@ -48,7 +48,7 @@ const AnimalIcon =
     <p class="description">{animal.description}</p>
   </div>
 </article>
-<AnimalModal animal={animal} />
+{catalog && <AnimalModal animal={animal} />}
 
 <script>
   import { onPageLoad } from '../../lib/page-lifecycle'

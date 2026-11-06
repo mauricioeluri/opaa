@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets'
 import { Mail, MapPin } from '@lucide/astro'
 import BrandIcon from './BrandIcon.astro'
 import { site } from '../config/site'
@@ -29,7 +30,13 @@ const socialLinks = getSocialLinks(site.facebook, site.instagram).map(
     <div class="columns">
       <div class="identity">
         <div class="brand">
-          <img src="/branding/opaa-logo.svg" alt="" width="64" height="64" />
+          <Image
+            src="/branding/opaa-logo.svg"
+            alt=""
+            width={64}
+            height={64}
+            loading="lazy"
+          />
           <span class="brand-copy">
             <span>{site.name}</span>
             <span class="tagline">Desde 2009, {site.slogan.toLowerCase()}</span>
@@ -98,7 +105,7 @@ const socialLinks = getSocialLinks(site.facebook, site.instagram).map(
       >
         Kit de marca
       </a>
-      <a href="#">Admin</a>
+      <span class="admin">Admin</span>
     </div>
   </div>
 </footer>
@@ -118,7 +125,7 @@ const socialLinks = getSocialLinks(site.facebook, site.instagram).map(
   }
 
   :global(body:has(.animal-notice)) .container {
-    padding-bottom: calc(88px + env(safe-area-inset-bottom));
+    padding-bottom: calc(3px + env(safe-area-inset-bottom));
   }
 
   .columns {
@@ -238,7 +245,8 @@ const socialLinks = getSocialLinks(site.facebook, site.instagram).map(
     font-size: 12px;
   }
 
-  .bottom a {
+  .bottom a,
+  .bottom .admin {
     display: inline-flex;
     align-items: center;
     min-height: 44px;

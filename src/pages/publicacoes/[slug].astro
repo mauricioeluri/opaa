@@ -3,6 +3,7 @@ import type { InferGetStaticPropsType } from 'astro'
 import { imageMetadata } from 'astro/assets/utils'
 import { ArrowLeft } from '@lucide/astro'
 import { readFile } from 'node:fs/promises'
+import ContentImage from '../../components/ContentImage.astro'
 import { site } from '../../config/site'
 import SiteLayout from '../../layouts/SiteLayout.astro'
 import { getPosts } from '../../lib/api'
@@ -52,12 +53,17 @@ const description = post.body.replace(/\s+/g, ' ').trim().slice(0, 160)
       <div class:list={['article-content', { portrait }]}>
         {image && dimensions && (
           <figure>
-            <img
+            <ContentImage
               class="cover"
               src={image}
               alt={post.title}
               width={dimensions.width}
-              height={dimensions.height}
+              sizes={
+                portrait
+                  ? '(max-width: 47.999rem) calc(100vw - 32px), 320px'
+                  : '(max-width: 47.999rem) calc(100vw - 32px), 880px'
+              }
+              loading="eager"
               decoding="async"
             />
           </figure>

@@ -47,6 +47,8 @@ Use os registros do JSON como modelo. Mídias do conteúdo ficam em `public/api/
 nas pastas `animals`, `stories`, `blog` e `products`. Imagens próprias do site ficam
 em `public/images/`. Os caminhos públicos não incluem `public`, por exemplo:
 `/api/animals/foto.webp`.
+`ContentImage.astro` usa o Astro para gerar versões menores das fotos locais,
+preservando os originais e suas proporções.
 
 Os slides iniciais são `public/images/slide-1.jpg` e `slide-2.jpg`. Para trocá-los,
 substitua os arquivos e confira `src`, `caption` e `alt` em `site.heroSlides`.
