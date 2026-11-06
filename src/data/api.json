@@ -152,12 +152,468 @@
   ],
   "products": [
     {
-      "public_id": "C9rF4kM7zP3v",
-      "name": "Camiseta solidária (exemplo)",
-      "description": "Exemplo fictício de produto para apoiar a proteção animal. Modelo, preço e disponibilidade são ilustrativos e precisam ser confirmados pela ONG antes da divulgação.",
-      "price_cents": 4990,
+      "public_id": "PVDehFm0CLuf",
+      "name": "Camiseta ilustrada OPAA",
+      "description": "Escolha sua estampa e leve a proteção animal com você. A compra ajuda a manter o trabalho da OPAA.",
       "active": true,
-      "images": ["/branding/opaa-logo.svg"]
+      "images": [
+        {
+          "id": "O5zixBqin629",
+          "src": "/api/products/O5zixBqin629.webp"
+        },
+        {
+          "id": "0b1Yv4lOSq6v",
+          "src": "/api/products/0b1Yv4lOSq6v.webp"
+        },
+        {
+          "id": "Q-O4PsUvZl50",
+          "src": "/api/products/Q-O4PsUvZl50.webp"
+        }
+      ],
+      "options": [
+        {
+          "id": "dTfd8N4rbt5L",
+          "name": "Estampa",
+          "values": [
+            {
+              "id": "atYKXdyragPL",
+              "name": "Até me caiu os butiás do bolso"
+            },
+            {
+              "id": "NzAljpZs6TXr",
+              "name": "Cão e gato"
+            }
+          ]
+        },
+        {
+          "id": "x6mbwAzqHhnD",
+          "name": "Tamanho",
+          "values": [
+            {
+              "id": "rQpjX1XR9Rgc",
+              "name": "P"
+            },
+            {
+              "id": "V6_K_yd6K31t",
+              "name": "M"
+            },
+            {
+              "id": "w7wSJBaueg32",
+              "name": "G"
+            },
+            {
+              "id": "9mHCXZo9XXqu",
+              "name": "GG"
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "id": "GUWJuvJ8EX_s",
+          "price": 7000,
+          "stock_quantity": 3,
+          "option_value_ids": [
+            "atYKXdyragPL",
+            "rQpjX1XR9Rgc"
+          ],
+          "image_ids": [
+            "O5zixBqin629",
+            "0b1Yv4lOSq6v"
+          ]
+        },
+        {
+          "id": "D8d9N7WhfjRV",
+          "price": 7000,
+          "stock_quantity": 5,
+          "option_value_ids": [
+            "atYKXdyragPL",
+            "V6_K_yd6K31t"
+          ],
+          "image_ids": [
+            "O5zixBqin629",
+            "0b1Yv4lOSq6v"
+          ]
+        },
+        {
+          "id": "ZDlmtz2d6qcK",
+          "price": 7000,
+          "stock_quantity": 2,
+          "option_value_ids": [
+            "atYKXdyragPL",
+            "w7wSJBaueg32"
+          ],
+          "image_ids": [
+            "O5zixBqin629",
+            "0b1Yv4lOSq6v"
+          ]
+        },
+        {
+          "id": "Ocr_jyZc_Uvs",
+          "price": 7000,
+          "stock_quantity": 0,
+          "option_value_ids": [
+            "atYKXdyragPL",
+            "9mHCXZo9XXqu"
+          ],
+          "image_ids": [
+            "O5zixBqin629",
+            "0b1Yv4lOSq6v"
+          ]
+        },
+        {
+          "id": "T8FXwXGTdLSu",
+          "price": 7000,
+          "stock_quantity": 0,
+          "option_value_ids": [
+            "NzAljpZs6TXr",
+            "rQpjX1XR9Rgc"
+          ],
+          "image_ids": [
+            "Q-O4PsUvZl50"
+          ]
+        },
+        {
+          "id": "FjHPui5W_btl",
+          "price": 7000,
+          "stock_quantity": 4,
+          "option_value_ids": [
+            "NzAljpZs6TXr",
+            "V6_K_yd6K31t"
+          ],
+          "image_ids": [
+            "Q-O4PsUvZl50"
+          ]
+        },
+        {
+          "id": "nhI0H7zbFlih",
+          "price": 7000,
+          "stock_quantity": 6,
+          "option_value_ids": [
+            "NzAljpZs6TXr",
+            "w7wSJBaueg32"
+          ],
+          "image_ids": [
+            "Q-O4PsUvZl50"
+          ]
+        },
+        {
+          "id": "wSypMulO9NEQ",
+          "price": 7000,
+          "stock_quantity": 2,
+          "option_value_ids": [
+            "NzAljpZs6TXr",
+            "9mHCXZo9XXqu"
+          ],
+          "image_ids": [
+            "Q-O4PsUvZl50"
+          ]
+        }
+      ]
+    },
+    {
+      "public_id": "8hMNkY7do8Xo",
+      "name": "Camiseta dry fit OPAA",
+      "description": "Leve, fresquinha e confortável para o dia a dia ou os treinos. Confeccionada em tecido dry fit, com a patinha da OPAA. Sua compra também apoia a proteção animal.",
+      "active": true,
+      "images": [
+        {
+          "id": "GQh1iK-_W8Zl",
+          "src": "/api/products/GQh1iK-_W8Zl.webp"
+        },
+        {
+          "id": "sgflyBjAbQsT",
+          "src": "/api/products/sgflyBjAbQsT.webp"
+        },
+        {
+          "id": "_4xrTgBvFXqD",
+          "src": "/api/products/_4xrTgBvFXqD.webp"
+        }
+      ],
+      "options": [
+        {
+          "id": "h_4_n9v551tC",
+          "name": "Cor",
+          "values": [
+            {
+              "id": "dLwewhsqMACT",
+              "name": "Rosa"
+            },
+            {
+              "id": "gX2sO6GkWjVv",
+              "name": "Azul marinho"
+            },
+            {
+              "id": "5jaDlG-y61BU",
+              "name": "Azul royal"
+            },
+            {
+              "id": "j3lWfKXtP6l4",
+              "name": "Preto"
+            }
+          ]
+        },
+        {
+          "id": "87SELUPPS6hf",
+          "name": "Tamanho",
+          "values": [
+            {
+              "id": "9NJLLDGW2lsV",
+              "name": "P"
+            },
+            {
+              "id": "0Jg2F3ryDW21",
+              "name": "M"
+            },
+            {
+              "id": "7SJNDHqrunUx",
+              "name": "G"
+            },
+            {
+              "id": "ebwZ_SPRNhs_",
+              "name": "GG"
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "id": "s4bPD2mqBeQR",
+          "price": 7000,
+          "stock_quantity": 4,
+          "option_value_ids": [
+            "dLwewhsqMACT",
+            "9NJLLDGW2lsV"
+          ],
+          "image_ids": [
+            "GQh1iK-_W8Zl"
+          ]
+        },
+        {
+          "id": "jLNP47pwQ5-N",
+          "price": 7000,
+          "stock_quantity": 7,
+          "option_value_ids": [
+            "dLwewhsqMACT",
+            "0Jg2F3ryDW21"
+          ],
+          "image_ids": [
+            "GQh1iK-_W8Zl"
+          ]
+        },
+        {
+          "id": "EaB6J2y2pm8-",
+          "price": 7000,
+          "stock_quantity": 3,
+          "option_value_ids": [
+            "dLwewhsqMACT",
+            "7SJNDHqrunUx"
+          ],
+          "image_ids": [
+            "GQh1iK-_W8Zl"
+          ]
+        },
+        {
+          "id": "z2bSVZTLTtQ-",
+          "price": 7000,
+          "stock_quantity": 1,
+          "option_value_ids": [
+            "dLwewhsqMACT",
+            "ebwZ_SPRNhs_"
+          ],
+          "image_ids": [
+            "GQh1iK-_W8Zl"
+          ]
+        },
+        {
+          "id": "zHyScVlP7aiJ",
+          "price": 7000,
+          "stock_quantity": 2,
+          "option_value_ids": [
+            "gX2sO6GkWjVv",
+            "9NJLLDGW2lsV"
+          ],
+          "image_ids": [
+            "sgflyBjAbQsT"
+          ]
+        },
+        {
+          "id": "P45jPp5eZHx8",
+          "price": 7000,
+          "stock_quantity": 0,
+          "option_value_ids": [
+            "gX2sO6GkWjVv",
+            "0Jg2F3ryDW21"
+          ],
+          "image_ids": [
+            "sgflyBjAbQsT"
+          ]
+        },
+        {
+          "id": "e8Nl0ImbvOna",
+          "price": 7000,
+          "stock_quantity": 5,
+          "option_value_ids": [
+            "gX2sO6GkWjVv",
+            "7SJNDHqrunUx"
+          ],
+          "image_ids": [
+            "sgflyBjAbQsT"
+          ]
+        },
+        {
+          "id": "JOS-H_X9NvtH",
+          "price": 7000,
+          "stock_quantity": 3,
+          "option_value_ids": [
+            "gX2sO6GkWjVv",
+            "ebwZ_SPRNhs_"
+          ],
+          "image_ids": [
+            "sgflyBjAbQsT"
+          ]
+        },
+        {
+          "id": "QHbMD73S3JXG",
+          "price": 7000,
+          "stock_quantity": 1,
+          "option_value_ids": [
+            "5jaDlG-y61BU",
+            "9NJLLDGW2lsV"
+          ],
+          "image_ids": [
+            "_4xrTgBvFXqD"
+          ]
+        },
+        {
+          "id": "L7ykc4mtmSMe",
+          "price": 7000,
+          "stock_quantity": 3,
+          "option_value_ids": [
+            "5jaDlG-y61BU",
+            "0Jg2F3ryDW21"
+          ],
+          "image_ids": [
+            "_4xrTgBvFXqD"
+          ]
+        },
+        {
+          "id": "rxF22H0N1tq0",
+          "price": 7000,
+          "stock_quantity": 4,
+          "option_value_ids": [
+            "5jaDlG-y61BU",
+            "7SJNDHqrunUx"
+          ],
+          "image_ids": [
+            "_4xrTgBvFXqD"
+          ]
+        },
+        {
+          "id": "eZXKs1EeMFvG",
+          "price": 7000,
+          "stock_quantity": 0,
+          "option_value_ids": [
+            "5jaDlG-y61BU",
+            "ebwZ_SPRNhs_"
+          ],
+          "image_ids": [
+            "_4xrTgBvFXqD"
+          ]
+        },
+        {
+          "id": "JbNzDN1Njwk4",
+          "price": 7000,
+          "stock_quantity": 3,
+          "option_value_ids": [
+            "j3lWfKXtP6l4",
+            "9NJLLDGW2lsV"
+          ],
+          "image_ids": []
+        },
+        {
+          "id": "WpFbWPnTAa-r",
+          "price": 7000,
+          "stock_quantity": 6,
+          "option_value_ids": [
+            "j3lWfKXtP6l4",
+            "0Jg2F3ryDW21"
+          ],
+          "image_ids": []
+        },
+        {
+          "id": "UKriswZyg7C_",
+          "price": 7000,
+          "stock_quantity": 2,
+          "option_value_ids": [
+            "j3lWfKXtP6l4",
+            "7SJNDHqrunUx"
+          ],
+          "image_ids": []
+        },
+        {
+          "id": "DAq7j5e3OGO4",
+          "price": 7000,
+          "stock_quantity": null,
+          "option_value_ids": [
+            "j3lWfKXtP6l4",
+            "ebwZ_SPRNhs_"
+          ],
+          "image_ids": []
+        }
+      ]
+    },
+    {
+      "public_id": "KS1hNCqBR3L1",
+      "name": "Adesivo OPAA",
+      "description": "Leve a patinha da OPAA com você e ajude a causa animal. Disponível nas versões preta e branca.",
+      "active": true,
+      "images": [
+        {
+          "id": "reLNMIDzq-Pr",
+          "src": "/api/products/reLNMIDzq-Pr.webp"
+        }
+      ],
+      "options": [
+        {
+          "id": "7bOdkKxOUUO6",
+          "name": "Cor",
+          "values": [
+            {
+              "id": "yLt2BxNFSXUm",
+              "name": "Preto"
+            },
+            {
+              "id": "tPEnq3nXGbPy",
+              "name": "Branco"
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "id": "T5PHUYliQvOv",
+          "price": 1000,
+          "stock_quantity": 18,
+          "option_value_ids": [
+            "yLt2BxNFSXUm"
+          ],
+          "image_ids": [
+            "reLNMIDzq-Pr"
+          ]
+        },
+        {
+          "id": "CLZVDT6HnuFd",
+          "price": 1000,
+          "stock_quantity": 11,
+          "option_value_ids": [
+            "tPEnq3nXGbPy"
+          ],
+          "image_ids": [
+            "reLNMIDzq-Pr"
+          ]
+        }
+      ]
     }
   ]
 }

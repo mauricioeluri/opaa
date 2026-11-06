@@ -141,6 +141,9 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   ou QR Code Pix na API. Novos campos exigem necessidade concreta.
 - Posts do blog ficam em `posts`, identificados pelo `slug`, sem `public_id` ou
   `expires_at`. Não aplicar essa regra aos identificadores dos animais.
+- Produtos usam nanoids de 12 caracteres nos IDs e nomes das fotos WebP.
+  Seguir o JSON existente: opções formam variantes com preço e estoque próprios,
+  referenciando a galeria compartilhada. Pedidos encaminham ao WhatsApp.
 - Histórias ficam em `stories`, sem identificador, com `name`, `description`,
   `published_at`, `afterImage` obrigatória e `beforeImage` como caminho ou `null`.
   O site gera o alt com nome e foto atual/anterior. A home mostra até seis fotos

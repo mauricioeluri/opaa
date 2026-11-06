@@ -49,7 +49,7 @@ em `public/images/`. Os caminhos públicos não incluem `public`, por exemplo:
 
 Os slides iniciais são `public/images/slide-1.jpg` e `slide-2.jpg`. Para trocá-los,
 substitua os arquivos e confira `src`, `caption` e `alt` em `site.heroSlides`.
-Os registros de animais e os exemplos de post e produto ainda são demonstrativos.
+Os registros de animais e o exemplo de post ainda são demonstrativos.
 Use fotos reais, sem filtros de IA, e informações confirmadas pela ONG.
 
 ### Animais
@@ -93,6 +93,14 @@ A home mostra até seis: fixados primeiro, por data decrescente dentro de cada g
 Sem avisos, a seção desaparece. O texto abre ao clicar, inclusive sem JavaScript.
 Não há imagens ou páginas individuais. “Ver todos” aponta para `#` enquanto a página não existe.
 Posts do blog ficam separados em `posts`, identificados por `slug`, sem `public_id` ou `expires_at`.
+
+### Produtos
+
+Em `products`, opções como cor e tamanho formam variantes com preço unitário em
+centavos (`price`) e estoque (`stock_quantity`): `0` esgotado, `null` consultar.
+IDs são nanoids de 12 caracteres; fotos ficam em `/api/products/<id>.webp` e podem
+ser compartilhadas entre variantes. Use os registros do JSON como modelo.
+O cliente escolhe a variante e a quantidade e confirma o pedido pelo WhatsApp.
 
 ## Contatos e doações
 
