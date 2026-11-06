@@ -95,6 +95,8 @@ Posts ficam em `posts`: `slug`, `title`, `body` (texto original com
 parágrafos), `category`, `published_at`, `isPinned` e `images`. A home mostra até três,
 com fixados primeiro e depois por data. Categorias: `community`, `campaign`, `transparency` e `care`.
 A prévia mostra o próprio texto, limitado a três linhas com reticências.
+`/publicacoes/` reúne todos os posts, com uma imagem por artigo e filtros no navegador.
+Cada card abre `/publicacoes/slug/`, com texto completo e imagem em tamanho grande.
 Animais, histórias e comunicados seguem essa mesma ordenação; só comunicados mostram o ícone de fixado.
 
 ### Produtos

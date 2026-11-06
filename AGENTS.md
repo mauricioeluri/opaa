@@ -147,6 +147,8 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   `expires_at`, com `title`, `body` (texto original com parágrafos),
   `category`, `published_at`, `isPinned` e `images`. A home exibe até três.
   A prévia usa o próprio `body`, limitado a três linhas com reticências por CSS.
+  Cada post usa no máximo uma imagem, sem carrossel.
+  Cards abrem `/publicacoes/slug/`, com texto completo e imagem grande sem cortes.
   Não aplicar essa regra aos identificadores dos animais.
 - Animais, posts, comunicados e histórias usam `isPinned` booleano: fixados primeiro,
   depois `published_at` decrescente dentro de cada grupo, antes de limitar a home.

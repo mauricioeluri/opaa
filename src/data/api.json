@@ -49,9 +49,7 @@
       "category": "transparency",
       "published_at": "2026-08-01",
       "isPinned": false,
-      "images": [
-        "/api/blog/_GnKq4FALI6l.webp"
-      ]
+      "images": ["/api/blog/_GnKq4FALI6l.webp"]
     },
     {
       "slug": "visita-centro-protecao-animais-urcamp",
@@ -60,9 +58,7 @@
       "category": "community",
       "published_at": "2026-10-29",
       "isPinned": false,
-      "images": [
-        "/api/blog/-_5jQiW6UuMK.webp"
-      ]
+      "images": ["/api/blog/-_5jQiW6UuMK.webp"]
     },
     {
       "slug": "sete-felinos-castrados-chipados-alegrete",
@@ -71,9 +67,7 @@
       "category": "care",
       "published_at": "2026-10-15",
       "isPinned": false,
-      "images": [
-        "/api/blog/SncyPf0EN9xN.webp"
-      ]
+      "images": ["/api/blog/SncyPf0EN9xN.webp"]
     }
   ],
   "notices": [

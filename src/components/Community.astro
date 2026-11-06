@@ -15,14 +15,14 @@ const stories = (await getStories()).slice(0, 6)
           <p class="eyebrow">Para ficar por dentro</p>
           <h2 id="news-title">Acontece na OPAA</h2>
         </div>
-        <a class="section-link" href="#">
+        <a class="section-link" href="/publicacoes/">
           Ver publicações
           <ArrowUpRight size={18} aria-hidden="true" />
         </a>
       </header>
       <div class="highlights">
         {posts.map((post) => (
-          <a class="highlight" href="#">
+          <a class="highlight" href={`/publicacoes/${post.slug}/`}>
             {post.images[0] ? (
               <img
                 class="cover"

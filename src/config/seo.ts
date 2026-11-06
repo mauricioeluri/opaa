@@ -3,6 +3,7 @@ export const indexablePaths = [
   '/',
   '/animais/',
   '/comunicados/',
+  '/publicacoes/',
   '/historias-felizes/',
   '/loja/',
 ]

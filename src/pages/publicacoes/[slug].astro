@@ -1,0 +1,188 @@
+---
+import type { InferGetStaticPropsType } from 'astro'
+import { imageMetadata } from 'astro/assets/utils'
+import { ArrowLeft } from '@lucide/astro'
+import { readFile } from 'node:fs/promises'
+import { site } from '../../config/site'
+import SiteLayout from '../../layouts/SiteLayout.astro'
+import { getPosts } from '../../lib/api'
+import { formatDate } from '../../lib/format-date'
+import { postCategories } from '../../lib/post-category'
+
+export async function getStaticPaths() {
+  return (await getPosts()).map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }))
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>
+const { post } = Astro.props
+const image = post.images[0]
+const dimensions = image
+  ? await imageMetadata(await readFile(`public${image}`), image)
+  : undefined
+const portrait = dimensions && dimensions.height > dimensions.width
+const description = post.body.replace(/\s+/g, ' ').trim().slice(0, 160)
+---
+
+<SiteLayout
+  title={`${post.title} | ${site.name}`}
+  description={description}
+  image={image}
+  imageAlt={post.title}
+>
+  <main>
+    <a class="back-link" href="/publicacoes/">
+      <ArrowLeft size={18} aria-hidden="true" />
+      Todas as publicações
+    </a>
+    <article>
+      <header>
+        <div class="metadata">
+          <span class="category">
+            {postCategories[post.category] ?? 'Publicações'}
+          </span>
+          <time datetime={post.published_at}>
+            {formatDate(post.published_at)}
+          </time>
+        </div>
+        <h1>{post.title}</h1>
+      </header>
+      <div class:list={['article-content', { portrait }]}>
+        {image && dimensions && (
+          <figure>
+            <img
+              class="cover"
+              src={image}
+              alt={post.title}
+              width={dimensions.width}
+              height={dimensions.height}
+              decoding="async"
+            />
+          </figure>
+        )}
+        <div class="body">
+          {post.body.split(/\n\s*\n/).map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
+        </div>
+      </div>
+    </article>
+  </main>
+</SiteLayout>
+
+<style>
+  main {
+    max-width: 1040px;
+    margin-inline: auto;
+    padding: 80px 24px 64px;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    margin-bottom: 24px;
+    color: var(--color-primary);
+    text-underline-offset: 4px;
+  }
+
+  header,
+  .article-content {
+    max-width: 880px;
+    margin-inline: auto;
+  }
+
+  header {
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .metadata {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: var(--color-muted);
+    font-size: 14px;
+  }
+
+  .category {
+    padding: 3px 10px;
+    border-radius: 6px;
+    background: var(--color-soft);
+    color: var(--color-primary);
+  }
+
+  h1 {
+    margin: 16px 0 0;
+    color: var(--color-primary);
+    font-size: clamp(32px, 4vw, 44px);
+    overflow-wrap: break-word;
+  }
+
+  .cover {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 440px;
+    margin-inline: auto;
+    border-radius: 16px;
+  }
+
+  figure {
+    min-width: 0;
+    margin: 0 0 28px;
+  }
+
+  .portrait {
+    display: grid;
+    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+    align-items: start;
+    gap: 32px;
+  }
+
+  .portrait figure {
+    margin-bottom: 0;
+  }
+
+  .portrait .cover {
+    max-height: 480px;
+  }
+
+  .body {
+    max-width: 72ch;
+    margin-inline: auto;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+  }
+
+  .body p {
+    margin: 0 0 20px;
+    white-space: pre-line;
+  }
+
+  @media (max-width: 47.999rem) {
+    main {
+      padding: 32px 16px 48px;
+    }
+
+    .cover {
+      max-height: 360px;
+      border-radius: 12px;
+    }
+
+    .portrait {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+    }
+
+    .portrait .cover {
+      max-height: 360px;
+    }
+  }
+</style>
