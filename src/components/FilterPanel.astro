@@ -1,0 +1,95 @@
+---
+import { ChevronDown, SlidersHorizontal } from '@lucide/astro'
+
+interface Props {
+  enabled?: boolean
+}
+
+const { enabled = true } = Astro.props
+---
+
+<div class="filter-toolbar">
+  {enabled && (
+    <details class="filter-panel" hidden>
+      <summary>
+        <SlidersHorizontal size={18} aria-hidden="true" />
+        <span class="show-label">Mostrar filtros</span>
+        <span class="hide-label">Ocultar filtros</span>
+        <ChevronDown class="chevron" size={16} aria-hidden="true" />
+      </summary>
+      <slot />
+    </details>
+  )}
+  <slot name="count" />
+</div>
+
+<script>
+  import { onPageLoad } from '../lib/page-lifecycle'
+
+  onPageLoad(() => {
+    document.querySelectorAll<HTMLElement>('.filter-panel').forEach((panel) => {
+      panel.hidden = false
+    })
+  })
+</script>
+
+<style>
+  .filter-toolbar {
+    margin-top: 24px;
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-sizing: border-box;
+    width: fit-content;
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    color: var(--color-primary);
+    font-size: 15px;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary:hover {
+    background: var(--color-soft);
+  }
+
+  .hide-label,
+  .filter-panel[open] .show-label {
+    display: none;
+  }
+
+  .filter-panel[open] .hide-label {
+    display: inline;
+  }
+
+  .filter-panel[open] :global(.chevron) {
+    transform: rotate(180deg);
+  }
+
+  @media (min-width: 48rem) {
+    .filter-toolbar {
+      position: relative;
+      min-height: 44px;
+      margin-bottom: 16px;
+    }
+
+    .filter-toolbar :global(.result-count) {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      min-height: 44px;
+      margin: 0;
+    }
+  }
+</style>
