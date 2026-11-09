@@ -178,15 +178,19 @@ const contactUrl = getWhatsAppUrl(
         selects.forEach((select) => {
           const previous = select.value
           const values = [
-            ...new Set(candidates.map((variant) => variant.options[select.name])),
+            ...new Set(
+              candidates.map((variant) => variant.options[select.name])
+            ),
           ].filter((value) => value !== undefined)
           select.replaceChildren(
             ...values.map((value) => new Option(value, value))
           )
-          select.value = values.includes(previous) ? previous : (values[0] ?? '')
+          select.value = values.includes(previous)
+            ? previous
+            : (values[0] ?? '')
           select.disabled = values.length === 0
-          candidates = candidates.filter((variant) =>
-            variant.options[select.name] === select.value
+          candidates = candidates.filter(
+            (variant) => variant.options[select.name] === select.value
           )
         })
       }
@@ -226,9 +230,7 @@ const contactUrl = getWhatsAppUrl(
         const valid =
           form.checkValidity() && Number.isInteger(amount) && amount >= 1
         totalPrice.textContent =
-          variant && available && valid
-            ? formatPrice(price * amount)
-            : '—'
+          variant && available && valid ? formatPrice(price * amount) : '—'
         if (!variant || !available || !valid) return
 
         const options = selects.map(
