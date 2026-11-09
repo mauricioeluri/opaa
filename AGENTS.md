@@ -159,9 +159,11 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   depois `published_at` decrescente dentro de cada grupo, antes de limitar a home.
   Usar data e hora ISO 8601 com fuso em `published_at`.
   Só comunicados mostram ícone de fixado. Não fixar registros sem solicitação.
-- Produtos usam nanoids de 12 caracteres nos IDs e nomes das fotos WebP.
-  Seguir o JSON existente: opções formam variantes com preço e estoque próprios,
-  referenciando a galeria compartilhada. Pedidos encaminham ao WhatsApp.
+- Produtos usam nanoids de 12 caracteres no identificador público e nos IDs e
+  nomes das fotos WebP. Cada variante guarda suas escolhas em `options` e seu
+  estoque em `stock_quantity`. O `price` em centavos vem do produto e pode ser
+  substituído na variante. `image_ids` limita a galeria à seleção da variante
+  quando informado. Pedidos encaminham ao WhatsApp.
 - Histórias ficam em `stories`, sem identificador, com `name`, `description`,
   `published_at`, `isPinned`, `afterImage` obrigatória e `beforeImage` como caminho ou `null`.
   O site gera o alt com nome e foto atual/anterior. A home mostra até seis fotos

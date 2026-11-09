@@ -25,7 +25,7 @@
       "name": "Bento",
       "ageGroup": "puppy",
       "age": "2 meses",
-      "isAgeApproximate": false,
+      "isAgeApproximate": true,
       "isMale": true,
       "neutered": false,
       "vaccinations": "Primeira dose da vacina importada aplicada.",
@@ -258,99 +258,58 @@
           "src": "/api/products/Q-O4PsUvZl50.webp"
         }
       ],
-      "options": [
-        {
-          "id": "dTfd8N4rbt5L",
-          "name": "Estampa",
-          "values": [
-            {
-              "id": "atYKXdyragPL",
-              "name": "Até me caiu os butiás do bolso"
-            },
-            {
-              "id": "NzAljpZs6TXr",
-              "name": "Cão e gato"
-            }
-          ]
-        },
-        {
-          "id": "x6mbwAzqHhnD",
-          "name": "Tamanho",
-          "values": [
-            {
-              "id": "rQpjX1XR9Rgc",
-              "name": "P"
-            },
-            {
-              "id": "V6_K_yd6K31t",
-              "name": "M"
-            },
-            {
-              "id": "w7wSJBaueg32",
-              "name": "G"
-            },
-            {
-              "id": "9mHCXZo9XXqu",
-              "name": "GG"
-            }
-          ]
-        }
-      ],
+      "price": 7000,
       "variants": [
         {
-          "id": "GUWJuvJ8EX_s",
-          "price": 7000,
+          "options": {
+            "Estampa": "Até me caiu os butiás do bolso",
+            "Tamanho": "P"
+          },
           "stock_quantity": 3,
-          "option_value_ids": ["atYKXdyragPL", "rQpjX1XR9Rgc"],
           "image_ids": ["O5zixBqin629", "0b1Yv4lOSq6v"]
         },
         {
-          "id": "D8d9N7WhfjRV",
-          "price": 7000,
+          "options": {
+            "Estampa": "Até me caiu os butiás do bolso",
+            "Tamanho": "M"
+          },
           "stock_quantity": 5,
-          "option_value_ids": ["atYKXdyragPL", "V6_K_yd6K31t"],
           "image_ids": ["O5zixBqin629", "0b1Yv4lOSq6v"]
         },
         {
-          "id": "ZDlmtz2d6qcK",
-          "price": 7000,
+          "options": {
+            "Estampa": "Até me caiu os butiás do bolso",
+            "Tamanho": "G"
+          },
           "stock_quantity": 2,
-          "option_value_ids": ["atYKXdyragPL", "w7wSJBaueg32"],
           "image_ids": ["O5zixBqin629", "0b1Yv4lOSq6v"]
         },
         {
-          "id": "Ocr_jyZc_Uvs",
-          "price": 7000,
+          "options": {
+            "Estampa": "Até me caiu os butiás do bolso",
+            "Tamanho": "GG"
+          },
           "stock_quantity": 0,
-          "option_value_ids": ["atYKXdyragPL", "9mHCXZo9XXqu"],
           "image_ids": ["O5zixBqin629", "0b1Yv4lOSq6v"]
         },
         {
-          "id": "T8FXwXGTdLSu",
-          "price": 7000,
+          "options": { "Estampa": "Cão e gato", "Tamanho": "P" },
           "stock_quantity": 0,
-          "option_value_ids": ["NzAljpZs6TXr", "rQpjX1XR9Rgc"],
           "image_ids": ["Q-O4PsUvZl50"]
         },
         {
-          "id": "FjHPui5W_btl",
-          "price": 7000,
+          "options": { "Estampa": "Cão e gato", "Tamanho": "M" },
           "stock_quantity": 4,
-          "option_value_ids": ["NzAljpZs6TXr", "V6_K_yd6K31t"],
           "image_ids": ["Q-O4PsUvZl50"]
         },
         {
-          "id": "nhI0H7zbFlih",
-          "price": 7000,
+          "options": { "Estampa": "Cão e gato", "Tamanho": "G" },
           "stock_quantity": 6,
-          "option_value_ids": ["NzAljpZs6TXr", "w7wSJBaueg32"],
           "image_ids": ["Q-O4PsUvZl50"]
         },
         {
-          "id": "wSypMulO9NEQ",
-          "price": 7000,
+          "options": { "Estampa": "Cão e gato", "Tamanho": "GG" },
           "stock_quantity": 2,
-          "option_value_ids": ["NzAljpZs6TXr", "9mHCXZo9XXqu"],
           "image_ids": ["Q-O4PsUvZl50"]
         }
       ]
@@ -374,131 +333,66 @@
           "src": "/api/products/_4xrTgBvFXqD.webp"
         }
       ],
-      "options": [
-        {
-          "id": "h_4_n9v551tC",
-          "name": "Cor",
-          "values": [
-            {
-              "id": "dLwewhsqMACT",
-              "name": "Rosa"
-            },
-            {
-              "id": "gX2sO6GkWjVv",
-              "name": "Azul marinho"
-            },
-            {
-              "id": "5jaDlG-y61BU",
-              "name": "Azul royal"
-            }
-          ]
-        },
-        {
-          "id": "87SELUPPS6hf",
-          "name": "Tamanho",
-          "values": [
-            {
-              "id": "9NJLLDGW2lsV",
-              "name": "P"
-            },
-            {
-              "id": "0Jg2F3ryDW21",
-              "name": "M"
-            },
-            {
-              "id": "7SJNDHqrunUx",
-              "name": "G"
-            },
-            {
-              "id": "ebwZ_SPRNhs_",
-              "name": "GG"
-            }
-          ]
-        }
-      ],
+      "price": 7000,
       "variants": [
         {
-          "id": "s4bPD2mqBeQR",
-          "price": 7000,
+          "options": { "Cor": "Rosa", "Tamanho": "P" },
           "stock_quantity": 4,
-          "option_value_ids": ["dLwewhsqMACT", "9NJLLDGW2lsV"],
           "image_ids": ["GQh1iK-_W8Zl"]
         },
         {
-          "id": "jLNP47pwQ5-N",
-          "price": 7000,
+          "options": { "Cor": "Rosa", "Tamanho": "M" },
           "stock_quantity": 7,
-          "option_value_ids": ["dLwewhsqMACT", "0Jg2F3ryDW21"],
           "image_ids": ["GQh1iK-_W8Zl"]
         },
         {
-          "id": "EaB6J2y2pm8-",
-          "price": 7000,
+          "options": { "Cor": "Rosa", "Tamanho": "G" },
           "stock_quantity": 3,
-          "option_value_ids": ["dLwewhsqMACT", "7SJNDHqrunUx"],
           "image_ids": ["GQh1iK-_W8Zl"]
         },
         {
-          "id": "z2bSVZTLTtQ-",
-          "price": 7000,
+          "options": { "Cor": "Rosa", "Tamanho": "GG" },
           "stock_quantity": 1,
-          "option_value_ids": ["dLwewhsqMACT", "ebwZ_SPRNhs_"],
           "image_ids": ["GQh1iK-_W8Zl"]
         },
         {
-          "id": "zHyScVlP7aiJ",
-          "price": 7000,
+          "options": { "Cor": "Azul marinho", "Tamanho": "P" },
           "stock_quantity": 2,
-          "option_value_ids": ["gX2sO6GkWjVv", "9NJLLDGW2lsV"],
           "image_ids": ["sgflyBjAbQsT"]
         },
         {
-          "id": "P45jPp5eZHx8",
-          "price": 7000,
+          "options": { "Cor": "Azul marinho", "Tamanho": "M" },
           "stock_quantity": 0,
-          "option_value_ids": ["gX2sO6GkWjVv", "0Jg2F3ryDW21"],
           "image_ids": ["sgflyBjAbQsT"]
         },
         {
-          "id": "e8Nl0ImbvOna",
-          "price": 7000,
+          "options": { "Cor": "Azul marinho", "Tamanho": "G" },
           "stock_quantity": 5,
-          "option_value_ids": ["gX2sO6GkWjVv", "7SJNDHqrunUx"],
           "image_ids": ["sgflyBjAbQsT"]
         },
         {
-          "id": "JOS-H_X9NvtH",
-          "price": 7000,
+          "options": { "Cor": "Azul marinho", "Tamanho": "GG" },
           "stock_quantity": 3,
-          "option_value_ids": ["gX2sO6GkWjVv", "ebwZ_SPRNhs_"],
           "image_ids": ["sgflyBjAbQsT"]
         },
         {
-          "id": "QHbMD73S3JXG",
-          "price": 7000,
+          "options": { "Cor": "Azul royal", "Tamanho": "P" },
           "stock_quantity": 1,
-          "option_value_ids": ["5jaDlG-y61BU", "9NJLLDGW2lsV"],
           "image_ids": ["_4xrTgBvFXqD"]
         },
         {
-          "id": "L7ykc4mtmSMe",
-          "price": 7000,
+          "options": { "Cor": "Azul royal", "Tamanho": "M" },
           "stock_quantity": 3,
-          "option_value_ids": ["5jaDlG-y61BU", "0Jg2F3ryDW21"],
           "image_ids": ["_4xrTgBvFXqD"]
         },
         {
-          "id": "rxF22H0N1tq0",
-          "price": 7000,
+          "options": { "Cor": "Azul royal", "Tamanho": "G" },
           "stock_quantity": 4,
-          "option_value_ids": ["5jaDlG-y61BU", "7SJNDHqrunUx"],
           "image_ids": ["_4xrTgBvFXqD"]
         },
         {
-          "id": "eZXKs1EeMFvG",
-          "price": 7000,
+          "options": { "Cor": "Azul royal", "Tamanho": "GG" },
           "stock_quantity": 0,
-          "option_value_ids": ["5jaDlG-y61BU", "ebwZ_SPRNhs_"],
           "image_ids": ["_4xrTgBvFXqD"]
         }
       ]
@@ -514,36 +408,15 @@
           "src": "/api/products/reLNMIDzq-Pr.webp"
         }
       ],
-      "options": [
-        {
-          "id": "7bOdkKxOUUO6",
-          "name": "Cor",
-          "values": [
-            {
-              "id": "yLt2BxNFSXUm",
-              "name": "Preto"
-            },
-            {
-              "id": "tPEnq3nXGbPy",
-              "name": "Branco"
-            }
-          ]
-        }
-      ],
+      "price": 1000,
       "variants": [
         {
-          "id": "T5PHUYliQvOv",
-          "price": 1000,
-          "stock_quantity": 18,
-          "option_value_ids": ["yLt2BxNFSXUm"],
-          "image_ids": ["reLNMIDzq-Pr"]
+          "options": { "Cor": "Preto" },
+          "stock_quantity": 18
         },
         {
-          "id": "CLZVDT6HnuFd",
-          "price": 1000,
-          "stock_quantity": 11,
-          "option_value_ids": ["tPEnq3nXGbPy"],
-          "image_ids": ["reLNMIDzq-Pr"]
+          "options": { "Cor": "Branco" },
+          "stock_quantity": 11
         }
       ]
     }

@@ -17,7 +17,7 @@ const availableVariants = product.variants.filter(
 )
 const prices = (
   availableVariants.length ? availableVariants : product.variants
-).map((item) => item.price)
+).map((item) => item.price ?? product.price)
 const price = prices.length ? Math.min(...prices) : null
 const hasPriceRange = new Set(prices).size > 1
 const contactUrl = getWhatsAppUrl(

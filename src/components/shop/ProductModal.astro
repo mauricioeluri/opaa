@@ -64,25 +64,18 @@ const contactUrl = getWhatsAppUrl(
       </div>
       <p class="price-line">
         <strong class="unit-price">
-          {initial ? formatPrice(initial.price) : 'Consulte'}
+          {initial ? formatPrice(initial.price ?? product.price) : 'Consulte'}
         </strong>
         <span>cada</span>
       </p>
 
       <form class="purchase" aria-label={`Escolher ${product.name}`} hidden>
         <div class="options">
-          {product.options.map((option) => (
+          {Object.entries(initial?.options ?? {}).map(([name, value]) => (
             <label>
-              {option.name}
-              <select name={option.id}>
-                {option.values.map((value) => (
-                  <option
-                    value={value.id}
-                    selected={initial?.option_value_ids.includes(value.id)}
-                  >
-                    {value.name}
-                  </option>
-                ))}
+              {name}
+              <select name={name}>
+                <option value={value}>{value}</option>
               </select>
             </label>
           ))}
@@ -182,35 +175,31 @@ const contactUrl = getWhatsAppUrl(
       const selects = Array.from(form.querySelectorAll('select'))
       const syncOptions = () => {
         let candidates = availableVariants
-        selects.forEach((select, index) => {
+        selects.forEach((select) => {
           const previous = select.value
-          const values = product.options[index].values.filter((value) =>
-            candidates.some((variant) =>
-              variant.option_value_ids.includes(value.id)
-            )
-          )
+          const values = [
+            ...new Set(candidates.map((variant) => variant.options[select.name])),
+          ].filter((value) => value !== undefined)
           select.replaceChildren(
-            ...values.map((value) => new Option(value.name, value.id))
+            ...values.map((value) => new Option(value, value))
           )
-          select.value = values.some((value) => value.id === previous)
-            ? previous
-            : (values[0]?.id ?? '')
+          select.value = values.includes(previous) ? previous : (values[0] ?? '')
           select.disabled = values.length === 0
           candidates = candidates.filter((variant) =>
-            variant.option_value_ids.includes(select.value)
+            variant.options[select.name] === select.value
           )
         })
       }
 
       const update = () => {
-        const selected = selects.map((select) => select.value)
-        const variant = availableVariants.find(
-          (item) =>
-            item.option_value_ids.length === selected.length &&
-            selected.every((id) => item.option_value_ids.includes(id))
+        const variant = availableVariants.find((item) =>
+          selects.every((select) => item.options[select.name] === select.value)
         )
+        const price = variant?.price ?? product.price
         if (slider) {
-          const imageIds = JSON.stringify(variant?.image_ids ?? [])
+          const imageIds = variant?.image_ids?.length
+            ? JSON.stringify(variant.image_ids)
+            : ''
           if (slider.dataset.visibleImages !== imageIds) {
             slider.dataset.visibleImages = imageIds
             slider.dispatchEvent(new Event('photo-slider:filter'))
@@ -223,7 +212,7 @@ const contactUrl = getWhatsAppUrl(
         quantity.max = variant?.stock_quantity
           ? String(variant.stock_quantity)
           : ''
-        unitPrice.textContent = variant ? formatPrice(variant.price) : '—'
+        unitPrice.textContent = variant ? formatPrice(price) : '—'
         stock.textContent =
           availableVariants.length === 0
             ? 'Produto esgotado no momento'
@@ -238,14 +227,13 @@ const contactUrl = getWhatsAppUrl(
           form.checkValidity() && Number.isInteger(amount) && amount >= 1
         totalPrice.textContent =
           variant && available && valid
-            ? formatPrice(variant.price * amount)
+            ? formatPrice(price * amount)
             : '—'
         if (!variant || !available || !valid) return
 
-        const options = product.options.map((option) => {
-          const value = option.values.find((item) => selected.includes(item.id))
-          return `${option.name}: ${value?.name}`
-        })
+        const options = selects.map(
+          (select) => `${select.name}: ${select.value}`
+        )
         orderLabel.textContent =
           variant.stock_quantity === null
             ? 'Consultar pelo WhatsApp'
@@ -257,7 +245,7 @@ const contactUrl = getWhatsAppUrl(
             product.name,
             ...options,
             `Quantidade: ${amount}`,
-            `Total: ${formatPrice(variant.price * amount)}`,
+            `Total: ${formatPrice(price * amount)}`,
             '',
             'Vocês confirmam a disponibilidade?',
             dialog.dataset.productUrl,

@@ -112,10 +112,14 @@ Cada card abre `/publicacoes/slug/`, com texto completo e imagem em tamanho gran
 
 ### Produtos
 
-Em `products`, opções como cor e tamanho formam variantes com preço unitário em
-centavos (`price`) e estoque (`stock_quantity`): `0` esgotado, `null` consultar.
-IDs são nanoids de 12 caracteres; fotos ficam em `/api/products/<id>.webp` e podem
-ser compartilhadas entre variantes. Use os registros do JSON como modelo.
+Em `products`, `price` é o preço unitário padrão em centavos. Informe `price`
+na variante quando ela tiver outro preço. Cada variante informa as escolhas
+diretamente em `options`, como `{ "Cor": "Rosa", "Tamanho": "M" }`. Use as mesmas
+chaves nas variantes de um produto. Em `stock_quantity`, `0` significa esgotado e
+`null` significa consultar.
+O identificador público e os IDs das fotos são nanoids de 12 caracteres. As fotos
+ficam em `/api/products/<id>.webp`. Use `image_ids` na variante para selecionar
+fotos específicas da galeria. Omitir o campo usa a galeria inteira.
 Em `/loja/`, o produto abre um modal com opções em estoque, quantidade e pedido pelo WhatsApp.
 
 ## Contatos e doações

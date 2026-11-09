@@ -2,6 +2,15 @@ import data from '../data/api.json'
 
 type PublishedItem = { isPinned: boolean; published_at: string }
 type Post = Omit<(typeof data.posts)[number], 'image'> & { image?: string }
+type ProductVariant = {
+  options: Partial<Record<string, string>>
+  stock_quantity: number | null
+  price?: number
+  image_ids?: string[]
+}
+type Product = Omit<(typeof data.products)[number], 'variants'> & {
+  variants: ProductVariant[]
+}
 
 function comparePublications(a: PublishedItem, b: PublishedItem) {
   return (
@@ -14,7 +23,7 @@ export async function getAllAnimals() {
   return [...data.animals].sort(comparePublications)
 }
 
-export async function getProducts() {
+export async function getProducts(): Promise<Product[]> {
   return data.products.filter((product) => product.active)
 }
 
