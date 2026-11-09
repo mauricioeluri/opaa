@@ -58,6 +58,9 @@ Os registros de animais ainda são demonstrativos.
 Use fotos reais, sem filtros de IA, e informações confirmadas pela ONG.
 Animais, histórias, comunicados e posts usam `isPinned`: fixados primeiro e depois
 `published_at` decrescente dentro de cada grupo. Só comunicados exibem o ícone de fixado.
+Use data e hora ISO 8601 com fuso em `published_at`, como
+`2026-11-04T14:30:00-03:00`. Para registros antigos sem hora conhecida, a
+conversão usa meia-noite local. A interface exibe apenas a data.
 
 ### Animais
 
@@ -67,17 +70,17 @@ Os cards mostram até duas fotos e três linhas de descrição; levam a
 `/animais/public_id/`, que abre um modal com todas as fotos, texto completo e WhatsApp.
 A mensagem inclui o link do animal.
 
-| Campo                          | Como preencher                                                                   |
-| ------------------------------ | -------------------------------------------------------------------------------- |
-| `public_id`                    | Identificador usado na URL.                                                      |
-| `name`                         | Nome ou `null`, sem criar campo `title`.                                         |
-| `type`                         | `dog`, `cat` ou `other`.                                                         |
-| `isMale`, `neutered`           | Booleanos obrigatórios, sem `null`.                                              |
-| `ageGroup`                     | Obrigatório: `puppy`, `adult` ou `senior`; o site não calcula idade.             |
-| `published_at`                 | Data de publicação obrigatória.                                                  |
-| `age`, `breed`, `vaccinations` | Texto ou `null`; aparecem apenas nos detalhes quando informados.                 |
-| `isAgeApproximate`             | `true` para idade estimada; `false` quando não houver estimativa.                |
-| `images`                       | Lista de fotos; sem foto, a fonte deve informar `["/api/animals/default.webp"]`. |
+| Campo                 | Como preencher                                                                   |
+| --------------------- | -------------------------------------------------------------------------------- |
+| `public_id`           | Identificador usado na URL.                                                      |
+| `name`                | Nome ou `null`, sem criar campo `title`.                                         |
+| `type`                | `dog`, `cat` ou `other`.                                                         |
+| `isMale`, `neutered`  | Booleanos obrigatórios, sem `null`.                                              |
+| `ageGroup`            | Obrigatório: `puppy`, `adult` ou `senior`; o site não calcula idade.             |
+| `published_at`        | Data e hora de publicação obrigatórias.                                          |
+| `age`, `vaccinations` | Texto ou `null`; aparecem apenas nos detalhes quando informados.                 |
+| `isAgeApproximate`    | `true` para idade estimada; `false` quando não houver estimativa.                |
+| `images`              | Lista de fotos; sem foto, a fonte deve informar `["/api/animals/default.webp"]`. |
 
 Manter os mesmos campos nos registros: o TypeScript infere os tipos do JSON.
 O site não escolhe foto padrão nem presume vacinação completa ou castração desconhecida.
@@ -95,12 +98,13 @@ sem páginas individuais ou carrossel.
 
 ### Comunicados e posts
 
-`notices` contém apenas `title`, `body`, `published_at` (`AAAA-MM-DD`) e `isPinned`.
+`notices` contém apenas `title`, `body`, `published_at` e `isPinned`.
 A home mostra até seis.
 Sem avisos, a seção desaparece. O texto abre ao clicar, inclusive sem JavaScript.
 Não há imagens ou páginas individuais. `/comunicados/` reúne todos os avisos.
 Posts ficam em `posts`: `slug`, `title`, `body` (texto original com
-parágrafos), `category`, `published_at`, `isPinned` e `images`. A home mostra até três.
+parágrafos), `category`, `published_at`, `isPinned` e `image` opcional
+(caminho de uma única foto). A home mostra até três.
 Categorias: `community`, `campaign`, `transparency` e `care`.
 A prévia mostra o próprio texto, limitado a três linhas com reticências.
 `/publicacoes/` reúne todos os posts, com uma imagem por artigo e filtros no navegador.

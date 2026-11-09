@@ -82,10 +82,10 @@ const categories = [...new Set(posts.map((post) => post.category))]
               aria-labelledby={`title-${post.slug}`}
             >
               <a class="post-link" href={`/publicacoes/${post.slug}/`}>
-                {post.images[0] && (
+                {post.image && (
                   <ContentImage
                     class="cover"
-                    src={post.images[0]}
+                    src={post.image}
                     alt={post.title}
                     width={320}
                     sizes="(max-width: 35rem) 88px, 120px"

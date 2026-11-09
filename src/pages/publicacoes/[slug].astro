@@ -18,7 +18,7 @@ export async function getStaticPaths() {
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>
 const { post } = Astro.props
-const image = post.images[0]
+const image = post.image
 const dimensions = image ? await getContentImage(image) : undefined
 const portrait = dimensions && dimensions.height > dimensions.width
 const description = post.body.replace(/\s+/g, ' ').trim().slice(0, 160)

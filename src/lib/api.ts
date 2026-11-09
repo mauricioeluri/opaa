@@ -1,6 +1,7 @@
 import data from '../data/api.json'
 
 type PublishedItem = { isPinned: boolean; published_at: string }
+type Post = Omit<(typeof data.posts)[number], 'image'> & { image?: string }
 
 function comparePublications(a: PublishedItem, b: PublishedItem) {
   return (
@@ -21,7 +22,7 @@ export async function getStories() {
   return [...data.stories].sort(comparePublications)
 }
 
-export async function getPosts() {
+export async function getPosts(): Promise<Post[]> {
   return [...data.posts].sort(comparePublications)
 }
 

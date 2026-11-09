@@ -149,13 +149,15 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   ou QR Code Pix na API. Novos campos exigem necessidade concreta.
 - Posts do blog ficam em `posts`, identificados pelo `slug`, sem `public_id` ou
   `expires_at`, com `title`, `body` (texto original com parágrafos),
-  `category`, `published_at`, `isPinned` e `images`. A home exibe até três.
+  `category`, `published_at`, `isPinned` e `image` opcional (caminho de uma foto).
+  A home exibe até três.
   A prévia usa o próprio `body`, limitado a três linhas com reticências por CSS.
   Cada post usa no máximo uma imagem, sem carrossel.
   Cards abrem `/publicacoes/slug/`, com texto completo e imagem grande sem cortes.
   Não aplicar essa regra aos identificadores dos animais.
 - Animais, posts, comunicados e histórias usam `isPinned` booleano: fixados primeiro,
   depois `published_at` decrescente dentro de cada grupo, antes de limitar a home.
+  Usar data e hora ISO 8601 com fuso em `published_at`.
   Só comunicados mostram ícone de fixado. Não fixar registros sem solicitação.
 - Produtos usam nanoids de 12 caracteres nos IDs e nomes das fotos WebP.
   Seguir o JSON existente: opções formam variantes com preço e estoque próprios,
@@ -174,7 +176,7 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   registros: `age: null` para idade desconhecida e `isAgeApproximate: false`
   quando não houver estimativa informada. Esses campos não entram no cabeçalho
   dos cards. `isMale` e `neutered` são booleanos obrigatórios, sem `null`;
-  `ageGroup` e `published_at` também são obrigatórios. Idade, raça e vacinas
+  `ageGroup` e `published_at` também são obrigatórios. Idade e vacinas
   (`vaccinations`, texto ou `null`) só aparecem nos detalhes quando informadas.
   Não presumir vacinação completa nem status de castração desconhecido. Preferir
   a inferência de tipos do JSON. Os cards exibem até duas
@@ -197,7 +199,7 @@ pnpm e preservar seu lockfile. Adicionar dependências somente quando necessári
   seis: fixados primeiro e data decrescente dentro de cada grupo. Sem comunicados,
   ocultar a seção.
   Exibir o corpo em texto escapado, com abertura nativa por `details`/`summary`.
-  Datas sem horário usam `AAAA-MM-DD` e são exibidas sem deslocamento de fuso.
+  Exibir a data de publicação no fuso de São Paulo.
 
 ## Comandos e validação
 

@@ -29,10 +29,10 @@ const storyImages = await Promise.all(
       <div class="highlights">
         {posts.map((post) => (
           <a class="highlight" href={`/publicacoes/${post.slug}/`}>
-            {post.images[0] ? (
+            {post.image ? (
               <ContentImage
                 class="cover"
-                src={post.images[0]}
+                src={post.image}
                 alt={post.title}
                 width={480}
                 sizes="auto, (max-width: 35rem) 112px, 180px"

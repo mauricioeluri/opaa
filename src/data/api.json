@@ -8,7 +8,6 @@
       "age": null,
       "isAgeApproximate": false,
       "isMale": false,
-      "breed": null,
       "neutered": false,
       "vaccinations": null,
       "description": "Amigos, essa filhotinha linda procura uma família! Quem pode oferecer um lar com carinho e cuidado para ela? Fale com a OPAA!",
@@ -28,7 +27,6 @@
       "age": "2 meses",
       "isAgeApproximate": false,
       "isMale": true,
-      "breed": null,
       "neutered": false,
       "vaccinations": "Primeira dose da vacina importada aplicada.",
       "description": "Bento tem 2 meses, porte pequeno e adora brincar! É carinhoso, curioso e já recebeu a primeira dose da vacina importada. Quem vai dar um lar para esse pequeno?",
@@ -42,13 +40,12 @@
     },
     {
       "public_id": "XrN4I4nC--ya",
-      "published_at": "2025-11-25",
+      "published_at": "2025-11-25T00:00:00-03:00",
       "name": null,
       "ageGroup": "puppy",
       "age": null,
       "isAgeApproximate": false,
       "isMale": true,
-      "breed": null,
       "neutered": false,
       "vaccinations": null,
       "description": "Filhote encontrado, à procura de um lar. Castração garantida pela OPAA.",
@@ -59,13 +56,12 @@
     },
     {
       "public_id": "ncwZlsQBTlTo",
-      "published_at": "2025-11-25",
+      "published_at": "2025-11-25T00:00:00-03:00",
       "name": null,
       "ageGroup": "puppy",
       "age": null,
       "isAgeApproximate": false,
       "isMale": true,
-      "breed": null,
       "neutered": false,
       "vaccinations": null,
       "description": "Filhote encontrado, à procura de um lar. Castração garantida pela OPAA.",
@@ -76,13 +72,12 @@
     },
     {
       "public_id": "QGuy9nhw61Dq",
-      "published_at": "2025-11-25",
+      "published_at": "2025-11-25T00:00:00-03:00",
       "name": null,
       "ageGroup": "puppy",
       "age": null,
       "isAgeApproximate": false,
       "isMale": false,
-      "breed": null,
       "neutered": false,
       "vaccinations": null,
       "description": "Filhote encontrada, à procura de um lar. Castração garantida pela OPAA.",
@@ -93,13 +88,12 @@
     },
     {
       "public_id": "RZEMLcsKH8Dd",
-      "published_at": "2025-11-25",
+      "published_at": "2025-11-25T00:00:00-03:00",
       "name": null,
       "ageGroup": "puppy",
       "age": null,
       "isAgeApproximate": false,
       "isMale": false,
-      "breed": null,
       "neutered": false,
       "vaccinations": null,
       "description": "Filhote encontrada, à procura de um lar. Castração garantida pela OPAA.",
@@ -115,89 +109,89 @@
       "title": "Relatório de serviços de janeiro a julho de 2026",
       "body": "🐾 Relatório de Serviços | Janeiro a Julho de 2026 🐾\n\n🐶🐈 Com muito compromisso, dedicação e o apoio da nossa comunidade, seguimos transformando a vida de centenas de animais e de suas famílias.\n\n🗓️ Entre 01/01/2026 e 31/07/2026, a ONG OPAA realizou 1.896 atendimentos, incluindo:\n\n🐾 955 atendimentos clínicos;\n🐾 85 atendimentos de emergência (plantão);\n🐾 218 cirurgias;\n🐾 331 castrações por meio de verba pública;\n🐾 142 castrações a baixo custo;\n🐾 162 adoções.\n\n🔢 Cada número representa uma vida acolhida, tratada, protegida e uma nova oportunidade para quem mais precisa.\n\n🤝🏻 Agradecemos a todos que caminham ao nosso lado. Vocês fazem parte de cada conquista.\n\n✅ Seguimos firmes em nossa missão de promover o bem-estar animal, oferecendo atendimento a animais em situação de rua e a animais de famílias cadastradas no CadÚnico.\n\n❤️‍🩹 Juntos, continuaremos fazendo a diferença.",
       "category": "transparency",
-      "published_at": "2026-08-01",
+      "published_at": "2026-08-01T00:00:00-03:00",
       "isPinned": false,
-      "images": ["/api/blog/_GnKq4FALI6l.webp"]
+      "image": "/api/blog/_GnKq4FALI6l.webp"
     },
     {
       "slug": "parceria-com-a-urcamp-no-cuidado-aos-animais",
       "title": "Parceria com a URCAMP no cuidado aos animais",
       "body": "Hoje a ONG OPAA esteve visitando o Centro de Proteção dos Animais Domingas Faraco. Equipe de estudantes estavam acompanhando castrações realizadas por professores da URCAMP. É muito bom ver as parcerias funcionando. Obrigada pelo empenho de todos que lutam para o bem dos animais e manutenção do Canil.",
       "category": "community",
-      "published_at": "2026-10-29",
+      "published_at": "2026-10-29T00:00:00-03:00",
       "isPinned": false,
-      "images": ["/api/blog/-_5jQiW6UuMK.webp"]
+      "image": "/api/blog/-_5jQiW6UuMK.webp"
     },
     {
       "slug": "sete-gatos-castrados-e-microchipados",
       "title": "Sete gatos castrados e microchipados",
       "body": "Dia de castração no Centro de Proteção dos Animais de Alegrete. Sete felinos castrados e chipados pela Dra. Adriana Stigger. Transporte realizado pela Equipe de Voluntários da OPAA e Clínica Mundo + Animal., amanhã mais cinco. A lista de espera é grande, mas confiamos na sensibilidade dos nossos Vereadores, que cientes da gravidade e da necessidade de castrar os animais, vão destinar recursos para que este trabalho possa acontecer. Temos uma lista com aproximadamente 1000 animais esperando. Inscrições pelo fone (55)999844045.",
       "category": "care",
-      "published_at": "2026-10-15",
+      "published_at": "2026-10-15T00:00:00-03:00",
       "isPinned": false,
-      "images": ["/api/blog/SncyPf0EN9xN.webp"]
+      "image": "/api/blog/SncyPf0EN9xN.webp"
     }
   ],
   "notices": [
     {
       "title": "Castramóvel: atendimento mantido mesmo com chuva",
       "body": "Informamos que, mesmo com chuva, os atendimentos do Castramóvel em Alegrete serão mantidos normalmente.\n\nPedimos aos responsáveis que não deixem de levar seus animais ao local agendado, conforme a data e o horário previamente estabelecidos.\n\nLocal: CTG Farroupilha.\n\nContamos com a colaboração de todos!\n\nONG OPAA | Prefeitura Municipal de Alegrete.",
-      "published_at": "2026-11-04",
+      "published_at": "2026-11-04T00:00:00-03:00",
       "isPinned": false
     },
     {
       "title": "Castramóvel: chamamento dos beneficiados em 3 de novembro",
       "body": "A ONG OPAA e a Prefeitura Municipal de Alegrete reforçam o chamamento dos beneficiados para a castração agendada para 3 de novembro de 2026.\n\nLocal: CTG Farroupilha.\n\nSolicitamos que os responsáveis pelos animais compareçam ao local conforme a data e o horário previamente estabelecidos.\n\nOs animais já estão sendo aguardados. Pedimos a colaboração e o comprometimento de todos para a realização dos atendimentos.\n\nAgradecemos a compreensão e a colaboração!",
-      "published_at": "2026-11-03",
+      "published_at": "2026-11-03T00:00:00-03:00",
       "isPinned": false
     },
     {
       "title": "Últimas vagas para o Castramóvel em Alegrete",
       "body": "O Castramóvel estará em Alegrete nos dias 3, 4 e 5 de novembro de 2026, e restam poucas vagas para castração de cães.\n\nPara se inscrever, entre em contato com a ONG OPAA pelo WhatsApp (55) 99984-4045, enviando:\n• Folha V7 atualizada do Cadastro Único (CadÚnico);\n• RG do responsável pelo animal.\n\nAs vagas são limitadas.\n\nCastrar é um ato de amor e responsabilidade.",
-      "published_at": "2026-10-29",
+      "published_at": "2026-10-29T00:00:00-03:00",
       "isPinned": false
     },
     {
       "title": "Castramóvel: vagas remanescentes para portadores do CadÚnico",
       "body": "Atenção, portadores do CadÚnico: ainda há vagas remanescentes para castração de cães, machos e fêmeas, por tempo limitado.\n\nOs interessados devem entrar em contato com a ONG OPAA pelo WhatsApp (55) 99984-4045, enviando a Folha V7 atualizada do Cadastro Único e o documento de identidade com foto do responsável pelo animal.\n\nAs vagas são limitadas e destinadas ao preenchimento das vagas remanescentes.\n\nO Castramóvel estará em Alegrete nos dias 3, 4 e 5 de novembro de 2026. O local e os horários serão divulgados posteriormente a cada beneficiado.\n\nCompartilhe esta informação e ajude a levar esse serviço a quem precisa!",
-      "published_at": "2026-10-27",
+      "published_at": "2026-10-27T00:00:00-03:00",
       "isPinned": false
     },
     {
       "title": "Castramóvel em Alegrete: atendimento de 3 a 5 de novembro",
       "body": "A ONG OPAA, em parceria com a Prefeitura Municipal de Alegrete, informa que o Castramóvel estará na cidade de 3 a 5 de novembro de 2026, com vagas remanescentes para castração de cães, machos e fêmeas.\n\nA ação é destinada aos portadores do Cadastro Único. Mesmo após o chamamento da lista de espera, ainda há vagas disponíveis para cadastro.\n\nOs interessados devem entrar em contato com a ONG OPAA pelo WhatsApp (55) 99984-4045, enviando:\n• Folha V7 atualizada do Cadastro Único (CadÚnico);\n• RG ou documento oficial com foto.\n\nNão perca essa oportunidade!",
-      "published_at": "2026-10-24",
+      "published_at": "2026-10-24T00:00:00-03:00",
       "isPinned": false
     },
     {
       "title": "Mutirão Saúde Única: convite aos presidentes de bairro",
       "body": "A OPAA, em parceria com a Prefeitura Municipal de Alegrete, por meio da Secretaria de Saúde, está organizando o Mutirão Saúde Única e busca os representantes dos bairros interessados em receber essa iniciativa.\n\nSe você é presidente de bairro, entre em contato pelo WhatsApp da OPAA, identificando-se como presidente e informando o nome do seu bairro.\n\nO objetivo é realizar o cadastro do bairro e organizar o evento, levando ações de cuidado e saúde animal à comunidade.\n\nServiços previstos:\n• Antiparasitário e controle de carrapatos;\n• Vermífugo;\n• Censo animal.\n\nContamos com a participação de vocês para levar o mutirão a mais bairros de Alegrete!\n\nWhatsApp: (55) 99984-4045.",
-      "published_at": "2026-10-22",
+      "published_at": "2026-10-22T00:00:00-03:00",
       "isPinned": false
     },
     {
       "title": "Proteja seu cão no Desfile de 20 de Setembro",
       "body": "O Dia do Gaúcho é uma festa linda, mas, para os nossos melhores amigos, as ruas cheias e os desfiles podem ser sinônimo de muito estresse e perigo. Se você vai assistir ou mora perto da rota do desfile, fique atento:\n\n• Evite levar seu cão ao desfile. Para preservar a segurança e o bem-estar dos animais, recomenda-se que permaneçam em casa, em um ambiente tranquilo e seguro, evitando acidentes, fugas e perdas.\n\n• Mantenha os portões fechados. Se você mora perto do trajeto, garanta que seu pet esteja bem protegido dentro de casa. O som dos cascos e a movimentação podem fazer com que tente escapar.\n\n• Há risco real de fugas. O pânico pode fazer o cão fugir, pular portões ou escapar da coleira.\n\n• Evite acidentes graves. Cães soltos podem avançar nos cavalos por instinto, causando pisoteamentos, quedas dos cavalarianos e tumulto no público.\n\n• Passeio só na guia. Se morar perto ou circular na região, mantenha o animal na guia e sob supervisão.\n\nCultivar a nossa tradição também é exercer a guarda responsável. O verdadeiro orgulho gaúcho também se mostra no cuidado com os animais. Cultive a tradição com proteção!",
-      "published_at": "2026-09-19",
+      "published_at": "2026-09-19T00:00:00-03:00",
       "isPinned": false
     },
     {
       "title": "Por segurança, priorizamos o atendimento pelo WhatsApp",
       "body": "Por motivos de segurança, estamos priorizando o atendimento por meio de chamadas e mensagens via WhatsApp.\n\nDessa forma, conseguimos agilizar os atendimentos, organizar melhor as informações e garantir mais segurança para todos.\n\nDenúncias: (55) 99984-4045.\nUrgências: (55) 99917-5896.\n\nPedimos que salvem nossos contatos e compartilhem esta publicação para que mais pessoas saibam como acionar a ONG quando necessário.",
-      "published_at": "2026-05-15",
+      "published_at": "2026-05-15T00:00:00-03:00",
       "isPinned": true
     },
     {
       "title": "Alerta de golpe: estão usando o nome da OPAA",
       "body": "A ONG OPAA vem a público alertar a comunidade sobre tentativas de golpe. Pessoas estão utilizando indevidamente o nome da entidade, passando-se por profissionais ou voluntários e cobrando valores de forma irregular.\n\nReforçamos que:\n• A OPAA não cobra por atendimentos ou serviços;\n• Nenhum profissional ou representante está autorizado a solicitar pagamentos em nome da ONG;\n• O número oficial de contato para atendimento da OPAA é (55) 99984-4045;\n• Qualquer abordagem fora desse canal deve ser desconsiderada e denunciada.\n\nSe receber contato suspeito:\n• Não efetue nenhum pagamento;\n• Não compartilhe dados pessoais;\n• Avise imediatamente a ONG pelo número oficial;\n• Registre boletim de ocorrência.\n\nA OPAA segue firme no propósito de proteger os animais com transparência, seriedade e compromisso. Contamos com a ajuda de todos para impedir que criminosos se aproveitem da nossa causa.\n\nCompartilhe este alerta e proteja mais vidas!",
-      "published_at": "2026-01-10",
+      "published_at": "2026-01-10T00:00:00-03:00",
       "isPinned": true
     }
   ],
   "stories": [
     {
       "name": "Fumaça",
-      "published_at": "2026-11-05",
+      "published_at": "2026-11-05T00:00:00-03:00",
       "description": "Fumaça foi resgatado de maus-tratos em janeiro de 2024 e adotado em seguida. Recebemos hoje uma foto dele, saudável e de banho tomado!",
       "beforeImage": null,
       "afterImage": "/api/stories/EFPEWmo_TTHM.webp",
@@ -205,7 +199,7 @@
     },
     {
       "name": "Tunico",
-      "published_at": "2026-11-04",
+      "published_at": "2026-11-04T00:00:00-03:00",
       "description": "Tunico foi encontrado ainda filhote, muito magrinho, na estrada entre Dom Pedrito e Bagé. Hoje está gordinho e feliz!",
       "beforeImage": "/api/stories/gVFxPto1tThQ.webp",
       "afterImage": "/api/stories/FtOUoC7iDPuN.webp",
@@ -213,7 +207,7 @@
     },
     {
       "name": "Maia",
-      "published_at": "2026-09-14",
+      "published_at": "2026-09-14T00:00:00-03:00",
       "description": "Maia foi encontrada em uma caixinha com outros filhotes no bairro Capão do Angico. Ela foi adotada pela Leonarda.",
       "beforeImage": "/api/stories/6dZxOZr_XaAC.webp",
       "afterImage": "/api/stories/y7ZlB0E_KXZN.webp",
@@ -221,7 +215,7 @@
     },
     {
       "name": "Melado",
-      "published_at": "2026-09-13",
+      "published_at": "2026-09-13T00:00:00-03:00",
       "description": "Melado foi resgatado com um olho machucado. Equipe de Veterinários da URCAMP e voluntários, juntamente com estudantes, realizaram cirurgia e amputaram um olho. Encontra-se recuperado e bem tratado pela ONG OPAA. Irá desfilar dia 20 de setembro no PIQUETE da URCAMP como símbolo de superação. Também representa as pessoas que se unem para fazer o bem e dar vida digna a estes seres de luz. Aplaudam muito o Melado, ele merece.",
       "beforeImage": "/api/stories/WLpl84ZSSil6.webp",
       "afterImage": "/api/stories/zQ9jWaEfbkP1.webp",
@@ -229,7 +223,7 @@
     },
     {
       "name": "Pitty",
-      "published_at": "2026-09-12",
+      "published_at": "2026-09-12T00:00:00-03:00",
       "description": "Pitty foi encontrada sozinha perto de uma estrada, ainda filhote. Recebeu cuidados, foi castrada e hoje mora em uma propriedade rural.",
       "beforeImage": "/api/stories/nDsF3r5F3YDm.webp",
       "afterImage": "/api/stories/f6SfWZbmgIZ3.webp",
@@ -237,7 +231,7 @@
     },
     {
       "name": "Mingau",
-      "published_at": "2026-09-11",
+      "published_at": "2026-09-11T00:00:00-03:00",
       "description": "Mingau foi um dos animais adotados na feira de adoções promovida pela Mundo Mais Animal Veterinária e PetShop em parceria com a ONG OPAA.",
       "beforeImage": "/api/stories/a4m7ChySYVD_.webp",
       "afterImage": "/api/stories/pDhMLX8nzAAC.webp",
