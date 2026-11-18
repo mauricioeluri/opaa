@@ -74,10 +74,13 @@ const { title, description, imageAlt, action, detail, bare } = Astro.props
   }
 
   .detail {
-    margin: 24px 0 0;
+    position: fixed;
+    inset: auto 16px 12px;
+    margin: 0;
     font-family: monospace;
-    font-size: 14px;
-    opacity: 0.7;
+    font-size: 12px;
+    text-align: center;
+    opacity: 0.6;
   }
 
   @media (max-width: 47.999rem) {
