@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 470 120" role="img" aria-label="Todapata">
+  <defs>
+    <style>@font-face{font-family:'Nunito';font-weight:900;src:url(data:font/woff2;base64,d09GMgABAAAAAASwABAAAAAACJQAAARWAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGhYbgSYcLgZgP1NUQVREAFQRCAqFKIQ5CxAAATYCJAMcBCAFhCAHIAwHG/8GyAQe+HfzPTekltQlULFUzanTvs1hc5irf4lJ/IfDpU3ABTLFCjyTXu3ftjWnhXnU2ekdjWlr0wEf+PFRZHgLbiO6RvRI9XitRgDeCC4JwZKbextQSKMYU31jez/BcwfvWAmhdca24URuqPtilK0t7GzgGaptWRkJT4RHohjk76X2DwNqTRnjH1C6bry5AAs+W/ZJmNKog2ExLZCnoyuGg9QtUh2HpXXTMUN2SU5pGGjzDxGTRAvLcvouQzK60drS13R2dTbwGBo20y//X0q0yQVC1xDnlofEp9LjtEVbGDbsgWCXkRA+sLRsm2F6xTZjFXXADSCPJMz9WoSdQ3iZjsEfm0J3zdYApurzwbBnyWjMMM8Wtg1pUqzNC4zPjcuMS4yzjNOx0RmVAmEY+FHk4ZIvZrXwOYgggE0+fZJMFfnDZbkozjfQN843Y8DDx33Wx8N7wPnOO8Lx5ruqiuJ86jrs96uuB28VwvGA4nwq/6p7brn01uQH31Vdb78N9ocU5yNChJz30HMDznfeEY5331Vdb8cowvGo6noYue4J5oveEq4H7xSONxTnfbdhf32moaaPXftbb701SFUMOB8RJocWwHIp4DiK851YFftDYz2ZxCgxx6OqOq4JR2h/SFH+2Q+rrmvVc6/HflPCWXfl3Ll32t5Ejh6g84lSMpia3ZxVePihkUtF/UXJafuBYT5xEQv7kbaEjozwBzqun6jxOPr8n7pVS+9qZv50+wv6xSmpN+uRE10V5/OLUjVdUbjb1VO4PV1RVTSU96X6jv5xetp3epz+cnrax3rJZR8NFx4ddcGiXleaEnX+fkZtGbrSe3BF3W5XeeJkU+2cpbL34Irane6yxKnG2nlL+VFRFyw2PN31UNrHupH+clr6y+mlPe2xpHq6omC7p6tgd7qiumgo7yvve/TvTsiPcu53eEeB0jadkTXeeKVFM2uaplkq9Y/T0z/WK3uTLzGbey9OtCT5nq3+mJ8YG7781u9c0JtMF8Qccd+vbVN+5b95mkxfEmk+DLv6bf/ET3KvLvj/2/8/cVuRUylyv77qDpqnciQ32//f/v+m28qV/Bp4iF/JlYqJlazESKPESFbyxQ3GbyJ2wkoPZvFg83M0YljkT5bpnAfikL143xV8GYsE4bwmkvDlCZGJTM5alutFbkRyiMidcGbdvhR+VECaxDQWLWYKbrDICwWFacaH7vs2WWeGDWqxMsMca7RgYwYrK8wxxAIrLLGMzW61scUupWRx5bvMscPKww6xS6a6/xWsZLLJDktk0UUj7XSyxwYr2NgkY4LMIAvswH+7yQYaeWRSSDa5YaqMTrpoaiCnGILZ61liL726A5DXjHWkZ4uDl6rZyF/SyCWbHPLR6GeZBbSOrd3ssMkqCxSgnhr2EMDWDt5FIwUNWurWucwes2QyhytKXJts0hkrCyxuFFhtZrExEaV+QFXiVuM2on825fcJ49jb5JMB) format('woff2')}</style>
+    <linearGradient id="padGradient" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#2E9E5B"/>
+      <stop offset="0.35" stop-color="#F2B705"/>
+      <stop offset="0.65" stop-color="#2F6FD1"/>
+      <stop offset="1" stop-color="#F06A3C"/>
+    </linearGradient>
+  </defs>
+  <!-- Paw on the left, name on the right -->
+  <svg x="0" y="0" width="124" height="120" viewBox="10 20 180 175">
+    <path d="M100 98 C128 98 156 126 158 152 C160 174 142 182 124 177 C113 174 107 171 100 171 C93 171 87 174 76 177 C58 182 40 174 42 152 C44 126 72 98 100 98 Z" fill="url(#padGradient)" opacity="0.35"/>
+    <ellipse cx="41" cy="93" rx="19" ry="24" transform="rotate(-35 41 93)" fill="#2E9E5B"/>
+    <ellipse cx="78" cy="58" rx="19" ry="25" transform="rotate(-12 78 58)" fill="#F2B705"/>
+    <ellipse cx="122" cy="58" rx="19" ry="25" transform="rotate(12 122 58)" fill="#2F6FD1"/>
+    <ellipse cx="159" cy="93" rx="19" ry="24" transform="rotate(35 159 93)" fill="#F06A3C"/>
+  </svg>
+  <text x="138" y="86" font-family="Nunito, 'Arial Rounded MT Bold', 'Segoe UI', Arial, sans-serif" font-size="76" font-weight="900" letter-spacing="-2" fill="#1D2B3A">toda<tspan fill="#2E9E5B">pata</tspan></text>
+</svg>
