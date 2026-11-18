@@ -37,18 +37,6 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
       icon={PawPrint}
     />
 
-    {hasSpecialNeeds && (
-      <button type="button" class="special-friends" aria-pressed="false" hidden>
-        <span class="badge">
-          <Heart size={22} aria-hidden="true" />
-        </span>
-        <span class="text">
-          <span class="off">Adote um animalzinho com deficiência</span>
-          <span class="on">Ver todos os animais</span>
-        </span>
-      </button>
-    )}
-
     <FilterPanel enabled={animals.length > 0}>
       <form class="filters" aria-label="Filtrar animais para adoção" hidden>
         <label>
@@ -86,6 +74,20 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
           </select>
         </label>
       </form>
+
+      {hasSpecialNeeds && (
+        <button
+          slot="action"
+          type="button"
+          class="special-friends"
+          aria-pressed="false"
+          hidden
+        >
+          <Heart size={16} aria-hidden="true" />
+          <span class="off">Adote um animalzinho com deficiência</span>
+          <span class="on">Ver todos os animais</span>
+        </button>
+      )}
 
       <p
         slot="count"
@@ -216,57 +218,35 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
   }
 
   .special-friends:not([hidden]) {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     box-sizing: border-box;
-    max-width: 100%;
-    margin: 32px 0 0;
-    padding: 8px 24px 8px 8px;
-    border: 2px solid #5a3d00;
+    min-height: 36px;
+    margin-top: 12px;
+    padding: 6px 14px;
+    border: 1px solid #e0b43c;
     border-radius: 999px;
-    color: #3d2a00;
-    background: #ffd35c;
-    box-shadow: 4px 4px 0 #5a3d00;
+    color: #5a3d00;
+    background: #fff3cf;
     font: inherit;
-    font-size: 18px;
-    font-weight: 800;
-    line-height: 1.2;
-    text-align: left;
+    font-size: 14px;
+    font-weight: 700;
     cursor: pointer;
-    transform: rotate(-1deg);
-    transition:
-      transform 0.15s,
-      box-shadow 0.15s;
   }
 
   .special-friends:hover {
-    transform: rotate(0) translate(-1px, -1px);
-    box-shadow: 6px 6px 0 #5a3d00;
-  }
-
-  .special-friends:active {
-    transform: translate(3px, 3px);
-    box-shadow: 1px 1px 0 #5a3d00;
+    background: #ffe9a8;
   }
 
   .special-friends:focus-visible {
-    outline: 3px solid var(--color-primary);
-    outline-offset: 4px;
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
   }
 
-  .badge {
-    display: grid;
+  .special-friends :global(svg) {
     flex: none;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
     color: #d6334f;
-    background: #fff;
-  }
-
-  .badge :global(svg) {
     fill: currentcolor;
   }
 
@@ -280,16 +260,18 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
   }
 
   .special-friends[aria-pressed='true'] {
-    border-color: var(--color-primary-hover);
+    border-color: var(--color-primary);
     color: #fff;
     background: var(--color-primary);
-    box-shadow: 4px 4px 0 var(--color-primary-hover);
-    transform: rotate(0);
   }
 
-  @media (prefers-reduced-motion: reduce) {
+  .special-friends[aria-pressed='true'] :global(svg) {
+    color: #fff;
+  }
+
+  @media (min-width: 48rem) {
     .special-friends:not([hidden]) {
-      transition: none;
+      margin-top: 0;
     }
   }
 
