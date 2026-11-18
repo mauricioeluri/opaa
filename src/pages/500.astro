@@ -1,10 +1,15 @@
 ---
 import StatusPage from '../components/StatusPage.astro'
+
+// Astro hands over what was thrown; only the developer sees it (see StatusPage).
+const { error } = Astro.props
+const detail = error instanceof Error ? error.message : undefined
 ---
 
 <StatusPage
   title="Estamos fora do ar por um momento"
   description="Não conseguimos carregar o conteúdo agora. Já já voltamos, tente de novo em instantes."
   imageAlt="Cachorro olhando ao redor, confuso, sem saber o que aconteceu"
-  action={{ href: '/', label: 'Tentar novamente' }}
+  action={{ href: Astro.url.pathname, label: 'Tentar novamente' }}
+  detail={detail}
 />

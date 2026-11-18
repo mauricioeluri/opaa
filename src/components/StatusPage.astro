@@ -7,9 +7,11 @@ interface Props {
   description: string
   imageAlt: string
   action: { href: string; label: string }
+  /** Technical cause, shown only while developing. */
+  detail?: string
 }
 
-const { title, description, imageAlt, action } = Astro.props
+const { title, description, imageAlt, action, detail } = Astro.props
 ---
 
 <SiteLayout title={`${title} | ${site.name}`} description={description} noindex>
@@ -26,6 +28,7 @@ const { title, description, imageAlt, action } = Astro.props
       <a class="button" href={action.href}>
         {action.label}
       </a>
+      {import.meta.env.DEV && detail && <p class="detail">{detail}</p>}
     </div>
   </main>
 </SiteLayout>
@@ -57,6 +60,13 @@ const { title, description, imageAlt, action } = Astro.props
 
   p {
     margin: 16px 0 24px;
+  }
+
+  .detail {
+    margin: 24px 0 0;
+    font-family: monospace;
+    font-size: 14px;
+    opacity: 0.7;
   }
 
   @media (max-width: 47.999rem) {
