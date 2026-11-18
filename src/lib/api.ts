@@ -88,8 +88,11 @@ interface Content {
 /** Maximum items shown on the home page for each kind of content. */
 export const homeLimits = { animals: 2, posts: 3, notices: 6, stories: 6 }
 
-// Memoized so that the build reads the source once, not once per page.
+// Memoized so that the build reads the source once, not once per page. In dev the
+// server lives for hours, so the copy expires and edits in the panel show up on reload.
+const DEV_CACHE_MS = 2000
 let content: Promise<Content> | undefined
+let loadedAt = 0
 
 const PAGE_SIZE = 100
 const DEFAULT_ANIMAL_IMAGE = '/images/animal-sem-foto.webp'
@@ -164,7 +167,12 @@ function loadContent() {
     )
   }
 
-  content ??= loadFromApi(TODAPATA_API_URL.replace(/\/+$/, ''), TODAPATA_API_KEY)
+  if (import.meta.env.DEV && Date.now() - loadedAt > DEV_CACHE_MS) content = undefined
+
+  if (!content) {
+    loadedAt = Date.now()
+    content = loadFromApi(TODAPATA_API_URL.replace(/\/+$/, ''), TODAPATA_API_KEY)
+  }
 
   return content
 }
