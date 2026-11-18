@@ -7,9 +7,9 @@ const detail = error instanceof Error ? error.message : undefined
 ---
 
 <StatusPage
-  title="Estamos fora do ar por um momento"
-  description="Não conseguimos carregar o conteúdo agora. Já já voltamos, tente de novo em instantes."
-  imageAlt="Cachorro olhando ao redor, confuso, sem saber o que aconteceu"
-  action={{ href: Astro.url.pathname, label: 'Tentar novamente' }}
+  title="Ué… nosso farejador perdeu a trilha"
+  description="Não conseguimos buscar o conteúdo agora. Ele já está atrás do cheiro de novo, tente outra vez em instantes!"
+  imageAlt="Cachorro olhando ao redor, confuso, procurando alguma coisa"
+  action={{ href: Astro.url.pathname, label: 'Tentar de novo' }}
   detail={detail}
 />
