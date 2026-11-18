@@ -9,13 +9,20 @@ interface Props {
   action: { href: string; label: string }
   /** Technical cause, shown only while developing. */
   detail?: string
+  /** Without navigation and footer. */
+  bare?: boolean
 }
 
-const { title, description, imageAlt, action, detail } = Astro.props
+const { title, description, imageAlt, action, detail, bare } = Astro.props
 ---
 
-<SiteLayout title={`${title} | ${site.name}`} description={description} noindex>
-  <main>
+<SiteLayout
+  title={`${title} | ${site.name}`}
+  description={description}
+  noindex
+  {bare}
+>
+  <main class:list={{ bare }}>
     <img
       src="/images/confused-dog.gif"
       alt={imageAlt}
@@ -44,6 +51,10 @@ const { title, description, imageAlt, action, detail } = Astro.props
     min-height: 50vh;
     margin-inline: auto;
     padding: 64px 24px;
+  }
+
+  main.bare {
+    min-height: 100vh;
   }
 
   img {

@@ -11,7 +11,12 @@ import PixModal from '../components/PixModal.astro'
 import Footer from '../components/Footer.astro'
 import AnimalNotice from '../components/home/AnimalNotice.astro'
 
-type Props = ComponentProps<typeof SEO>
+type Props = ComponentProps<typeof SEO> & {
+  /** Only the content: no navigation, footer or Pix (for the "unavailable" page). */
+  bare?: boolean
+}
+
+const { bare = false, ...seo } = Astro.props
 ---
 
 <!doctype html>
@@ -32,7 +37,7 @@ type Props = ComponentProps<typeof SEO>
         crossorigin=""
       />
     ))}
-    <SEO {...Astro.props} />
+    <SEO {...seo} />
     <noscript>
       <style is:inline>
         #contribuir:not([open]) {
@@ -65,13 +70,13 @@ type Props = ComponentProps<typeof SEO>
     </script>
     <ClientRouter fallback="swap" />
   </head>
-  <body id="inicio">
+  <body id="inicio" class:list={{ bare }}>
     <NavigationProgress />
-    <Topbar />
+    {!bare && <Topbar />}
     <slot />
-    <Footer />
-    {Astro.url.pathname === '/' && <AnimalNotice />}
-    <PixModal />
+    {!bare && <Footer />}
+    {!bare && Astro.url.pathname === '/' && <AnimalNotice />}
+    {!bare && <PixModal />}
   </body>
 </html>
 
@@ -91,6 +96,10 @@ type Props = ComponentProps<typeof SEO>
   body {
     box-sizing: border-box;
     padding-top: 64px;
+  }
+
+  body.bare {
+    padding-top: 0;
   }
 
   html:has(dialog[open]) {
