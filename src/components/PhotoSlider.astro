@@ -240,6 +240,7 @@ const slides = await Promise.all(
           window.clearInterval(timer)
           if (
             automatic &&
+            !motion.matches &&
             visibleDots().length > 1 &&
             !drag &&
             !document.hidden

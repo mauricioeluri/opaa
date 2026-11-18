@@ -1,16 +1,13 @@
-import type { getAllAnimals } from './api'
+import type { Animal, AnimalAgeGroup } from './api'
 
-export const animalAgeGroups: Record<string, string> = {
+export const animalAgeGroups: Record<AnimalAgeGroup, string> = {
   puppy: 'Filhote',
   adult: 'Adulto',
   senior: 'Idoso',
 }
 
 export function getAnimalLabel(
-  animal: Pick<
-    Awaited<ReturnType<typeof getAllAnimals>>[number],
-    'name' | 'isMale' | 'ageGroup'
-  >
+  animal: Pick<Animal, 'name' | 'isMale' | 'ageGroup'>
 ) {
   const sex = animal.isMale ? 'Macho' : 'Fêmea'
 

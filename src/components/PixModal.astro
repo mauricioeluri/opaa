@@ -66,6 +66,7 @@ import { site } from '../config/site'
 </dialog>
 
 <script>
+  import { isBackdropClick } from '../lib/dom-events'
   import { onPageLoad } from '../lib/page-lifecycle'
 
   onPageLoad(() => {
@@ -105,16 +106,7 @@ import { site } from '../config/site'
       }
     })
     dialog.addEventListener('click', (event) => {
-      const bounds = dialog.getBoundingClientRect()
-      if (
-        event.target === dialog &&
-        (event.clientX < bounds.left ||
-          event.clientX > bounds.right ||
-          event.clientY < bounds.top ||
-          event.clientY > bounds.bottom)
-      ) {
-        dialog.close()
-      }
+      if (isBackdropClick(dialog, event)) dialog.close()
     })
 
     if (copyButton && copyLabel && status && key && navigator.clipboard) {

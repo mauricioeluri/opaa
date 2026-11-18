@@ -6,11 +6,11 @@ import AnimalCard from './AnimalCard.astro'
 import AnimalModal from './AnimalModal.astro'
 import { site } from '../../config/site'
 import SiteLayout from '../../layouts/SiteLayout.astro'
-import { getAvailableAnimals } from '../../lib/api'
+import { getAvailableAnimals, type Animal } from '../../lib/api'
 import { animalAgeGroups } from '../../lib/animal-label'
 
 interface Props {
-  animal?: Awaited<ReturnType<typeof getAvailableAnimals>>[number]
+  animal?: Animal
 }
 
 const { animal } = Astro.props

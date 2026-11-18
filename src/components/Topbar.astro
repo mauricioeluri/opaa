@@ -94,6 +94,7 @@ const items = [
 </header>
 
 <script>
+  import { isPlainClick } from '../lib/dom-events'
   import { onPageLoad } from '../lib/page-lifecycle'
 
   onPageLoad(() => {
@@ -103,15 +104,7 @@ const items = [
     const brand = header?.querySelector<HTMLAnchorElement>('.brand')
 
     brand?.addEventListener('click', (event) => {
-      if (
-        location.pathname !== '/' ||
-        event.button !== 0 ||
-        event.ctrlKey ||
-        event.metaKey ||
-        event.shiftKey ||
-        event.altKey
-      )
-        return
+      if (location.pathname !== '/' || !isPlainClick(event)) return
       event.preventDefault()
       history.replaceState(history.state, '', '/')
       window.scrollTo({

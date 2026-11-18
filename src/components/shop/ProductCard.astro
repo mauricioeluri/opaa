@@ -1,14 +1,14 @@
 ---
 import { ImageOff } from '@lucide/astro'
 import { site } from '../../config/site'
-import type { getProducts } from '../../lib/api'
+import type { Product } from '../../lib/api'
 import { formatPrice } from '../../lib/format-price'
 import { getWhatsAppUrl } from '../../lib/whatsapp'
 import PhotoSlider from '../PhotoSlider.astro'
 import ProductModal from './ProductModal.astro'
 
 interface Props {
-  product: Awaited<ReturnType<typeof getProducts>>[number]
+  product: Product
 }
 
 const { product } = Astro.props

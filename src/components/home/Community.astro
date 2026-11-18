@@ -1,12 +1,12 @@
 ---
 import { ArrowUpRight, PawPrint, Shirt, Stethoscope } from '@lucide/astro'
-import { getPosts, getStories } from '../../lib/api'
+import { getPosts, getStories, homeLimits } from '../../lib/api'
 import { postCategories } from '../../lib/post-category'
 import { getContentImage } from '../../lib/content-image'
 import ContentImage from '../ContentImage.astro'
 
-const posts = (await getPosts()).slice(0, 3)
-const stories = (await getStories()).slice(0, 6)
+const posts = (await getPosts()).slice(0, homeLimits.posts)
+const stories = (await getStories()).slice(0, homeLimits.stories)
 const storyImages = await Promise.all(
   stories.map((story) => getContentImage(story.afterImage))
 )
@@ -33,7 +33,7 @@ const storyImages = await Promise.all(
               <ContentImage
                 class="cover"
                 src={post.image}
-                alt={post.title}
+                alt=""
                 width={480}
                 sizes="auto, (max-width: 35rem) 112px, 180px"
                 loading="lazy"

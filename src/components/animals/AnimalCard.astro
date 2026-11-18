@@ -1,11 +1,11 @@
 ---
 import { Cat, Dog, PawPrint } from '@lucide/astro'
-import type { getAllAnimals } from '../../lib/api'
+import type { Animal } from '../../lib/api'
 import { getAnimalLabel } from '../../lib/animal-label'
 import PhotoSlider from '../PhotoSlider.astro'
 
 interface Props {
-  animal: Awaited<ReturnType<typeof getAllAnimals>>[number]
+  animal: Animal
   catalog?: boolean
 }
 
@@ -54,6 +54,7 @@ const AnimalIcon =
 </article>
 
 <script>
+  import { isPlainClick } from '../../lib/dom-events'
   import { onPageLoad } from '../../lib/page-lifecycle'
   import { openRouteModal } from '../../lib/route-modal'
 
@@ -71,15 +72,7 @@ const AnimalIcon =
           link.click()
         })
         link.addEventListener('click', (event) => {
-          if (
-            event.defaultPrevented ||
-            event.button !== 0 ||
-            event.ctrlKey ||
-            event.metaKey ||
-            event.shiftKey ||
-            event.altKey
-          )
-            return
+          if (!isPlainClick(event)) return
           if (openRouteModal(new URL(link.href).pathname, link))
             event.preventDefault()
         })

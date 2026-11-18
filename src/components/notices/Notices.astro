@@ -1,6 +1,6 @@
 ---
 import { ArrowUpRight, ChevronDown, Megaphone, Pin } from '@lucide/astro'
-import { getNotices } from '../../lib/api'
+import { getNotices, homeLimits } from '../../lib/api'
 import { formatDate } from '../../lib/format-date'
 import PageHeader from '../PageHeader.astro'
 
@@ -10,7 +10,7 @@ interface Props {
 
 const { showAll = false } = Astro.props
 const allNotices = await getNotices()
-const notices = showAll ? allNotices : allNotices.slice(0, 6)
+const notices = showAll ? allNotices : allNotices.slice(0, homeLimits.notices)
 ---
 
 {(showAll || notices.length > 0) && (

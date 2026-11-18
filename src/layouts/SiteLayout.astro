@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css'
 import type { ComponentProps } from 'astro/types'
+import lilitaOne from '@fontsource/lilita-one/files/lilita-one-latin-400-normal.woff2?url'
+import nunitoSans from '@fontsource/nunito-sans/files/nunito-sans-latin-400-normal.woff2?url'
 import { ClientRouter } from 'astro:transitions'
 import NavigationProgress from '../components/NavigationProgress.astro'
 import SEO from '../components/SEO.astro'
@@ -21,6 +23,17 @@ type Props = ComponentProps<typeof SEO>
     <link rel="icon" type="image/x-icon" href="/branding/opaa-icon.ico" />
     <link rel="apple-touch-icon" href="/branding/opaa-apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
+    {
+      [lilitaOne, nunitoSans].map((href) => (
+        <link
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href={href}
+          crossorigin=""
+        />
+      ))
+    }
     <SEO {...Astro.props} />
     <noscript>
       <style is:inline>

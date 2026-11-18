@@ -3,13 +3,13 @@ import { ChevronLeft, ChevronRight, X } from '@lucide/astro'
 import BrandIcon from '../BrandIcon.astro'
 import PhotoSlider from '../PhotoSlider.astro'
 import { site } from '../../config/site'
-import type { getAvailableAnimals } from '../../lib/api'
+import type { Animal } from '../../lib/api'
 import { animalAgeGroups, getAnimalLabel } from '../../lib/animal-label'
 import { formatDate } from '../../lib/format-date'
 import { getWhatsAppUrl } from '../../lib/whatsapp'
 
 interface Props {
-  animal: Awaited<ReturnType<typeof getAvailableAnimals>>[number]
+  animal: Animal
   index: number
   total: number
   previous?: string
@@ -127,6 +127,7 @@ const details = [
 </dialog>
 
 <script>
+  import { isPlainClick } from '../../lib/dom-events'
   import { onPageLoad } from '../../lib/page-lifecycle'
   import { attachRouteModal, openRouteModal } from '../../lib/route-modal'
 
@@ -147,15 +148,7 @@ const details = [
             link.addEventListener(
               'click',
               (event) => {
-                if (
-                  event.defaultPrevented ||
-                  event.button !== 0 ||
-                  event.ctrlKey ||
-                  event.metaKey ||
-                  event.shiftKey ||
-                  event.altKey
-                )
-                  return
+                if (!isPlainClick(event)) return
                 if (
                   openRouteModal(new URL(link.href).pathname, undefined, true)
                 )

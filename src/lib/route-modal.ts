@@ -1,4 +1,5 @@
 import { navigate } from 'astro:transitions/client'
+import { isBackdropClick } from './dom-events'
 
 type ModalEntry = {
   dialog: HTMLDialogElement
@@ -99,15 +100,7 @@ export function attachRouteModal(
   dialog.addEventListener(
     'click',
     (event) => {
-      const bounds = dialog.getBoundingClientRect()
-      if (
-        event.target === dialog &&
-        (event.clientX < bounds.left ||
-          event.clientX > bounds.right ||
-          event.clientY < bounds.top ||
-          event.clientY > bounds.bottom)
-      )
-        dialog.close()
+      if (isBackdropClick(dialog, event)) dialog.close()
     },
     { signal }
   )
