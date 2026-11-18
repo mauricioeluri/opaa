@@ -20,7 +20,10 @@ const { enabled = true } = Astro.props
       <slot />
     </details>
   )}
-  <slot name="count" />
+  <div class="toolbar-end">
+    <slot name="action" />
+    <slot name="count" />
+  </div>
 </div>
 
 <script>
@@ -82,13 +85,17 @@ const { enabled = true } = Astro.props
       margin-bottom: 16px;
     }
 
-    .filter-toolbar :global(.result-count) {
+    .toolbar-end {
       position: absolute;
       top: 0;
       right: 0;
       display: flex;
       align-items: center;
+      gap: 16px;
       min-height: 44px;
+    }
+
+    .filter-toolbar :global(.result-count) {
       margin: 0;
     }
   }

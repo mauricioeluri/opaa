@@ -1,5 +1,5 @@
 ---
-import { PawPrint } from '@lucide/astro'
+import { Heart, PawPrint } from '@lucide/astro'
 import PageHeader from '../PageHeader.astro'
 import FilterPanel from '../FilterPanel.astro'
 import AnimalCard from './AnimalCard.astro'
@@ -15,6 +15,7 @@ interface Props {
 
 const { animal } = Astro.props
 const animals = await getAvailableAnimals()
+const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
 ---
 
 <SiteLayout
@@ -72,7 +73,27 @@ const animals = await getAvailableAnimals()
             <option value="false">Não castrados</option>
           </select>
         </label>
+        <label>
+          Necessidades especiais
+          <select name="hasDisability">
+            <option value="">Todos</option>
+            <option value="true">Com deficiência</option>
+          </select>
+        </label>
       </form>
+
+      {hasSpecialNeeds && (
+        <button
+          slot="action"
+          type="button"
+          class="special-friends"
+          aria-pressed="false"
+          hidden
+        >
+          <Heart size={18} aria-hidden="true" />
+          Adote um animal com deficiência
+        </button>
+      )}
 
       <p
         slot="count"
@@ -136,6 +157,25 @@ const animals = await getAvailableAnimals()
             : `${visible} animais encontrados`
         empty.hidden = visible > 0
       }
+      const special =
+        listing.querySelector<HTMLButtonElement>('.special-friends')
+      const disability = form.querySelector<HTMLSelectElement>(
+        '[name="hasDisability"]'
+      )
+      const syncSpecial = () => {
+        special?.setAttribute(
+          'aria-pressed',
+          String(disability?.value === 'true')
+        )
+      }
+      if (special && disability) {
+        special.hidden = false
+        special.addEventListener('click', () => {
+          disability.value = disability.value === 'true' ? '' : 'true'
+          form.dispatchEvent(new Event('change'))
+        })
+        form.addEventListener('change', syncSpecial)
+      }
       update()
       form.hidden = false
       form.addEventListener('submit', (event) => event.preventDefault())
@@ -182,6 +222,51 @@ const animals = await getAvailableAnimals()
     color: var(--color-text);
     background: var(--color-surface);
     font-weight: 400;
+  }
+
+  .special-friends:not([hidden]) {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-sizing: border-box;
+    min-height: 44px;
+    padding: 8px 16px;
+    border: 2px dashed #d9a21b;
+    border-radius: 999px;
+    color: #6b4a00;
+    background: #fff3cf;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+    transform: rotate(-1.5deg);
+    transition:
+      transform 0.15s,
+      background-color 0.15s;
+  }
+
+  .special-friends:hover {
+    transform: rotate(0);
+    background: #ffe9a8;
+  }
+
+  .special-friends[aria-pressed='true'] {
+    border-style: solid;
+    border-color: var(--color-primary);
+    color: #fff;
+    background: var(--color-primary);
+    transform: rotate(0);
+  }
+
+  .special-friends[aria-pressed='true'] :global(svg) {
+    fill: currentcolor;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .special-friends:not([hidden]) {
+      transition: none;
+    }
   }
 
   .result-count {
