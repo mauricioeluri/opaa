@@ -37,6 +37,18 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
       icon={PawPrint}
     />
 
+    {hasSpecialNeeds && (
+      <button type="button" class="special-friends" aria-pressed="false" hidden>
+        <span class="badge">
+          <Heart size={22} aria-hidden="true" />
+        </span>
+        <span class="text">
+          <span class="off">Adote um animalzinho com deficiência</span>
+          <span class="on">Ver todos os animais</span>
+        </span>
+      </button>
+    )}
+
     <FilterPanel enabled={animals.length > 0}>
       <form class="filters" aria-label="Filtrar animais para adoção" hidden>
         <label>
@@ -73,27 +85,7 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
             <option value="false">Não castrados</option>
           </select>
         </label>
-        <label>
-          Necessidades especiais
-          <select name="hasDisability">
-            <option value="">Todos</option>
-            <option value="true">Com deficiência</option>
-          </select>
-        </label>
       </form>
-
-      {hasSpecialNeeds && (
-        <button
-          slot="action"
-          type="button"
-          class="special-friends"
-          aria-pressed="false"
-          hidden
-        >
-          <Heart size={18} aria-hidden="true" />
-          Adote um animal com deficiência
-        </button>
-      )}
 
       <p
         slot="count"
@@ -141,14 +133,20 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
     if (listing && form && count && empty) {
       const filters = Array.from(form.querySelectorAll('select'))
       const cards = Array.from(listing.querySelectorAll<HTMLElement>('.animal'))
+      const onlySpecial = () =>
+        listing
+          .querySelector('.special-friends')
+          ?.getAttribute('aria-pressed') === 'true'
       const update = () => {
         let visible = 0
         cards.forEach((element) => {
-          element.hidden = filters.some(
-            (filter) =>
-              filter.value !== '' &&
-              element.dataset[filter.name] !== filter.value
-          )
+          element.hidden =
+            (onlySpecial() && element.dataset.hasDisability !== 'true') ||
+            filters.some(
+              (filter) =>
+                filter.value !== '' &&
+                element.dataset[filter.name] !== filter.value
+            )
           if (!element.hidden) visible++
         })
         count.textContent =
@@ -159,22 +157,15 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
       }
       const special =
         listing.querySelector<HTMLButtonElement>('.special-friends')
-      const disability = form.querySelector<HTMLSelectElement>(
-        '[name="hasDisability"]'
-      )
-      const syncSpecial = () => {
-        special?.setAttribute(
-          'aria-pressed',
-          String(disability?.value === 'true')
-        )
-      }
-      if (special && disability) {
+      if (special) {
         special.hidden = false
         special.addEventListener('click', () => {
-          disability.value = disability.value === 'true' ? '' : 'true'
-          form.dispatchEvent(new Event('change'))
+          special.setAttribute(
+            'aria-pressed',
+            String(special.getAttribute('aria-pressed') !== 'true')
+          )
+          update()
         })
-        form.addEventListener('change', syncSpecial)
       }
       update()
       form.hidden = false
@@ -225,42 +216,75 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
   }
 
   .special-friends:not([hidden]) {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     box-sizing: border-box;
-    min-height: 44px;
-    padding: 8px 16px;
-    border: 2px dashed #d9a21b;
+    max-width: 100%;
+    margin: 32px 0 0;
+    padding: 8px 24px 8px 8px;
+    border: 2px solid #5a3d00;
     border-radius: 999px;
-    color: #6b4a00;
-    background: #fff3cf;
+    color: #3d2a00;
+    background: #ffd35c;
+    box-shadow: 4px 4px 0 #5a3d00;
     font: inherit;
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1.2;
     text-align: left;
     cursor: pointer;
-    transform: rotate(-1.5deg);
+    transform: rotate(-1deg);
     transition:
       transform 0.15s,
-      background-color 0.15s;
+      box-shadow 0.15s;
   }
 
   .special-friends:hover {
-    transform: rotate(0);
-    background: #ffe9a8;
+    transform: rotate(0) translate(-1px, -1px);
+    box-shadow: 6px 6px 0 #5a3d00;
+  }
+
+  .special-friends:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 #5a3d00;
+  }
+
+  .special-friends:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 4px;
+  }
+
+  .badge {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: #d6334f;
+    background: #fff;
+  }
+
+  .badge :global(svg) {
+    fill: currentcolor;
+  }
+
+  .special-friends .on,
+  .special-friends[aria-pressed='true'] .off {
+    display: none;
+  }
+
+  .special-friends[aria-pressed='true'] .on {
+    display: inline;
   }
 
   .special-friends[aria-pressed='true'] {
-    border-style: solid;
-    border-color: var(--color-primary);
+    border-color: var(--color-primary-hover);
     color: #fff;
     background: var(--color-primary);
+    box-shadow: 4px 4px 0 var(--color-primary-hover);
     transform: rotate(0);
-  }
-
-  .special-friends[aria-pressed='true'] :global(svg) {
-    fill: currentcolor;
   }
 
   @media (prefers-reduced-motion: reduce) {
