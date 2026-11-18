@@ -1,4 +1,4 @@
-import { defineConfig } from 'astro/config'
+import { defineConfig, envField } from 'astro/config'
 import { existsSync } from 'node:fs'
 import { loadEnvFile } from 'node:process'
 
@@ -13,5 +13,37 @@ if (
   )
 }
 
+// Origin that serves the API's images (Supabase Storage). When set, Astro also
+// optimizes those remote images; otherwise they are used as they come.
+const mediaOrigin = process.env.TODAPATA_MEDIA_ORIGIN
+const remotePatterns = []
+if (mediaOrigin) {
+  const { protocol, hostname, port } = new URL(mediaOrigin)
+  remotePatterns.push({
+    protocol: protocol.replace(':', ''),
+    hostname,
+    ...(port ? { port } : {}),
+  })
+}
+
 // https://astro.build/config
-export default defineConfig({ site, trailingSlash: 'ignore' })
+export default defineConfig({
+  site,
+  trailingSlash: 'ignore',
+  image: { remotePatterns },
+  // Server-only (build time): never reach the browser bundles.
+  env: {
+    schema: {
+      TODAPATA_API_URL: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
+      TODAPATA_API_KEY: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
+    },
+  },
+})

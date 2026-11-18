@@ -6,8 +6,9 @@ Site da ONG para apresentar seu trabalho, divulgar animais para adoção e facil
 doações. Usa **Astro** para gerar HTML estático, **TypeScript** para verificar o
 código, **CSS** para os estilos e **pnpm** para instalar dependências e executar comandos.
 
-O módulo `src/lib/api.ts` consulta `src/data/api.json`, que simula uma API.
-Não há servidor de dados, banco, checkout ou painel administrativo neste projeto.
+O conteúdo (animais, histórias, comunicados, posts e produtos) vem da API pública da
+[Todapata](https://github.com/mauricioeluri/todapata), lida pelo módulo `src/lib/api.ts`
+na hora do build. Não há banco, checkout ou painel administrativo neste projeto.
 Alterações no conteúdo exigem novo build e publicação.
 
 ## Rodar localmente
@@ -16,12 +17,20 @@ Instale Node.js `>=22.23.4` e pnpm. Na pasta do projeto:
 
 ```sh
 pnpm install
-pnpm dev
 ```
 
+O site precisa da API da Todapata, de duas formas:
+
+- **API real (remota):** copie `.env.example` para `.env` e preencha `TODAPATA_API_URL`,
+  `TODAPATA_API_KEY` (a chave da ONG, criada pelo administrador da Todapata) e
+  `TODAPATA_MEDIA_ORIGIN` (origem das imagens). Depois rode `pnpm dev`.
+- **Todapata no seu computador:** na pasta da Todapata, com o Supabase local no ar, rode
+  `pnpm dev:local` e, uma vez, `pnpm site:local-key` (cria a ONG de teste e grava
+  `.env.todapata-local` aqui). Neste projeto, rode `pnpm dev:local`. O `.env` não é alterado.
+
 Abra o endereço mostrado no terminal, normalmente `http://localhost:4321`.
-Não precisa configurar `.env` para desenvolver. No VS Code, instale as extensões
-recomendadas pelo projeto.
+Sem a configuração, o build para com uma mensagem explicando o que falta.
+No VS Code, instale as extensões recomendadas pelo projeto.
 
 ## Onde editar
 
@@ -31,8 +40,8 @@ recomendadas pelo projeto.
 | `src/components/`              | Partes reutilizáveis da interface e suas interações.       |
 | `src/layouts/SiteLayout.astro` | Estrutura comum, topbar, footer e SEO.                     |
 | `src/config/site.ts`           | Contatos, Pix, informações da ONG, redes sociais e slides. |
-| `src/data/api.json`            | Animais, histórias, comunicados, posts e produtos.         |
-| `src/lib/`                     | Consultas aos dados e funções compartilhadas.              |
+| `scripts/dev-local.mjs`        | `pnpm dev:local`: lê o conteúdo da Todapata local.         |
+| `src/lib/`                     | Leitura da API e funções compartilhadas.                   |
 | `src/styles/global.css`        | Cores, fontes, foco e classe `.button`.                    |
 | `public/`                      | Imagens, logos e PDF do kit de marca.                      |
 
@@ -45,16 +54,14 @@ e listeners globais ao sair. A barra de navegação indica etapas, não bytes ba
 
 ## Conteúdo e imagens
 
-Use os registros do JSON como modelo. Mídias do conteúdo ficam em `public/api/`
-nas pastas `animals`, `stories`, `blog` e `products`. Imagens próprias do site ficam
-em `public/images/`. Os caminhos públicos não incluem `public`, por exemplo:
-`/api/animals/foto.webp`.
-`ContentImage.astro` usa o Astro para gerar versões menores das fotos locais,
-preservando os originais e suas proporções.
+Conteúdo e fotos de animais, histórias, posts e produtos são cadastrados no painel
+da Todapata; as imagens chegam como URLs absolutas e o site mede e otimiza cada uma.
+Imagens próprias do site ficam em `public/images/`; `animal-sem-foto.webp` é a imagem
+usada quando um animal não tem foto. `ContentImage.astro` usa o Astro para gerar
+versões menores, preservando os originais e suas proporções.
 
 Os slides iniciais são `public/images/slide-1.jpg` e `slide-2.jpg`. Para trocá-los,
 substitua os arquivos e confira `src`, `caption` e `alt` em `site.heroSlides`.
-Os registros de animais ainda são demonstrativos.
 Use fotos reais, sem filtros de IA, e informações confirmadas pela ONG.
 Animais, histórias, comunicados e posts usam `isPinned`: fixados primeiro e depois
 `published_at` decrescente dentro de cada grupo. Só comunicados exibem o ícone de fixado.
@@ -80,9 +87,9 @@ A mensagem inclui o link do animal.
 | `published_at`        | Data e hora de publicação obrigatórias.                                          |
 | `age`, `vaccinations` | Texto ou `null`; aparecem apenas nos detalhes quando informados.                 |
 | `isAgeApproximate`    | `true` para idade estimada; `false` quando não houver estimativa.                |
-| `images`              | Lista de fotos; sem foto, a fonte deve informar `["/api/animals/default.webp"]`. |
+| `images`              | Lista de fotos; sem foto, a fonte deve informar `[]`; o site usa `animal-sem-foto.webp`. |
 
-Manter os mesmos campos nos registros: o TypeScript infere os tipos do JSON.
+Manter os mesmos campos nos registros: os tipos estão declarados em `src/lib/api.ts`.
 O site não escolhe foto padrão nem presume vacinação completa ou castração desconhecida.
 Os cards combinam nome, sexo e faixa etária; nos detalhes, o título usa só o nome
 ou “Ainda sem nome”.
@@ -118,7 +125,7 @@ diretamente em `options`, como `{ "Cor": "Rosa", "Tamanho": "M" }`. Use as mesma
 chaves nas variantes de um produto. Em `stock_quantity`, `0` significa esgotado e
 `null` significa consultar.
 O identificador público e os IDs das fotos são nanoids de 12 caracteres. As fotos
-ficam em `/api/products/<id>.webp`. Use `image_ids` na variante para selecionar
+vêm da API como URLs. Use `image_ids` na variante para selecionar
 fotos específicas da galeria. Omitir o campo usa a galeria inteira.
 Em `/loja/`, o produto abre um modal com opções em estoque, quantidade e pedido pelo WhatsApp.
 
@@ -140,7 +147,7 @@ O botão “Avisar a OPAA” aparece só na home e encaminha ao WhatsApp.
 | `pnpm preview`              | Conferir o build localmente.                                   |
 
 Antes de entregar, rode `pnpm check-all`, revise as correções e confira no celular.
-Agentes seguem também os limites do [AGENTS.md](AGENTS.md).
+O Claude segue também os limites do [CLAUDE.md](CLAUDE.md).
 O GitHub está integrado à Cloudflare: enviar à `main` pode publicar automaticamente.
 Combine o envio com a equipe. Para domínio e indexação, consulte `.env.example` e
 [docs/SEO.md](docs/SEO.md).
