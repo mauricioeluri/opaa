@@ -11,13 +11,14 @@ interface Props extends Omit<
   alt: string
   width?: number
   sizes?: string
+  quality?: 'low' | 'mid' | 'high' | 'max' | number
 }
 
 const { src, width, sizes, ...attributes } = Astro.props
 const image = await getContentImage(src)
 const imageWidth = Math.min(width ?? image.width, image.width)
 const imageHeight = Math.round((imageWidth * image.height) / image.width)
-const widths = [96, 160, 240, 320, 480, 640, 768, 960, 1200].filter(
+const widths = [96, 160, 240, 320, 480, 640, 768, 960, 1200, 1600, 2000].filter(
   (value) => value < imageWidth
 )
 widths.push(imageWidth)
