@@ -5,7 +5,7 @@ Site estático simples da OPAA Alegrete, uma ONG de proteção animal de Alegret
 ## Forma de trabalho
 
 - Priorizar clareza, qualidade e simplicidade. Limitar as mudanças à tarefa e preservar arquivos e alterações existentes do usuário. Ler antes de editar.
-- **Git:** commits são permitidos (sem linha de coautor do Claude). **Não fazer push**, pull, fetch nem abrir PRs, e não mexer em remotos. Antes do push, o usuário confere que a Todapata está no ar e que as variáveis `TODAPATA_*` estão na Cloudflare, senão o build falha.
+- **Git:** commits e push direto na `main` são permitidos (sem linha de coautor do Claude), conforme as tarefas terminam. Sem PRs, branches ou alterações em remotos. Enviar à `main` publica o site na Cloudflare, que precisa das variáveis `TODAPATA_*` e da Todapata no ar; senão o build falha e o site publicado continua como está.
 - Não publicar, fazer deploy nem alterar configurações do GitHub e da Cloudflare. O usuário cuida disso; enviar à `main` pode publicar o site automaticamente.
 - **Tudo destinado ao usuário em português:** interface, mensagens, textos alternativos, metadados, rotas públicas, âncoras, comunicação e documentação. Inglês só no código, comentários, identificadores, arquivos técnicos e campos técnicos da API. O conteúdo da API exibido ao usuário também deve estar em português. Arquivos que definem rotas seguem o nome público em português. Preservar nomes oficiais e arquivos de marca existentes.
 - Comentar apenas decisões ou restrições que não sejam evidentes no código.
