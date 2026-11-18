@@ -23,17 +23,15 @@ type Props = ComponentProps<typeof SEO>
     <link rel="icon" type="image/x-icon" href="/branding/opaa-icon.ico" />
     <link rel="apple-touch-icon" href="/branding/opaa-apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
-    {
-      [lilitaOne, nunitoSans].map((href) => (
-        <link
-          rel="preload"
-          as="font"
-          type="font/woff2"
-          href={href}
-          crossorigin=""
-        />
-      ))
-    }
+    {[lilitaOne, nunitoSans].map((href) => (
+      <link
+        rel="preload"
+        as="font"
+        type="font/woff2"
+        href={href}
+        crossorigin=""
+      />
+    ))}
     <SEO {...Astro.props} />
     <noscript>
       <style is:inline>

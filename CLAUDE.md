@@ -34,16 +34,16 @@ pnpm exec astro dev --background   # servidor em segundo plano (status | logs | 
 
 ## Estrutura
 
-| Diretório | Responsabilidade |
-|---|---|
-| `src/pages/` | Páginas e endpoints estáticos, incluindo sitemap e robots |
-| `src/layouts/` | Estrutura compartilhada do documento |
-| `src/components/` | Componentes Astro reutilizáveis (`home`, `animals`, `shop`, `notices`; compartilhados na raiz) |
-| `scripts/` | `dev-local.mjs`: desenvolvimento contra a Todapata local |
-| `src/lib/` | Leitura da API (`api.ts`) e funções compartilhadas |
-| `src/config/` | Configuração compartilhada, incluindo SEO |
-| `public/branding/` | Logos oficiais, favicons e ícone Apple |
-| `public/images/` | Imagens próprias do site (slides, Pix, 404, `animal-sem-foto.webp`) |
+| Diretório          | Responsabilidade                                                                               |
+| ------------------ | ---------------------------------------------------------------------------------------------- |
+| `src/pages/`       | Páginas e endpoints estáticos, incluindo sitemap e robots                                      |
+| `src/layouts/`     | Estrutura compartilhada do documento                                                           |
+| `src/components/`  | Componentes Astro reutilizáveis (`home`, `animals`, `shop`, `notices`; compartilhados na raiz) |
+| `scripts/`         | `dev-local.mjs`: desenvolvimento contra a Todapata local                                       |
+| `src/lib/`         | Leitura da API (`api.ts`) e funções compartilhadas                                             |
+| `src/config/`      | Configuração compartilhada, incluindo SEO                                                      |
+| `public/branding/` | Logos oficiais, favicons e ícone Apple                                                         |
+| `public/images/`   | Imagens próprias do site (slides, Pix, 404, `animal-sem-foto.webp`)                            |
 
 ## Convenções de código
 

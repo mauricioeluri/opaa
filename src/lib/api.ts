@@ -106,7 +106,11 @@ function describeFailure(kind: string, status: number) {
 }
 
 /** Reads every page of one kind. Any failure stops the build: never publish a blank site. */
-async function fetchAll<T>(base: string, key: string, kind: string): Promise<T[]> {
+async function fetchAll<T>(
+  base: string,
+  key: string,
+  kind: string
+): Promise<T[]> {
   const items: T[] = []
 
   for (let page = 1, totalPages = 1; page <= totalPages; page++) {
@@ -114,7 +118,9 @@ async function fetchAll<T>(base: string, key: string, kind: string): Promise<T[]
     let response: Response
 
     try {
-      response = await fetch(url, { headers: { Authorization: `Bearer ${key}` } })
+      response = await fetch(url, {
+        headers: { Authorization: `Bearer ${key}` },
+      })
     } catch (error) {
       throw new Error(
         `Não foi possível acessar a API da Todapata em ${base}. Ela está no ar?`,
@@ -125,10 +131,18 @@ async function fetchAll<T>(base: string, key: string, kind: string): Promise<T[]
     if (!response.ok) throw new Error(describeFailure(kind, response.status))
 
     const body: unknown = await response.json()
-    const envelope = body as { data?: unknown; pagination?: { totalPages?: unknown } }
+    const envelope = body as {
+      data?: unknown
+      pagination?: { totalPages?: unknown }
+    }
 
-    if (!Array.isArray(envelope?.data) || typeof envelope.pagination?.totalPages !== 'number') {
-      throw new Error(`Resposta inesperada da API da Todapata ao buscar ${kind}.`)
+    if (
+      !Array.isArray(envelope?.data) ||
+      typeof envelope.pagination?.totalPages !== 'number'
+    ) {
+      throw new Error(
+        `Resposta inesperada da API da Todapata ao buscar ${kind}.`
+      )
     }
 
     items.push(...(envelope.data as T[]))
@@ -167,11 +181,15 @@ function loadContent() {
     )
   }
 
-  if (import.meta.env.DEV && Date.now() - loadedAt > DEV_CACHE_MS) content = undefined
+  if (import.meta.env.DEV && Date.now() - loadedAt > DEV_CACHE_MS)
+    content = undefined
 
   if (!content) {
     loadedAt = Date.now()
-    content = loadFromApi(TODAPATA_API_URL.replace(/\/+$/, ''), TODAPATA_API_KEY)
+    content = loadFromApi(
+      TODAPATA_API_URL.replace(/\/+$/, ''),
+      TODAPATA_API_KEY
+    )
   }
 
   return content

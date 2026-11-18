@@ -1,7 +1,5 @@
 # OPAA Alegrete
 
-[Acesse o site](https://opaa-alegrete.d-w46wx.workers.dev/)
-
 Site da ONG para apresentar seu trabalho, divulgar animais para adoção e facilitar
 doações. Usa **Astro** para gerar HTML estático, **TypeScript** para verificar o
 código, **CSS** para os estilos e **pnpm** para instalar dependências e executar comandos.
@@ -77,16 +75,16 @@ Os cards mostram até duas fotos e três linhas de descrição; levam a
 `/animais/public_id/`, que abre um modal com todas as fotos, texto completo e WhatsApp.
 A mensagem inclui o link do animal.
 
-| Campo                 | Como preencher                                                                   |
-| --------------------- | -------------------------------------------------------------------------------- |
-| `public_id`           | Identificador usado na URL.                                                      |
-| `name`                | Nome ou `null`, sem criar campo `title`.                                         |
-| `type`                | `dog`, `cat` ou `other`.                                                         |
-| `isMale`, `neutered`  | Booleanos obrigatórios, sem `null`.                                              |
-| `ageGroup`            | Obrigatório: `puppy`, `adult` ou `senior`; o site não calcula idade.             |
-| `published_at`        | Data e hora de publicação obrigatórias.                                          |
-| `age`, `vaccinations` | Texto ou `null`; aparecem apenas nos detalhes quando informados.                 |
-| `isAgeApproximate`    | `true` para idade estimada; `false` quando não houver estimativa.                |
+| Campo                 | Como preencher                                                                           |
+| --------------------- | ---------------------------------------------------------------------------------------- |
+| `public_id`           | Identificador usado na URL.                                                              |
+| `name`                | Nome ou `null`, sem criar campo `title`.                                                 |
+| `type`                | `dog`, `cat` ou `other`.                                                                 |
+| `isMale`, `neutered`  | Booleanos obrigatórios, sem `null`.                                                      |
+| `ageGroup`            | Obrigatório: `puppy`, `adult` ou `senior`; o site não calcula idade.                     |
+| `published_at`        | Data e hora de publicação obrigatórias.                                                  |
+| `age`, `vaccinations` | Texto ou `null`; aparecem apenas nos detalhes quando informados.                         |
+| `isAgeApproximate`    | `true` para idade estimada; `false` quando não houver estimativa.                        |
 | `images`              | Lista de fotos; sem foto, a fonte deve informar `[]`; o site usa `animal-sem-foto.webp`. |
 
 Manter os mesmos campos nos registros: os tipos estão declarados em `src/lib/api.ts`.

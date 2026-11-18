@@ -19,7 +19,9 @@ const remoteSizes = new Map<string, Promise<ContentImageSource>>()
  * Resolves a content image for `astro:assets`. Local files (`/images/...`) come from `public/`; absolute URLs (the Todapata API) are
  * measured from the file itself, because the API does not send dimensions.
  */
-export async function getContentImage(src: string): Promise<ContentImageSource> {
+export async function getContentImage(
+  src: string
+): Promise<ContentImageSource> {
   if (/^https?:\/\//.test(src)) {
     let size = remoteSizes.get(src)
 

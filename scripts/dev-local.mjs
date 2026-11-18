@@ -27,7 +27,9 @@ if (!existsSync(file)) {
 
 const values = parseEnv(readFileSync(file, 'utf-8'))
 
-console.log(`Conteúdo vindo de ${values.TODAPATA_API_URL} (Todapata local)`)
+process.stdout.write(
+  `Conteúdo vindo de ${values.TODAPATA_API_URL} (Todapata local)\n`
+)
 
 spawn('pnpm', ['exec', 'astro', 'dev'], {
   stdio: 'inherit',
