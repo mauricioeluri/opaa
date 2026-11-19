@@ -5,15 +5,26 @@ import StatusPage from '../components/StatusPage.astro'
 // the middleware, which also answers 503. Only the developer sees the message
 // (see StatusPage).
 const error: unknown = Astro.locals.contentError ?? Astro.props.error
+
+// Opened on its own (a saved history entry or bookmark of /500, with no error
+// behind it): there is nothing to retry, so send the visitor to the home page.
+if (!error) return Astro.redirect('/')
+
 const detail = error instanceof Error ? error.message : undefined
 Astro.response.headers.set('Cache-Control', 'no-store')
+
+// The error page is rendered in place of the failed one (the URL stays the one
+// requested), so "try again" must reload that URL, not `/500`, which is what
+// Astro.url reports after the rewrite.
+const requested = new URL(Astro.request.url)
+const retryHref = requested.pathname === '/500' ? '/' : requested.pathname + requested.search
 ---
 
 <StatusPage
   title="Ué… nosso farejador perdeu a trilha"
   description="Não conseguimos buscar o conteúdo agora. Ele já está atrás do cheiro de novo, tente outra vez em instantes!"
   imageAlt="Cachorro olhando ao redor, confuso, procurando alguma coisa"
-  action={{ href: Astro.url.pathname, label: 'Tentar de novo' }}
+  action={{ href: retryHref, label: 'Tentar de novo' }}
   detail={detail}
   bare
 />
