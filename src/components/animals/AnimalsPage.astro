@@ -218,51 +218,90 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
   }
 
   .special-friends:not([hidden]) {
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: 10px;
     box-sizing: border-box;
-    min-height: 44px;
-    margin-top: 12px;
-    padding: 4px 18px 4px 4px;
-    border: 2px solid var(--color-primary);
-    border-radius: 999px;
-    color: #fff;
-    background: var(--color-primary);
-    box-shadow: 0 3px 0 var(--color-primary-hover);
+    min-height: 48px;
+    margin-top: 16px;
+    padding: 8px 20px 8px 14px;
+    border: 2.5px solid #2b2b2b;
+    border-radius: 18px 18px 18px 4px;
+    color: #2b2b2b;
+    background: #ffd54a;
+    box-shadow: 4px 4px 0 var(--color-primary);
     font: inherit;
     font-size: 15px;
     font-weight: 800;
+    line-height: 1.2;
+    text-align: left;
     cursor: pointer;
+    transform: rotate(-2deg);
     transition:
       transform 0.15s ease,
       box-shadow 0.15s ease;
   }
 
+  .special-friends::before {
+    content: 'amigos especiais';
+    position: absolute;
+    top: -13px;
+    right: 12px;
+    padding: 1px 9px;
+    border: 2px solid #2b2b2b;
+    border-radius: 999px;
+    color: #fff;
+    background: #e8590c;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transform: rotate(3deg);
+  }
+
   .special-friends:hover {
-    background: var(--color-primary-hover);
-    border-color: var(--color-primary-hover);
-    transform: translateY(-1px);
+    transform: rotate(0deg) translateY(-2px);
+    box-shadow: 6px 6px 0 var(--color-primary);
   }
 
   .special-friends:active {
-    transform: translateY(2px);
-    box-shadow: none;
+    transform: rotate(0deg) translate(3px, 3px);
+    box-shadow: 1px 1px 0 var(--color-primary);
   }
 
   .special-friends:focus-visible {
     outline: 3px solid var(--color-primary);
-    outline-offset: 3px;
+    outline-offset: 4px;
   }
 
   .special-friends :global(svg) {
     flex: none;
     box-sizing: content-box;
-    padding: 7px;
+    padding: 6px;
+    border: 2px solid #2b2b2b;
     border-radius: 50%;
-    color: #d6334f;
-    background: #fff3cf;
+    color: #e11d48;
+    background: #fff;
     fill: currentcolor;
+    animation: heartbeat 1.8s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%,
+    60%,
+    100% {
+      transform: scale(1);
+    }
+    70% {
+      transform: scale(1.18);
+    }
+    80% {
+      transform: scale(1);
+    }
+    90% {
+      transform: scale(1.12);
+    }
   }
 
   .special-friends .on,
@@ -275,13 +314,18 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
   }
 
   .special-friends[aria-pressed='true'] {
-    color: var(--color-primary);
-    background: var(--color-soft);
-    box-shadow: none;
+    background: #fff;
+    transform: rotate(0deg);
+  }
+
+  .special-friends[aria-pressed='true']::before {
+    content: 'só os especiais';
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .special-friends {
+    .special-friends,
+    .special-friends :global(svg) {
+      animation: none;
       transition: none;
     }
   }
