@@ -8,7 +8,12 @@
   },
   "observability": {
     "enabled": true
+  },
+  // Read by the Worker on every request. The address is not sensitive, so it
+  // lives here, versioned; locally `.env` (or `.env.todapata-local`) wins.
+  // The key, TODAPATA_API_KEY, is a Worker secret (Settings → Runtime
+  // variables and secrets, or `wrangler secret put`): never put it here.
+  "vars": {
+    "TODAPATA_API_URL": "https://todapata.customsys.com.br"
   }
-  // TODAPATA_API_URL and TODAPATA_API_KEY are Worker secrets (dashboard or
-  // `wrangler secret put`), read on every request; locally they come from `.env`.
 }

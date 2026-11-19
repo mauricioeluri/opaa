@@ -29,7 +29,8 @@ export default defineConfig({
   session: false,
   env: {
     schema: {
-      // Runtime secrets of the Worker: never reach the browser bundles.
+      // Read from the Worker's env at runtime (the address from wrangler.jsonc,
+      // the key from a secret): never inlined, never in the browser bundles.
       TODAPATA_API_URL: envField.string({
         context: 'server',
         access: 'secret',

@@ -159,8 +159,10 @@ O botão “Avisar a OPAA” aparece só na home e encaminha ao WhatsApp.
 Antes de entregar, rode `pnpm check-all`, revise as correções e confira no celular.
 O Claude segue também os limites do [CLAUDE.md](CLAUDE.md).
 O GitHub está integrado à Cloudflare: enviar à `main` pode publicar automaticamente.
-Na Cloudflare, `TODAPATA_API_URL` e `TODAPATA_API_KEY` são **segredos do Worker**
-(Settings → Variables and Secrets), lidos a cada visita; não são variáveis de build. As
+O Worker lê dois valores a cada visita (não são variáveis de build): o endereço da API,
+`TODAPATA_API_URL`, versionado em `wrangler.jsonc` (`vars`), e a chave da ONG,
+`TODAPATA_API_KEY`, um **segredo do Worker** (Settings → Runtime variables and secrets,
+tipo Secret). As
 imagens próprias do site (slides, foto padrão) são redimensionadas pelo binding
 `IMAGES` do Cloudflare Images, configurado automaticamente no deploy.
 Combine o envio com a equipe. Para domínio e indexação, consulte `.env.example` e
