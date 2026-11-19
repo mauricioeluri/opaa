@@ -220,33 +220,48 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
   .special-friends:not([hidden]) {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     box-sizing: border-box;
-    min-height: 36px;
+    min-height: 44px;
     margin-top: 12px;
-    padding: 6px 14px;
-    border: 1px solid #e0b43c;
+    padding: 4px 18px 4px 4px;
+    border: 2px solid var(--color-primary);
     border-radius: 999px;
-    color: #5a3d00;
-    background: #fff3cf;
+    color: #fff;
+    background: var(--color-primary);
+    box-shadow: 0 3px 0 var(--color-primary-hover);
     font: inherit;
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 15px;
+    font-weight: 800;
     cursor: pointer;
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
   }
 
   .special-friends:hover {
-    background: #ffe9a8;
+    background: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+    transform: translateY(-1px);
+  }
+
+  .special-friends:active {
+    transform: translateY(2px);
+    box-shadow: none;
   }
 
   .special-friends:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
   }
 
   .special-friends :global(svg) {
     flex: none;
+    box-sizing: content-box;
+    padding: 7px;
+    border-radius: 50%;
     color: #d6334f;
+    background: #fff3cf;
     fill: currentcolor;
   }
 
@@ -260,13 +275,15 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
   }
 
   .special-friends[aria-pressed='true'] {
-    border-color: var(--color-primary);
-    color: #fff;
-    background: var(--color-primary);
+    color: var(--color-primary);
+    background: var(--color-soft);
+    box-shadow: none;
   }
 
-  .special-friends[aria-pressed='true'] :global(svg) {
-    color: #fff;
+  @media (prefers-reduced-motion: reduce) {
+    .special-friends {
+      transition: none;
+    }
   }
 
   @media (min-width: 48rem) {
