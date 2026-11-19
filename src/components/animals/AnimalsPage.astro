@@ -77,15 +77,14 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
 
       {hasSpecialNeeds && (
         <button
-          slot="action"
+          slot="start"
           type="button"
           class="special-friends"
           aria-pressed="false"
           hidden
         >
           <Heart size={16} aria-hidden="true" />
-          <span class="off">Adote um animalzinho com deficiência</span>
-          <span class="on">Ver todos os animais</span>
+          Adote um animalzinho com deficiência
         </button>
       )}
 
@@ -225,19 +224,17 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
     min-height: 44px;
     margin-top: 12px;
     padding: 8px 14px;
-    border: 1.5px solid var(--color-primary);
+    border: 1px dashed var(--color-border);
     border-radius: 8px;
     color: var(--color-primary);
-    background: #fff3cf;
+    background: transparent;
     font: inherit;
     font-size: 15px;
-    font-weight: 700;
     cursor: pointer;
   }
 
   .special-friends:hover {
-    color: #fff;
-    background: var(--color-primary);
+    background: var(--color-soft);
   }
 
   .special-friends:focus-visible {
@@ -248,45 +245,17 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
   .special-friends :global(svg) {
     flex: none;
     color: #e11d48;
-    fill: currentcolor;
-    animation: heartbeat 1.8s ease-in-out infinite;
-  }
-
-  @keyframes heartbeat {
-    0%,
-    60%,
-    100% {
-      transform: scale(1);
-    }
-    70% {
-      transform: scale(1.25);
-    }
-    80% {
-      transform: scale(1);
-    }
-    90% {
-      transform: scale(1.15);
-    }
-  }
-
-  .special-friends .on,
-  .special-friends[aria-pressed='true'] .off {
-    display: none;
-  }
-
-  .special-friends[aria-pressed='true'] .on {
-    display: inline;
   }
 
   .special-friends[aria-pressed='true'] {
-    color: #fff;
-    background: var(--color-primary);
+    border-style: solid;
+    border-color: var(--color-primary);
+    background: #fff3cf;
+    font-weight: 700;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .special-friends :global(svg) {
-      animation: none;
-    }
+  .special-friends[aria-pressed='true'] :global(svg) {
+    fill: currentcolor;
   }
 
   @media (min-width: 48rem) {
