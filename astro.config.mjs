@@ -1,3 +1,4 @@
+import cloudflare from '@astrojs/cloudflare'
 import { defineConfig, envField } from 'astro/config'
 import { existsSync } from 'node:fs'
 import { loadEnvFile } from 'node:process'
@@ -13,27 +14,22 @@ if (
   )
 }
 
-// Origin that serves the API's images (Supabase Storage). When set, Astro also
-// optimizes those remote images; otherwise they are used as they come.
-const mediaOrigin = process.env.TODAPATA_MEDIA_ORIGIN
-const remotePatterns = []
-if (mediaOrigin) {
-  const { protocol, hostname, port } = new URL(mediaOrigin)
-  remotePatterns.push({
-    protocol: protocol.replace(':', ''),
-    hostname,
-    ...(port ? { port } : {}),
-  })
-}
-
 // https://astro.build/config
 export default defineConfig({
   site,
   trailingSlash: 'ignore',
-  image: { remotePatterns },
-  // Server-only (build time): never reach the browser bundles.
+  // Pages are rendered on each visit by a Cloudflare Worker, reading the
+  // Todapata API (see src/lib/api.ts). Only pages without content are prerendered.
+  output: 'server',
+  // The site's own images (slides, placeholder) are resized and converted by
+  // the Worker's Cloudflare Images binding, once per size (then cached). The
+  // API's photos skip it: the Todapata panel already resizes them.
+  adapter: cloudflare({ imageService: 'cloudflare-binding' }),
+  // No sessions: the site has no login and stores nothing per visitor.
+  session: false,
   env: {
     schema: {
+      // Runtime secrets of the Worker: never reach the browser bundles.
       TODAPATA_API_URL: envField.string({
         context: 'server',
         access: 'secret',

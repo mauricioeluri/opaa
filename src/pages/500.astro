@@ -1,9 +1,12 @@
 ---
 import StatusPage from '../components/StatusPage.astro'
 
-// Astro hands over what was thrown; only the developer sees it (see StatusPage).
-const { error } = Astro.props
+// Unexpected errors come from Astro as `error`; an unreachable API comes from
+// the middleware, which also answers 503. Only the developer sees the message
+// (see StatusPage).
+const error: unknown = Astro.locals.contentError ?? Astro.props.error
 const detail = error instanceof Error ? error.message : undefined
+Astro.response.headers.set('Cache-Control', 'no-store')
 ---
 
 <StatusPage

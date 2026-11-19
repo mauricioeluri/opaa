@@ -31,8 +31,10 @@ process.stdout.write(
   `Conteúdo vindo de ${values.TODAPATA_API_URL} (Todapata local)\n`
 )
 
-spawn('pnpm', ['exec', 'astro', 'dev'], {
+// The pages run in the local Worker runtime (workerd), which only sees the
+// process environment when asked to. Extra arguments go to `astro dev`.
+spawn('pnpm', ['exec', 'astro', 'dev', ...process.argv.slice(2)], {
   stdio: 'inherit',
   shell: true,
-  env: { ...process.env, ...values },
+  env: { ...process.env, ...values, CLOUDFLARE_INCLUDE_PROCESS_ENV: 'true' },
 })

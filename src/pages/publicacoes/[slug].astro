@@ -1,26 +1,21 @@
 ---
-import type { InferGetStaticPropsType } from 'astro'
 import { ArrowLeft } from '@lucide/astro'
 import ContentImage from '../../components/ContentImage.astro'
 import { site } from '../../config/site'
 import SiteLayout from '../../layouts/SiteLayout.astro'
-import { getPosts } from '../../lib/api'
-import { getContentImage } from '../../lib/content-image'
+import { getImageSize } from '../../lib/content-image'
 import { formatDate } from '../../lib/format-date'
 import { postCategories } from '../../lib/post-category'
 
-export async function getStaticPaths() {
-  return (await getPosts()).map((post) => ({
-    params: { slug: post.slug },
-    props: { post },
-  }))
-}
-
-type Props = InferGetStaticPropsType<typeof getStaticPaths>
-const { post } = Astro.props
+const post = await Astro.locals.content.getPost(Astro.params.slug!)
+if (!post) return new Response(null, { status: 404 })
 const image = post.image
-const dimensions = image ? await getContentImage(image) : undefined
-const portrait = dimensions && dimensions.height > dimensions.width
+// The layout depends on the photo's orientation. If it cannot be measured, the
+// post still shows, with the landscape layout.
+const size = image
+  ? await getImageSize(image).catch(() => undefined)
+  : undefined
+const portrait = !!size && size.height > size.width
 const description = post.body.replace(/\s+/g, ' ').trim().slice(0, 160)
 ---
 
@@ -48,13 +43,13 @@ const description = post.body.replace(/\s+/g, ' ').trim().slice(0, 160)
         <h1>{post.title}</h1>
       </header>
       <div class:list={['article-content', { portrait }]}>
-        {image && dimensions && (
+        {image && (
           <figure>
             <ContentImage
               class="cover"
               src={image}
               alt={post.title}
-              width={dimensions.width}
+              width={size?.width}
               sizes={
                 portrait
                   ? '(max-width: 47.999rem) calc(100vw - 32px), 320px'

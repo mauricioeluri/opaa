@@ -1,5 +1,7 @@
 ---
 import AnimalsPage from '../components/animals/AnimalsPage.astro'
+
+const animals = await Astro.locals.content.getAvailableAnimals()
 ---
 
-<AnimalsPage />
+<AnimalsPage animals={animals} />

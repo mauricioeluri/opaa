@@ -2,6 +2,8 @@
 import Notices from '../components/notices/Notices.astro'
 import { site } from '../config/site'
 import SiteLayout from '../layouts/SiteLayout.astro'
+
+const notices = await Astro.locals.content.getNotices()
 ---
 
 <SiteLayout
@@ -9,6 +11,6 @@ import SiteLayout from '../layouts/SiteLayout.astro'
   description="Confira os comunicados e alertas da OPAA Alegrete, com avisos e orientações para a comunidade."
 >
   <main>
-    <Notices showAll />
+    <Notices notices={notices} showAll />
   </main>
 </SiteLayout>

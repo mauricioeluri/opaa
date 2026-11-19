@@ -1,13 +1,21 @@
 # OPAA Alegrete
 
 Site da ONG para apresentar seu trabalho, divulgar animais para adoção e facilitar
-doações. Usa **Astro** para gerar HTML estático, **TypeScript** para verificar o
-código, **CSS** para os estilos e **pnpm** para instalar dependências e executar comandos.
+doações. Usa **Astro** renderizando as páginas num **Cloudflare Worker**, **TypeScript**
+para verificar o código, **CSS** para os estilos e **pnpm** para instalar dependências e
+executar comandos.
 
 O conteúdo (animais, histórias, comunicados, posts e produtos) vem da API pública da
-[Todapata](https://github.com/mauricioeluri/todapata), lida pelo módulo `src/lib/api.ts`
-na hora do build. Não há banco, checkout ou painel administrativo neste projeto.
-Alterações no conteúdo exigem novo build e publicação.
+[Todapata](https://github.com/mauricioeluri/todapata). A cada visita, o Worker lê a API no
+servidor, com a chave da ONG, e entrega o HTML pronto: o que a ONG muda no painel aparece
+na próxima visita, sem novo build. A chave nunca chega ao navegador. Não há banco, checkout
+ou painel administrativo neste projeto.
+
+**Como funciona:** `src/middleware.ts` cria, para cada visita, a fonte de conteúdo de
+`src/lib/api.ts` (cliente da API com autenticação, tempo limite de 8 s e erros tipados). As
+rotas em `src/pages/` buscam tudo de que precisam antes de renderizar e passam os dados aos
+componentes por props. Se a API não responder, o visitante recebe a página "volte daqui a
+pouco" com status 503 (nunca uma página pela metade); item inexistente responde 404.
 
 ## Rodar localmente
 
@@ -19,15 +27,17 @@ pnpm install
 
 O site precisa da API da Todapata, de duas formas:
 
-- **API real (remota):** copie `.env.example` para `.env` e preencha `TODAPATA_API_URL`,
-  `TODAPATA_API_KEY` (a chave da ONG, criada pelo administrador da Todapata) e
-  `TODAPATA_MEDIA_ORIGIN` (origem das imagens). Depois rode `pnpm dev`.
+- **API real (remota):** copie `.env.example` para `.env` e preencha `TODAPATA_API_URL` e
+  `TODAPATA_API_KEY` (a chave da ONG, criada pelo administrador da Todapata). Depois rode
+  `pnpm dev`.
 - **Todapata no seu computador:** na pasta da Todapata, com o Supabase local no ar, rode
   `pnpm dev:local` e, uma vez, `pnpm site:local-key` (cria a ONG de teste e grava
   `.env.todapata-local` aqui). Neste projeto, rode `pnpm dev:local`. O `.env` não é alterado.
 
-Abra o endereço mostrado no terminal, normalmente `http://localhost:4321`.
-Sem a configuração, o build para com uma mensagem explicando o que falta.
+Abra o endereço mostrado no terminal, normalmente `http://localhost:4321`. O `pnpm dev`
+roda as páginas no mesmo runtime do Cloudflare (workerd). Sem a configuração, ou com a API
+fora do ar, as páginas mostram a tela de indisponibilidade com o motivo em letra miúda
+(só em desenvolvimento).
 No VS Code, instale as extensões recomendadas pelo projeto.
 
 ## Onde editar
@@ -141,12 +151,16 @@ O botão “Avisar a OPAA” aparece só na home e encaminha ao WhatsApp.
 | `pnpm dev`                  | Desenvolvimento local.                                         |
 | `pnpm check-all`            | ESLint com correções, formatação e verificação de tipos Astro. |
 | `pnpm lint` / `pnpm format` | Executar apenas uma dessas rotinas.                            |
-| `pnpm build`                | Gerar o site em `dist/`.                                       |
-| `pnpm preview`              | Conferir o build localmente.                                   |
+| `pnpm build`                | Gerar o Worker e os arquivos estáticos em `dist/`.             |
+| `pnpm preview`              | Rodar o build localmente no runtime da Cloudflare.             |
 
 Antes de entregar, rode `pnpm check-all`, revise as correções e confira no celular.
 O Claude segue também os limites do [CLAUDE.md](CLAUDE.md).
 O GitHub está integrado à Cloudflare: enviar à `main` pode publicar automaticamente.
+Na Cloudflare, `TODAPATA_API_URL` e `TODAPATA_API_KEY` são **segredos do Worker**
+(Settings → Variables and Secrets), lidos a cada visita; não são variáveis de build. As
+imagens próprias do site (slides, foto padrão) são redimensionadas pelo binding
+`IMAGES` do Cloudflare Images, configurado automaticamente no deploy.
 Combine o envio com a equipe. Para domínio e indexação, consulte `.env.example` e
 [docs/SEO.md](docs/SEO.md).
 

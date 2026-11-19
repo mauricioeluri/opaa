@@ -1,6 +1,6 @@
 ---
 import ContentImage from './ContentImage.astro'
-import { getContentImage } from '../lib/content-image'
+import { getLocalImage } from '../lib/content-image'
 
 interface Props {
   images: { id?: string; src: string; alt: string; caption?: string }[]
@@ -31,7 +31,7 @@ const sizes =
 const slides = await Promise.all(
   images.map(async (image) => {
     if (variant !== 'hero') return { ...image, sizes }
-    const source = await getContentImage(image.src)
+    const source = await getLocalImage(image.src)
     // Cover crops need enough pixels for the image beyond the visible frame.
     const cropScale = Math.max(1, source.width / source.height / (4 / 3))
     return {

@@ -1,5 +1,7 @@
 ---
 import ShopPage from '../components/shop/ShopPage.astro'
+
+const products = await Astro.locals.content.getProducts()
 ---
 
-<ShopPage />
+<ShopPage products={products} />

@@ -1,17 +1,12 @@
 ---
-import type { InferGetStaticPropsType } from 'astro'
 import AnimalsPage from '../../components/animals/AnimalsPage.astro'
-import { getAvailableAnimals } from '../../lib/api'
 
-export async function getStaticPaths() {
-  return (await getAvailableAnimals()).map((animal) => ({
-    params: { id: animal.public_id },
-    props: { animal },
-  }))
-}
-
-type Props = InferGetStaticPropsType<typeof getStaticPaths>
-const { animal } = Astro.props
+const { content } = Astro.locals
+const [animal, animals] = await Promise.all([
+  content.getAvailableAnimal(Astro.params.id!),
+  content.getAvailableAnimals(),
+])
+if (!animal) return new Response(null, { status: 404 })
 ---
 
-<AnimalsPage animal={animal} />
+<AnimalsPage animals={animals} animal={animal} />

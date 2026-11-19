@@ -1,15 +1,15 @@
 ---
 import { ArrowUpRight, PawPrint, Shirt, Stethoscope } from '@lucide/astro'
-import { getPosts, getStories, homeLimits } from '../../lib/api'
+import type { Post, Story } from '../../lib/api'
 import { postCategories } from '../../lib/post-category'
-import { getContentImage } from '../../lib/content-image'
 import ContentImage from '../ContentImage.astro'
 
-const posts = (await getPosts()).slice(0, homeLimits.posts)
-const stories = (await getStories()).slice(0, homeLimits.stories)
-const storyImages = await Promise.all(
-  stories.map((story) => getContentImage(story.afterImage))
-)
+interface Props {
+  posts: Post[]
+  stories: Story[]
+}
+
+const { posts, stories } = Astro.props
 ---
 
 <div class="community">
@@ -88,29 +88,23 @@ const storyImages = await Promise.all(
       </a>
     </header>
     <div class="photo-album">
-      {stories.map((story, index) => {
-        const image = storyImages[index]
-        const cropScale = Math.max(1, image.width / image.height)
-        return (
-          <a
-            class="photo-print"
-            href="/historias-felizes/"
-            aria-label={`Ver histórias felizes — ${story.name}`}
-          >
-            <figure>
-              <ContentImage
-                src={story.afterImage}
-                alt={`Foto atual de ${story.name}`}
-                width={640}
-                sizes={`(max-width: 35rem) ${30 * cropScale}vw, ${160 * cropScale}px`}
-                loading="lazy"
-                decoding="async"
-              />
-              <figcaption>{story.name}</figcaption>
-            </figure>
-          </a>
-        )
-      })}
+      {stories.map((story) => (
+        <a
+          class="photo-print"
+          href="/historias-felizes/"
+          aria-label={`Ver histórias felizes — ${story.name}`}
+        >
+          <figure>
+            <ContentImage
+              src={story.afterImage}
+              alt={`Foto atual de ${story.name}`}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>{story.name}</figcaption>
+          </figure>
+        </a>
+      ))}
     </div>
   </section>
 </div>

@@ -5,11 +5,10 @@ import BrandIcon from '../components/BrandIcon.astro'
 import ContentImage from '../components/ContentImage.astro'
 import { site } from '../config/site'
 import SiteLayout from '../layouts/SiteLayout.astro'
-import { getStories } from '../lib/api'
 import { formatDate } from '../lib/format-date'
 import { getWhatsAppUrl } from '../lib/whatsapp'
 
-const stories = await getStories()
+const stories = await Astro.locals.content.getStories()
 const contactUrl = getWhatsAppUrl(
   site.phone,
   'Oi, pessoal! Quero compartilhar uma história feliz com vocês! Posso enviar uma foto e um texto curtinho por aqui?'

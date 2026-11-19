@@ -1,17 +1,12 @@
 ---
-import type { InferGetStaticPropsType } from 'astro'
 import ShopPage from '../../components/shop/ShopPage.astro'
-import { getProducts } from '../../lib/api'
 
-export async function getStaticPaths() {
-  return (await getProducts()).map((product) => ({
-    params: { id: product.public_id },
-    props: { product },
-  }))
-}
-
-type Props = InferGetStaticPropsType<typeof getStaticPaths>
-const { product } = Astro.props
+const { content } = Astro.locals
+const [product, products] = await Promise.all([
+  content.getProduct(Astro.params.id!),
+  content.getProducts(),
+])
+if (!product) return new Response(null, { status: 404 })
 ---
 
-<ShopPage product={product} />
+<ShopPage products={products} product={product} />

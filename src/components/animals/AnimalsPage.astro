@@ -6,15 +6,15 @@ import AnimalCard from './AnimalCard.astro'
 import AnimalModal from './AnimalModal.astro'
 import { site } from '../../config/site'
 import SiteLayout from '../../layouts/SiteLayout.astro'
-import { getAvailableAnimals, type Animal } from '../../lib/api'
+import type { Animal } from '../../lib/api'
 import { animalAgeGroups } from '../../lib/animal-label'
 
 interface Props {
+  animals: Animal[]
   animal?: Animal
 }
 
-const { animal } = Astro.props
-const animals = await getAvailableAnimals()
+const { animals, animal } = Astro.props
 const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
 ---
 

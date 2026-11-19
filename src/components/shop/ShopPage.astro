@@ -4,14 +4,14 @@ import PageHeader from '../PageHeader.astro'
 import ProductCard from './ProductCard.astro'
 import { site } from '../../config/site'
 import SiteLayout from '../../layouts/SiteLayout.astro'
-import { getProducts, type Product } from '../../lib/api'
+import type { Product } from '../../lib/api'
 
 interface Props {
+  products: Product[]
   product?: Product
 }
 
-const { product } = Astro.props
-const products = await getProducts()
+const { products, product } = Astro.props
 ---
 
 <SiteLayout

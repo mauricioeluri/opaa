@@ -1,11 +1,11 @@
 # OPAA Alegrete
 
-Site estático simples da OPAA Alegrete, uma ONG de proteção animal de Alegrete/RS. Priorizar engajamento, divulgação dos animais e formas de ajudar, com pouca manutenção. O site não é um sistema de gestão. O conteúdo (animais, histórias, comunicados, posts e produtos) vem da API pública da Todapata (`/api/v1`), lida no build por `src/lib/api.ts` com `TODAPATA_API_URL` e `TODAPATA_API_KEY` (obrigatórias; sem elas o build para). `TODAPATA_MEDIA_ORIGIN` libera a otimização das imagens remotas. Para desenvolver contra a Todapata local: `pnpm dev:local` (lê `.env.todapata-local`, gerado por `pnpm site:local-key` na Todapata). Os dados de origem (antigo `api.json` e `public/api/`) foram importados para a Todapata e removidos; só existem no histórico do Git.
+Site simples da OPAA Alegrete, uma ONG de proteção animal de Alegrete/RS. Priorizar engajamento, divulgação dos animais e formas de ajudar, com pouca manutenção. O site não é um sistema de gestão. O conteúdo (animais, histórias, comunicados, posts e produtos) vem da API pública da Todapata (`/api/v1`), lida a cada visita, no servidor (Cloudflare Worker), por `src/lib/api.ts` com `TODAPATA_API_URL` e `TODAPATA_API_KEY` (segredos do Worker; localmente, `.env`). `src/middleware.ts` cria uma fonte de conteúdo por visita em `Astro.locals.content`; só as rotas a usam, buscando tudo antes de renderizar e passando os dados aos componentes por props (assim uma falha da API vira a página 503, nunca uma página cortada no streaming). Item inexistente responde 404. Para desenvolver contra a Todapata local: `pnpm dev:local` (lê `.env.todapata-local`, gerado por `pnpm site:local-key` na Todapata). Os dados de origem (antigo `api.json` e `public/api/`) foram importados para a Todapata e removidos; só existem no histórico do Git.
 
 ## Forma de trabalho
 
 - Priorizar clareza, qualidade e simplicidade. Limitar as mudanças à tarefa e preservar arquivos e alterações existentes do usuário. Ler antes de editar.
-- **Git:** commits e push direto na `main` são permitidos (sem linha de coautor do Claude), conforme as tarefas terminam. Sem PRs, branches ou alterações em remotos. Enviar à `main` publica o site na Cloudflare, que precisa das variáveis `TODAPATA_*` e da Todapata no ar; senão o build falha e o site publicado continua como está.
+- **Git:** commits e push direto na `main` são permitidos (sem linha de coautor do Claude), conforme as tarefas terminam. Sem PRs, branches ou alterações em remotos. Enviar à `main` publica o site na Cloudflare, que precisa dos segredos `TODAPATA_*` no Worker; com a Todapata fora do ar, o site mostra a página de indisponibilidade (503).
 - Não publicar, fazer deploy nem alterar configurações do GitHub e da Cloudflare. O usuário cuida disso; enviar à `main` pode publicar o site automaticamente.
 - **Tudo destinado ao usuário em português:** interface, mensagens, textos alternativos, metadados, rotas públicas, âncoras, comunicação e documentação. Inglês só no código, comentários, identificadores, arquivos técnicos e campos técnicos da API. O conteúdo da API exibido ao usuário também deve estar em português. Arquivos que definem rotas seguem o nome público em português. Preservar nomes oficiais e arquivos de marca existentes.
 - Comentar apenas decisões ou restrições que não sejam evidentes no código.
@@ -15,7 +15,7 @@ Site estático simples da OPAA Alegrete, uma ONG de proteção animal de Alegret
 
 ## Stack
 
-Astro com geração estática, TypeScript estrito, CSS e pnpm. Preferir HTML nativo e CSS local dos componentes Astro; JavaScript no navegador só para interações que precisem dele. Não adicionar React nem Tailwind por padrão. Sem banco de dados nem acesso direto a ele em nenhuma etapa: a persistência pertence à API da Todapata. Sem autenticação nem painel neste projeto.
+Astro com renderização no servidor (`@astrojs/cloudflare`, só 404 e robots pré-renderizados), TypeScript estrito, CSS e pnpm. Preferir HTML nativo e CSS local dos componentes Astro; JavaScript no navegador só para interações que precisem dele. Não adicionar React nem Tailwind por padrão. Sem banco de dados nem acesso direto a ele em nenhuma etapa: a persistência pertence à API da Todapata. Sem autenticação nem painel neste projeto.
 
 Usar o `README.md` como guia de configuração e combinados da equipe; este arquivo complementa com as restrições para o Claude. Conferir o código e as configurações reais e manter os documentos coerentes ao alterá-los. Usar pnpm, preservar o lockfile e adicionar dependências só quando necessárias.
 
@@ -36,7 +36,7 @@ pnpm exec astro dev --background   # servidor em segundo plano (status | logs | 
 
 | Diretório          | Responsabilidade                                                                               |
 | ------------------ | ---------------------------------------------------------------------------------------------- |
-| `src/pages/`       | Páginas e endpoints estáticos, incluindo sitemap e robots                                      |
+| `src/pages/`       | Páginas e endpoints (rotas buscam os dados), incluindo sitemap e robots                        |
 | `src/layouts/`     | Estrutura compartilhada do documento                                                           |
 | `src/components/`  | Componentes Astro reutilizáveis (`home`, `animals`, `shop`, `notices`; compartilhados na raiz) |
 | `scripts/`         | `dev-local.mjs`: desenvolvimento contra a Todapata local                                       |
@@ -50,7 +50,8 @@ pnpm exec astro dev --background   # servidor em segundo plano (status | logs | 
 - PascalCase em componentes e layouts Astro; kebab-case nos demais arquivos novos e nas rotas. Seguir as convenções de cada área.
 - Dois espaços, aspas simples, sem ponto e vírgula, LF (`.prettierrc` e `eslint.config.mjs`).
 - Manter `astro/tsconfigs/strict`. Sem `any`, sem desativar regras nem suprimir verificações para esconder defeitos.
-- Entregar o conteúdo relevante no HTML gerado, sem depender só do carregamento no navegador. Mudanças nos dados locais exigem novo build/deploy.
+- Entregar o conteúdo relevante no HTML gerado no servidor, sem depender só do carregamento no navegador. Componentes recebem os dados por props; não chamam a API.
+- Imagens: as fotos da API são exibidas como vêm (`<img>`, molduras por CSS), sem medir arquivos por visita; só a página de um post mede a própria foto (orientação). As imagens próprias (`public/images/`) passam por `astro:assets` com o binding `IMAGES` do Cloudflare.
 - A navegação usa `ClientRouter` no layout. Inicializar interações com `onPageLoad()` de `src/lib/page-lifecycle.ts`, retornando a limpeza de timers e listeners globais. Preservar links nativos e o funcionamento sem JavaScript.
 - Separar dados da apresentação. Funções simples que importam JS/JSON bastam; não criar servidor para ler arquivos locais.
 - Preservar SEO, canonical, barras finais das URLs, sitemap e robots ao modificar páginas. Não inventar domínio de produção nem contornar validações de ambiente.
@@ -79,7 +80,7 @@ O formato é o que a API da Todapata entrega. Os tipos de cada registro (`Animal
 
 ## Segurança
 
-- Preservar arquivos `.env`. Nunca exibir credenciais em logs, código ou documentação. A chave de API da Todapata, quando for ligada, fica só no ambiente de build, nunca no repositório nem no navegador.
+- Preservar arquivos `.env`. Nunca exibir credenciais em logs, código ou documentação. A chave de API da Todapata fica só nos segredos do Worker (e no `.env` local), nunca no repositório nem no navegador.
 - Tudo em `public/`, no HTML gerado e nos bundles do navegador é público: sem segredos nem dados pessoais privados.
 - Não renderizar HTML não confiável diretamente; preferir a interpolação escapada dos templates.
 

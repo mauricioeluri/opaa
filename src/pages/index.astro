@@ -7,6 +7,15 @@ import Notices from '../components/notices/Notices.astro'
 import Community from '../components/home/Community.astro'
 import SectionDivider from '../components/home/SectionDivider.astro'
 import SiteLayout from '../layouts/SiteLayout.astro'
+import { homeLimits } from '../lib/api'
+
+const { content } = Astro.locals
+const [animals, notices, posts, stories] = await Promise.all([
+  content.getAvailableAnimals(),
+  content.getNotices(),
+  content.getPosts(),
+  content.getStories(),
+])
 ---
 
 <SiteLayout>
@@ -14,9 +23,12 @@ import SiteLayout from '../layouts/SiteLayout.astro'
     <Hero />
     <Donation />
     <SectionDivider />
-    <Adoption />
-    <Notices />
+    <Adoption animals={animals.slice(0, homeLimits.animals)} />
+    <Notices notices={notices.slice(0, homeLimits.notices)} />
     <Neutering />
-    <Community />
+    <Community
+      posts={posts.slice(0, homeLimits.posts)}
+      stories={stories.slice(0, homeLimits.stories)}
+    />
   </main>
 </SiteLayout>

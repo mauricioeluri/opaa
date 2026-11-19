@@ -5,11 +5,10 @@ import FilterPanel from '../components/FilterPanel.astro'
 import ContentImage from '../components/ContentImage.astro'
 import { site } from '../config/site'
 import SiteLayout from '../layouts/SiteLayout.astro'
-import { getPosts } from '../lib/api'
 import { formatDate } from '../lib/format-date'
 import { postCategories } from '../lib/post-category'
 
-const posts = await getPosts()
+const posts = await Astro.locals.content.getPosts()
 const categories = [...new Set(posts.map((post) => post.category))]
 ---
 

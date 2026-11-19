@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import type { HTMLAttributes } from 'astro/types'
-import { getContentImage } from '../lib/content-image'
+import { getLocalImage, isRemoteImage } from '../lib/content-image'
 
 interface Props extends Omit<
   HTMLAttributes<'img'>,
@@ -9,30 +9,35 @@ interface Props extends Omit<
 > {
   src: string
   alt: string
+  /** Largest width rendered; local images only. */
   width?: number
   sizes?: string
   quality?: 'low' | 'mid' | 'high' | 'max' | number
 }
 
-const { src, width, sizes, ...attributes } = Astro.props
-const image = await getContentImage(src)
-const imageWidth = Math.min(width ?? image.width, image.width)
-const imageHeight = Math.round((imageWidth * image.height) / image.width)
-const widths = [96, 160, 240, 320, 480, 640, 768, 960, 1200, 1600, 2000].filter(
-  (value) => value < imageWidth
-)
-widths.push(imageWidth)
-const imageProps = {
-  ...attributes,
-  width: imageWidth,
-  height: imageHeight,
-  widths,
-  sizes: sizes ?? `${imageWidth}px`,
-}
+const { src, width, sizes, quality, ...attributes } = Astro.props
+
+// The API's photos are served as they are: the Todapata panel already resizes
+// them (WebP, up to 1600px) and their frames are sized by CSS.
+const local = isRemoteImage(src) ? undefined : await getLocalImage(src)
+const imageWidth = local && Math.min(width ?? local.width, local.width)
+const widths =
+  imageWidth &&
+  [96, 160, 240, 320, 480, 640, 768, 960, 1200, 1600, 2000]
+    .filter((value) => value < imageWidth)
+    .concat(imageWidth)
 ---
 
-{typeof image.src === 'string' ? (
-  <Image {...imageProps} src={image.src} />
+{local && imageWidth && widths ? (
+  <Image
+    {...attributes}
+    src={local}
+    width={imageWidth}
+    height={Math.round((imageWidth * local.height) / local.width)}
+    widths={widths}
+    sizes={sizes ?? `${imageWidth}px`}
+    quality={quality}
+  />
 ) : (
-  <Image {...imageProps} src={image.src} />
+  <img {...attributes} src={src} />
 )}

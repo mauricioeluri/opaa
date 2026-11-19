@@ -1,9 +1,10 @@
 // Single seam between the site and its content source. Pages and components read
-// content only through the helpers exported here, never from the source directly.
+// content only through the `ContentSource` the middleware puts in `Astro.locals`.
 //
-// Source: the Todapata public API (`GET {base}/api/v1/animals|posts|notices|
-// stories|products` with `Authorization: Bearer <key>` and `{ data, pagination }`
-// envelopes). `TODAPATA_API_URL` and `TODAPATA_API_KEY` are required at build time.
+// Source: the Todapata public API (`GET {base}/api/v1/...` with
+// `Authorization: Bearer <key>`; lists answer `{ data, pagination }`, items
+// `{ data }`). Every page view reads it on the server, so what the NGO changes
+// in the panel shows on the next visit. The key never reaches the browser.
 import { TODAPATA_API_KEY, TODAPATA_API_URL } from 'astro:env/server'
 
 export type AnimalType = 'dog' | 'cat' | 'other'
@@ -29,9 +30,8 @@ export interface Animal extends Publication {
   description: string
   /** `true` means "not adopted yet" (available for adoption), not stock. */
   available: boolean
-  /** New optional key from the Todapata API. The site does not use it yet. */
   hasDisability?: boolean
-  /** Never empty: the loader adds a placeholder when the animal has no photo. */
+  /** Never empty: a placeholder stands in when the animal has no photo. */
   images: string[]
   type: AnimalType
 }
@@ -77,123 +77,69 @@ export interface Product {
   variants: ProductVariant[]
 }
 
-interface Content {
-  animals: Animal[]
-  posts: Post[]
-  notices: Notice[]
-  stories: Story[]
-  products: Product[]
-}
-
 /** Maximum items shown on the home page for each kind of content. */
 export const homeLimits = { animals: 2, posts: 3, notices: 6, stories: 6 }
 
-// Memoized so that the build reads the source once, not once per page. In dev the
-// server lives for hours, so the copy expires and edits in the panel show up on reload.
-const DEV_CACHE_MS = 2000
-let content: Promise<Content> | undefined
-let loadedAt = 0
+/**
+ * The content could not be read (API down or slow, key revoked, unexpected
+ * answer). Pages let it propagate: the visitor gets the "come back soon" page.
+ */
+export class ContentUnavailableError extends Error {
+  override name = 'ContentUnavailableError'
+}
 
+/** Content of the NGO, read from the API for one page view. */
+export interface ContentSource {
+  getAllAnimals(): Promise<Animal[]>
+  getAvailableAnimals(): Promise<Animal[]>
+  /** An animal up for adoption, or `null` (unknown or already adopted). */
+  getAvailableAnimal(publicId: string): Promise<Animal | null>
+  getPosts(): Promise<Post[]>
+  getPost(slug: string): Promise<Post | null>
+  getNotices(): Promise<Notice[]>
+  getStories(): Promise<Story[]>
+  getProducts(): Promise<Product[]>
+  /** An active product, or `null`. */
+  getProduct(publicId: string): Promise<Product | null>
+}
+
+/** The API's maximum page size: lists come in as few requests as possible. */
 const PAGE_SIZE = 100
+/** A visitor is waiting: give up instead of hanging the page. */
+const REQUEST_TIMEOUT_MS = 8_000
 const DEFAULT_ANIMAL_IMAGE = '/images/animal-sem-foto.webp'
 
-function describeFailure(kind: string, status: number) {
-  if (status === 401) {
-    return `A chave de API da Todapata é inválida ou foi revogada (TODAPATA_API_KEY). Falha ao buscar ${kind}.`
-  }
+type ApiAnimal = Animal
+type ApiPost = Omit<Post, 'image'> & { image: string | null }
 
-  return `A API da Todapata respondeu ${status} ao buscar ${kind}.`
+interface ListEnvelope<T> {
+  data: T[]
+  pagination: { totalPages: number }
 }
 
-/** Reads every page of one kind. Any failure stops the build: never publish a blank site. */
-async function fetchAll<T>(
-  base: string,
-  key: string,
-  kind: string
-): Promise<T[]> {
-  const items: T[] = []
-
-  for (let page = 1, totalPages = 1; page <= totalPages; page++) {
-    const url = `${base}/api/v1/${kind}?limit=${PAGE_SIZE}&page=${page}`
-    let response: Response
-
-    try {
-      response = await fetch(url, {
-        headers: { Authorization: `Bearer ${key}` },
-      })
-    } catch (error) {
-      throw new Error(
-        `Não foi possível acessar a API da Todapata em ${base}. Ela está no ar?`,
-        { cause: error }
-      )
-    }
-
-    if (!response.ok) throw new Error(describeFailure(kind, response.status))
-
-    const body: unknown = await response.json()
-    const envelope = body as {
-      data?: unknown
-      pagination?: { totalPages?: unknown }
-    }
-
-    if (
-      !Array.isArray(envelope?.data) ||
-      typeof envelope.pagination?.totalPages !== 'number'
-    ) {
-      throw new Error(
-        `Resposta inesperada da API da Todapata ao buscar ${kind}.`
-      )
-    }
-
-    items.push(...(envelope.data as T[]))
-    totalPages = envelope.pagination.totalPages
-  }
-
-  return items
+function isListEnvelope<T>(body: unknown): body is ListEnvelope<T> {
+  const envelope = body as Partial<ListEnvelope<T>> | null
+  return (
+    Array.isArray(envelope?.data) &&
+    typeof envelope.pagination?.totalPages === 'number'
+  )
 }
 
-async function loadFromApi(base: string, key: string): Promise<Content> {
-  const [animals, posts, notices, stories, products] = await Promise.all([
-    fetchAll<Animal>(base, key, 'animals'),
-    fetchAll<Post & { image: string | null }>(base, key, 'posts'),
-    fetchAll<Notice>(base, key, 'notices'),
-    fetchAll<Story>(base, key, 'stories'),
-    fetchAll<Product>(base, key, 'products'),
-  ])
-
-  return {
-    // The API sends no photos for an animal without any; the pages need one image.
-    animals: animals.map((animal) => ({
-      ...animal,
-      images: animal.images.length ? animal.images : [DEFAULT_ANIMAL_IMAGE],
-    })),
-    posts: posts.map((post) => ({ ...post, image: post.image ?? undefined })),
-    notices,
-    stories,
-    products,
-  }
+function isItemEnvelope<T>(body: unknown): body is { data: T } {
+  const envelope = body as { data?: unknown } | null
+  return typeof envelope?.data === 'object' && envelope.data !== null
 }
 
-function loadContent() {
-  if (!TODAPATA_API_URL || !TODAPATA_API_KEY) {
-    throw new Error(
-      'Defina TODAPATA_API_URL e TODAPATA_API_KEY (veja .env.example). O site lê o conteúdo da API da Todapata.'
-    )
-  }
+// The API sends no photos for an animal without any; the pages need one image.
+const toAnimal = (animal: ApiAnimal): Animal => ({
+  ...animal,
+  images: animal.images.length ? animal.images : [DEFAULT_ANIMAL_IMAGE],
+})
 
-  if (import.meta.env.DEV && Date.now() - loadedAt > DEV_CACHE_MS)
-    content = undefined
-
-  if (!content) {
-    loadedAt = Date.now()
-    content = loadFromApi(
-      TODAPATA_API_URL.replace(/\/+$/, ''),
-      TODAPATA_API_KEY
-    )
-  }
-
-  return content
-}
+const toPost = (post: ApiPost): Post => ({
+  ...post,
+  image: post.image ?? undefined,
+})
 
 function comparePublications(a: Publication, b: Publication) {
   return (
@@ -202,21 +148,146 @@ function comparePublications(a: Publication, b: Publication) {
   )
 }
 
-async function getSorted<K extends 'animals' | 'posts' | 'notices' | 'stories'>(
-  kind: K
-) {
-  return [...(await loadContent())[kind]].sort(comparePublications)
+const sorted = <T extends Publication>(items: T[]) =>
+  [...items].sort(comparePublications)
+
+function describeStatus(path: string, status: number) {
+  if (status === 401) {
+    return `A chave de API da Todapata é inválida ou foi revogada (TODAPATA_API_KEY). Falha em ${path}.`
+  }
+
+  if (status === 403) {
+    return `A Todapata recusou o acesso a ${path} (a chave não permite esta origem).`
+  }
+
+  return `A API da Todapata respondeu ${status} em ${path}.`
 }
 
-export const getAllAnimals = () => getSorted('animals')
-export const getPosts = () => getSorted('posts')
-export const getNotices = () => getSorted('notices')
-export const getStories = () => getSorted('stories')
+/**
+ * Talks to the API: authentication, timeout and error translation. `null`
+ * means 404 (an item that does not exist for this NGO).
+ */
+function createApiClient(url: string | undefined, key: string | undefined) {
+  const base = url?.replace(/\/+$/, '')
 
-export async function getAvailableAnimals() {
-  return (await getAllAnimals()).filter((animal) => animal.available)
+  return async function get(path: string): Promise<unknown> {
+    if (!base || !key) {
+      throw new ContentUnavailableError(
+        'Defina TODAPATA_API_URL e TODAPATA_API_KEY (veja .env.example). O site lê o conteúdo da API da Todapata.'
+      )
+    }
+
+    let response: Response
+
+    try {
+      response = await fetch(`${base}/api/v1${path}`, {
+        headers: { Authorization: `Bearer ${key}`, Accept: 'application/json' },
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+      })
+    } catch (error) {
+      throw new ContentUnavailableError(
+        `Não foi possível acessar a API da Todapata em ${base} (${path}).`,
+        { cause: error }
+      )
+    }
+
+    if (response.status === 404) return null
+    if (!response.ok) {
+      throw new ContentUnavailableError(describeStatus(path, response.status))
+    }
+
+    try {
+      return await response.json()
+    } catch (error) {
+      throw new ContentUnavailableError(
+        `A API da Todapata enviou uma resposta ilegível em ${path}.`,
+        { cause: error }
+      )
+    }
+  }
 }
 
-export async function getProducts() {
-  return (await loadContent()).products.filter((product) => product.active)
+/**
+ * The content source for one page view. Each list is fetched at most once per
+ * instance, however many components ask for it, and never shared between
+ * visits: the middleware creates a new one per request.
+ */
+export function createContentSource(): ContentSource {
+  const get = createApiClient(TODAPATA_API_URL, TODAPATA_API_KEY)
+  const lists = new Map<string, Promise<unknown[]>>()
+
+  async function fetchPage<T>(kind: string, page: number) {
+    const path = `/${kind}?limit=${PAGE_SIZE}&page=${page}`
+    const body = await get(path)
+
+    if (!isListEnvelope<T>(body)) {
+      throw new ContentUnavailableError(
+        `Resposta inesperada da API da Todapata em ${path}.`
+      )
+    }
+
+    return body
+  }
+
+  /** Every item of a list: the first page says how many more to fetch, in parallel. */
+  function list<T>(kind: string): Promise<T[]> {
+    let items = lists.get(kind) as Promise<T[]> | undefined
+
+    if (!items) {
+      items = fetchPage<T>(kind, 1).then(async (first) => {
+        const rest = await Promise.all(
+          Array.from({ length: first.pagination.totalPages - 1 }, (_, index) =>
+            fetchPage<T>(kind, index + 2)
+          )
+        )
+        return [first, ...rest].flatMap((page) => page.data)
+      })
+      lists.set(kind, items)
+    }
+
+    return items
+  }
+
+  async function item<T>(path: string): Promise<T | null> {
+    const body = await get(path)
+    if (body === null) return null
+
+    if (!isItemEnvelope<T>(body)) {
+      throw new ContentUnavailableError(
+        `Resposta inesperada da API da Todapata em ${path}.`
+      )
+    }
+
+    return body.data
+  }
+
+  const getAllAnimals = async () =>
+    sorted((await list<ApiAnimal>('animals')).map(toAnimal))
+
+  return {
+    getAllAnimals,
+    getAvailableAnimals: async () =>
+      (await getAllAnimals()).filter((animal) => animal.available),
+    getAvailableAnimal: async (publicId) => {
+      const animal = await item<ApiAnimal>(
+        `/animals/${encodeURIComponent(publicId)}`
+      )
+      return animal?.available ? toAnimal(animal) : null
+    },
+    getPosts: async () => sorted((await list<ApiPost>('posts')).map(toPost)),
+    getPost: async (slug) => {
+      const post = await item<ApiPost>(`/posts/${encodeURIComponent(slug)}`)
+      return post && toPost(post)
+    },
+    getNotices: async () => sorted(await list<Notice>('notices')),
+    getStories: async () => sorted(await list<Story>('stories')),
+    getProducts: async () =>
+      (await list<Product>('products')).filter((product) => product.active),
+    getProduct: async (publicId) => {
+      const product = await item<Product>(
+        `/products/${encodeURIComponent(publicId)}`
+      )
+      return product?.active ? product : null
+    },
+  }
 }
