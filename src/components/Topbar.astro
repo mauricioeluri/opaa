@@ -78,7 +78,7 @@ const items = [
             )
           })}
           <li>
-            <button class="button help-link" type="button" data-open-pix hidden>
+            <button class="button help-link" type="button" data-open-help hidden>
               Quero ajudar
             </button>
             <noscript>
@@ -180,7 +180,7 @@ const items = [
       navigation.addEventListener('click', (event) => {
         if (
           event.target instanceof Element &&
-          event.target.closest('a, [data-open-pix]')
+          event.target.closest('a, [data-open-pix], [data-open-help]')
         )
           closeMenu()
       })

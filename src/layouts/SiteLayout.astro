@@ -7,6 +7,7 @@ import { ClientRouter } from 'astro:transitions'
 import NavigationProgress from '../components/NavigationProgress.astro'
 import SEO from '../components/SEO.astro'
 import Topbar from '../components/Topbar.astro'
+import HelpModal from '../components/HelpModal.astro'
 import PixModal from '../components/PixModal.astro'
 import Footer from '../components/Footer.astro'
 import AnimalNotice from '../components/home/AnimalNotice.astro'
@@ -76,6 +77,7 @@ const { bare = false, ...seo } = Astro.props
     <slot />
     {!bare && <Footer />}
     {!bare && Astro.url.pathname === '/' && <AnimalNotice />}
+    {!bare && <HelpModal />}
     {!bare && <PixModal />}
   </body>
 </html>

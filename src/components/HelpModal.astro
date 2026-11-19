@@ -1,0 +1,372 @@
+---
+import {
+  ArrowRight,
+  HandHelping,
+  Heart,
+  Megaphone,
+  PawPrint,
+  QrCode,
+  X,
+} from '@lucide/astro'
+import { site } from '../config/site'
+import { getWhatsAppUrl } from '../lib/whatsapp'
+
+const servicesUrl = getWhatsAppUrl(
+  site.phone,
+  'Oi, pessoal! Quero ajudar a OPAA com meu tempo e meus serviços. Como posso participar?'
+)
+---
+
+<dialog id="ajudar" aria-labelledby="help-title" aria-describedby="help-intro">
+  <form method="dialog" class="close-form">
+    <button type="submit" class="close-button" aria-label="Fechar">
+      <X size={22} aria-hidden="true" />
+    </button>
+  </form>
+  <div class="modal-content">
+    <div class="invitation">
+      <span class="heart">
+        <Heart size={28} aria-hidden="true" />
+      </span>
+      <h2 id="help-title">
+        Cada pessoa
+        <br />
+        tem um jeito de ajudar.
+      </h2>
+      <p id="help-intro">
+        Escolha o seu. Todos eles chegam a quem mais precisa: os animais.
+      </p>
+      <PawPrint class="paw" size={140} stroke-width={1} aria-hidden="true" />
+    </div>
+
+    <ul class="options">
+      <li>
+        <a
+          class="option services"
+          href={servicesUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span class="tile"><HandHelping size={26} aria-hidden="true" /></span>
+          <span class="text">
+            <strong>Com meu tempo e serviços</strong>
+            <span>Voluntariado, lar temporário e outras formas de somar.</span>
+          </span>
+          <ArrowRight class="arrow" size={20} aria-hidden="true" />
+        </a>
+      </li>
+      <li>
+        <a class="option campaigns" href="/publicacoes/">
+          <span class="tile"><Megaphone size={26} aria-hidden="true" /></span>
+          <span class="text">
+            <strong>Participando das campanhas</strong>
+            <span>Acompanhe, compareça e divulgue. Todo apoio conta.</span>
+          </span>
+          <ArrowRight class="arrow" size={20} aria-hidden="true" />
+        </a>
+      </li>
+      <li>
+        <button class="option pix" type="button" data-open-pix>
+          <span class="tile"><QrCode size={26} aria-hidden="true" /></span>
+          <span class="text">
+            <strong>Com uma doação por Pix</strong>
+            <span>Ração, vacina e cuidado, com o valor que você escolher.</span>
+          </span>
+          <ArrowRight class="arrow" size={20} aria-hidden="true" />
+        </button>
+      </li>
+    </ul>
+  </div>
+</dialog>
+
+<script>
+  import { isBackdropClick } from '../lib/dom-events'
+  import { onPageLoad } from '../lib/page-lifecycle'
+
+  onPageLoad(() => {
+    const dialog = document.querySelector<HTMLDialogElement>('#ajudar')
+    if (!dialog) return
+
+    let opener: HTMLElement | undefined
+
+    document
+      .querySelectorAll<HTMLButtonElement>('[data-open-help]')
+      .forEach((button) => {
+        button.hidden = false
+        button.addEventListener('click', () => {
+          opener = button
+          dialog.showModal()
+        })
+      })
+
+    // Any choice hands the visitor over to its destination: the Pix button
+    // opens the Pix dialog on its own, the links leave the page.
+    dialog.querySelectorAll('.option').forEach((option) => {
+      option.addEventListener('click', () => dialog.close())
+    })
+    dialog.addEventListener('click', (event) => {
+      if (isBackdropClick(dialog, event)) dialog.close()
+    })
+    dialog.addEventListener('close', () => {
+      if (opener?.closest('nav')?.inert) {
+        document.querySelector<HTMLButtonElement>('.menu-toggle')?.focus()
+      } else {
+        opener?.focus({ preventScroll: true })
+      }
+    })
+
+    return () => {
+      if (dialog.open) dialog.close()
+    }
+  })
+</script>
+
+<style>
+  dialog {
+    box-sizing: border-box;
+    width: min(860px, calc(100% - 32px));
+    max-height: calc(100dvh - 32px);
+    padding: 0;
+    border: 0;
+    border-radius: 28px;
+    color: var(--color-text);
+    background: var(--color-surface);
+    box-shadow: 0 24px 80px
+      color-mix(in srgb, var(--color-text) 25%, transparent);
+    overflow: auto;
+  }
+
+  dialog::backdrop {
+    background: color-mix(in srgb, var(--color-text) 60%, transparent);
+    backdrop-filter: blur(5px);
+  }
+
+  dialog[open] {
+    animation: appear 200ms ease-out;
+  }
+
+  .modal-content {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+  }
+
+  .close-form {
+    position: sticky;
+    top: 12px;
+    z-index: 1;
+    height: 0;
+    margin: 0;
+    padding-right: 12px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .close-button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    color: var(--color-primary);
+    background: var(--color-surface);
+    cursor: pointer;
+  }
+
+  .close-button:hover {
+    background: var(--color-soft);
+  }
+
+  .invitation {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 44px 36px;
+    color: var(--color-surface);
+    background: var(--color-primary);
+  }
+
+  .heart {
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 32px;
+    border: 1px solid currentColor;
+    border-radius: 20px;
+    transform: rotate(-8deg);
+  }
+
+  h2 {
+    margin: 0 0 24px;
+    font-size: clamp(30px, 4vw, 40px);
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .invitation :global(.paw) {
+    position: absolute;
+    right: -24px;
+    bottom: -20px;
+    z-index: -1;
+    opacity: 0.12;
+    transform: rotate(-18deg);
+  }
+
+  .options {
+    display: grid;
+    align-content: center;
+    gap: 12px;
+    margin: 0;
+    padding: 44px 28px 28px;
+    list-style: none;
+  }
+
+  .option {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 16px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    color: var(--color-text);
+    background: var(--color-surface);
+    font: inherit;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      border-color 0.15s ease,
+      background 0.15s ease;
+  }
+
+  .option:hover {
+    border-color: var(--color-primary);
+    background: var(--color-soft);
+  }
+
+  .option:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .tile {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+    color: var(--color-primary);
+    background: var(--color-soft);
+    transform: rotate(-6deg);
+    transition: transform 0.15s ease;
+  }
+
+  .option:hover .tile {
+    background: var(--color-surface);
+  }
+
+  .campaigns .tile {
+    background: #fff3cf;
+    color: #7a5200;
+    transform: rotate(5deg);
+  }
+
+  .pix .tile {
+    background: var(--color-primary);
+    color: var(--color-surface);
+  }
+
+  .option:hover .tile {
+    transform: rotate(0deg) scale(1.05);
+  }
+
+  .text {
+    display: grid;
+    gap: 2px;
+    font-size: 14px;
+    color: var(--color-muted);
+  }
+
+  .text strong {
+    color: var(--color-primary);
+    font-size: 17px;
+  }
+
+  .option :global(.arrow) {
+    color: var(--color-primary);
+    transition: transform 0.15s ease;
+  }
+
+  .option:hover :global(.arrow) {
+    transform: translateX(3px);
+  }
+
+  @keyframes appear {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 47.999rem) {
+    dialog {
+      border-radius: 20px;
+    }
+
+    .modal-content {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .invitation {
+      padding: 24px;
+      font-size: 14px;
+    }
+
+    .heart {
+      display: none;
+    }
+
+    h2 {
+      margin-bottom: 12px;
+      padding-right: 16px;
+      font-size: 28px;
+    }
+
+    .options {
+      padding: 16px;
+    }
+
+    .option {
+      gap: 12px;
+      padding: 12px;
+    }
+
+    .tile {
+      width: 48px;
+      height: 48px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    dialog[open] {
+      animation: none;
+    }
+
+    .option,
+    .tile,
+    .option :global(.arrow) {
+      transition: none;
+    }
+  }
+</style>
