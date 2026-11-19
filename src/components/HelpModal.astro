@@ -56,16 +56,6 @@ const servicesUrl = getWhatsAppUrl(
         </a>
       </li>
       <li>
-        <a class="option campaigns" href="/publicacoes/">
-          <span class="tile"><Megaphone size={26} aria-hidden="true" /></span>
-          <span class="text">
-            <strong>Participando das campanhas</strong>
-            <span>Acompanhe, compareça e divulgue. Todo apoio conta.</span>
-          </span>
-          <ArrowRight class="arrow" size={20} aria-hidden="true" />
-        </a>
-      </li>
-      <li>
         <button class="option pix" type="button" data-open-pix>
           <span class="tile"><QrCode size={26} aria-hidden="true" /></span>
           <span class="text">
@@ -74,6 +64,13 @@ const servicesUrl = getWhatsAppUrl(
           </span>
           <ArrowRight class="arrow" size={20} aria-hidden="true" />
         </button>
+      </li>
+      <li class="note">
+        <span class="note-icon"><Megaphone size={20} aria-hidden="true" /></span>
+        <p>
+          <strong>Participe das campanhas.</strong>{" "}
+          Acompanhe, compareça e divulgue: todo apoio conta.
+        </p>
       </li>
     </ul>
   </div>
@@ -272,12 +269,6 @@ const servicesUrl = getWhatsAppUrl(
     background: var(--color-surface);
   }
 
-  .campaigns .tile {
-    background: #fff3cf;
-    color: #7a5200;
-    transform: rotate(5deg);
-  }
-
   .pix .tile {
     background: var(--color-primary);
     color: var(--color-surface);
@@ -285,6 +276,29 @@ const servicesUrl = getWhatsAppUrl(
 
   .option:hover .tile {
     transform: rotate(0deg) scale(1.05);
+  }
+
+  .note {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 4px;
+    padding: 12px 16px;
+    border-radius: 16px;
+    background: #fff3cf;
+    color: #5a3d00;
+    font-size: 14px;
+  }
+
+  .note-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    background: var(--color-surface);
+    transform: rotate(5deg);
   }
 
   .text {
