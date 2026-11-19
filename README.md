@@ -63,10 +63,12 @@ e listeners globais ao sair. A barra de navegação indica etapas, não bytes ba
 ## Conteúdo e imagens
 
 Conteúdo e fotos de animais, histórias, posts e produtos são cadastrados no painel
-da Todapata; as imagens chegam como URLs absolutas e o site mede e otimiza cada uma.
-Imagens próprias do site ficam em `public/images/`; `animal-sem-foto.webp` é a imagem
-usada quando um animal não tem foto. `ContentImage.astro` usa o Astro para gerar
-versões menores, preservando os originais e suas proporções.
+da Todapata. A API guarda cada foto pronta para a web (WebP, até 1600 px no lado
+maior) e a envia como `{ src, width, height }`: o site a exibe como vem, com largura e
+altura no `<img>`, sem medir nada. Imagens próprias do site ficam em `public/images/`;
+`animal-sem-foto.webp` é a imagem usada quando um animal não tem foto. Para essas,
+`ContentImage.astro` usa o Astro para gerar versões menores, preservando os originais
+e suas proporções.
 
 Os slides iniciais são `public/images/slide-1.jpg` e `slide-2.jpg`. Para trocá-los,
 substitua os arquivos e confira `src`, `caption` e `alt` em `site.heroSlides`.

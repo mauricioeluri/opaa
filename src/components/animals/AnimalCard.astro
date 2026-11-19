@@ -39,8 +39,8 @@ const AnimalIcon =
         ? undefined
         : '(max-width: 35rem) min(320px, calc(100vw - 72px)), 160px'
     }
-    images={images.map((src, index) => ({
-      src,
+    images={images.map((image, index) => ({
+      ...image,
       alt: `${label} — foto ${index + 1} de ${images.length}`,
     }))}
   />

@@ -11,6 +11,17 @@ export type AnimalType = 'dog' | 'cat' | 'other'
 export type AnimalAgeGroup = 'puppy' | 'adult' | 'senior'
 export type PostCategory = 'community' | 'campaign' | 'transparency' | 'care'
 
+/**
+ * A photo. The API's photos are absolute URLs with their size (at most 1600 px
+ * on the longest side, WebP), so the page reserves their space before they
+ * load; the site's own are `/images/...` paths, measured at build time.
+ */
+export interface Photo {
+  src: string
+  width?: number
+  height?: number
+}
+
 interface Publication {
   /** Pinned records come first; each group is ordered by `published_at` desc. */
   isPinned: boolean
@@ -32,7 +43,7 @@ export interface Animal extends Publication {
   available: boolean
   hasDisability?: boolean
   /** Never empty: a placeholder stands in when the animal has no photo. */
-  images: string[]
+  images: Photo[]
   type: AnimalType
 }
 
@@ -41,7 +52,7 @@ export interface Post extends Publication {
   title: string
   body: string
   category: PostCategory
-  image?: string
+  image?: Photo
 }
 
 export interface Notice extends Publication {
@@ -52,8 +63,8 @@ export interface Notice extends Publication {
 export interface Story extends Publication {
   name: string
   description: string
-  afterImage: string
-  beforeImage: string | null
+  afterImage: Photo
+  beforeImage: Photo | null
 }
 
 export interface ProductVariant {
@@ -71,7 +82,8 @@ export interface Product {
   name: string
   description: string
   active: boolean
-  images: { id: string; src: string }[]
+  /** `id` is what `ProductVariant.image_ids` refer to. */
+  images: ({ id: string } & Photo)[]
   /** Default unit price in cents. */
   price: number
   variants: ProductVariant[]
@@ -107,10 +119,24 @@ export interface ContentSource {
 const PAGE_SIZE = 100
 /** A visitor is waiting: give up instead of hanging the page. */
 const REQUEST_TIMEOUT_MS = 8_000
-const DEFAULT_ANIMAL_IMAGE = '/images/animal-sem-foto.webp'
+const DEFAULT_ANIMAL_IMAGE: Photo = { src: '/images/animal-sem-foto.webp' }
 
-type ApiAnimal = Animal
-type ApiPost = Omit<Post, 'image'> & { image: string | null }
+/** How the API sends a photo: the size is `null` for old files not normalized yet. */
+interface ApiImage {
+  src: string
+  width: number | null
+  height: number | null
+}
+
+type ApiAnimal = Omit<Animal, 'images'> & { images: ApiImage[] }
+type ApiPost = Omit<Post, 'image'> & { image: ApiImage | null }
+type ApiStory = Omit<Story, 'afterImage' | 'beforeImage'> & {
+  afterImage: ApiImage
+  beforeImage: ApiImage | null
+}
+type ApiProduct = Omit<Product, 'images'> & {
+  images: ({ id: string } & ApiImage)[]
+}
 
 interface ListEnvelope<T> {
   data: T[]
@@ -130,15 +156,34 @@ function isItemEnvelope<T>(body: unknown): body is { data: T } {
   return typeof envelope?.data === 'object' && envelope.data !== null
 }
 
+const toPhoto = ({ src, width, height }: ApiImage): Photo => ({
+  src,
+  width: width ?? undefined,
+  height: height ?? undefined,
+})
+
 // The API sends no photos for an animal without any; the pages need one image.
 const toAnimal = (animal: ApiAnimal): Animal => ({
   ...animal,
-  images: animal.images.length ? animal.images : [DEFAULT_ANIMAL_IMAGE],
+  images: animal.images.length
+    ? animal.images.map(toPhoto)
+    : [DEFAULT_ANIMAL_IMAGE],
 })
 
 const toPost = (post: ApiPost): Post => ({
   ...post,
-  image: post.image ?? undefined,
+  image: post.image ? toPhoto(post.image) : undefined,
+})
+
+const toStory = (story: ApiStory): Story => ({
+  ...story,
+  afterImage: toPhoto(story.afterImage),
+  beforeImage: story.beforeImage && toPhoto(story.beforeImage),
+})
+
+const toProduct = (product: ApiProduct): Product => ({
+  ...product,
+  images: product.images.map((image) => ({ id: image.id, ...toPhoto(image) })),
 })
 
 function comparePublications(a: Publication, b: Publication) {
@@ -280,14 +325,17 @@ export function createContentSource(): ContentSource {
       return post && toPost(post)
     },
     getNotices: async () => sorted(await list<Notice>('notices')),
-    getStories: async () => sorted(await list<Story>('stories')),
+    getStories: async () =>
+      sorted((await list<ApiStory>('stories')).map(toStory)),
     getProducts: async () =>
-      (await list<Product>('products')).filter((product) => product.active),
+      (await list<ApiProduct>('products'))
+        .filter((product) => product.active)
+        .map(toProduct),
     getProduct: async (publicId) => {
-      const product = await item<Product>(
+      const product = await item<ApiProduct>(
         `/products/${encodeURIComponent(publicId)}`
       )
-      return product?.active ? product : null
+      return product?.active ? toProduct(product) : null
     },
   }
 }

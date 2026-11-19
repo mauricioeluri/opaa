@@ -51,7 +51,7 @@ pnpm exec astro dev --background   # servidor em segundo plano (status | logs | 
 - Dois espaços, aspas simples, sem ponto e vírgula, LF (`.prettierrc` e `eslint.config.mjs`).
 - Manter `astro/tsconfigs/strict`. Sem `any`, sem desativar regras nem suprimir verificações para esconder defeitos.
 - Entregar o conteúdo relevante no HTML gerado no servidor, sem depender só do carregamento no navegador. Componentes recebem os dados por props; não chamam a API.
-- Imagens: as fotos da API são exibidas como vêm (`<img>`, molduras por CSS), sem medir arquivos por visita; só a página de um post mede a própria foto (orientação). As imagens próprias (`public/images/`) passam por `astro:assets` com o binding `IMAGES` do Cloudflare.
+- Imagens: as fotos da API chegam prontas (WebP, até 1600 px) e com largura e altura (`Photo` em `src/lib/api.ts`); são exibidas como vêm (`<img>` com `width`/`height`, molduras por CSS), sem medir arquivo nenhum. A orientação da foto de um post vem desse tamanho. As imagens próprias (`public/images/`) passam por `astro:assets` com o binding `IMAGES` do Cloudflare.
 - A navegação usa `ClientRouter` no layout. Inicializar interações com `onPageLoad()` de `src/lib/page-lifecycle.ts`, retornando a limpeza de timers e listeners globais. Preservar links nativos e o funcionamento sem JavaScript.
 - Separar dados da apresentação. Funções simples que importam JS/JSON bastam; não criar servidor para ler arquivos locais.
 - Preservar SEO, canonical, barras finais das URLs, sitemap e robots ao modificar páginas. Não inventar domínio de produção nem contornar validações de ambiente.

@@ -68,8 +68,8 @@ const details = [
         label={`Fotos de ${label}`}
         variant="animal"
         thumbnails
-        images={animal.images.map((src, index) => ({
-          src,
+        images={animal.images.map((image, index) => ({
+          ...image,
           alt: `${label} — foto ${index + 1} de ${animal.images.length}`,
         }))}
       />

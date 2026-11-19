@@ -24,7 +24,7 @@ const hasSpecialNeeds = animals.some((animal) => animal.hasDisability)
     animal?.description ??
     'Conheça os animais disponíveis para adoção na OPAA Alegrete. Encontre um novo amigo e fale com a ONG para saber mais.'
   }
-  image={animal?.images[0]}
+  image={animal?.images[0]?.src}
   imageAlt={
     animal ? animal.name?.trim() || 'Animal disponível para adoção' : undefined
   }

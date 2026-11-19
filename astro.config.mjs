@@ -23,7 +23,7 @@ export default defineConfig({
   output: 'server',
   // The site's own images (slides, placeholder) are resized and converted by
   // the Worker's Cloudflare Images binding, once per size (then cached). The
-  // API's photos skip it: the Todapata panel already resizes them.
+  // API's photos skip it: the Todapata API stores them ready for the web.
   adapter: cloudflare({ imageService: 'cloudflare-binding' }),
   // No sessions: the site has no login and stores nothing per visitor.
   session: false,

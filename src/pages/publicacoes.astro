@@ -84,9 +84,9 @@ const categories = [...new Set(posts.map((post) => post.category))]
                 {post.image && (
                   <ContentImage
                     class="cover"
-                    src={post.image}
+                    image={post.image}
                     alt=""
-                    width={320}
+                    maxWidth={320}
                     sizes="(max-width: 35rem) 88px, 120px"
                     loading="lazy"
                     decoding="async"

@@ -3,26 +3,22 @@ import { ArrowLeft } from '@lucide/astro'
 import ContentImage from '../../components/ContentImage.astro'
 import { site } from '../../config/site'
 import SiteLayout from '../../layouts/SiteLayout.astro'
-import { getImageSize } from '../../lib/content-image'
 import { formatDate } from '../../lib/format-date'
 import { postCategories } from '../../lib/post-category'
 
 const post = await Astro.locals.content.getPost(Astro.params.slug!)
 if (!post) return new Response(null, { status: 404 })
 const image = post.image
-// The layout depends on the photo's orientation. If it cannot be measured, the
-// post still shows, with the landscape layout.
-const size = image
-  ? await getImageSize(image).catch(() => undefined)
-  : undefined
-const portrait = !!size && size.height > size.width
+// The layout depends on the photo's orientation, which the API sends with it.
+// Without a size (an old photo), the post shows with the landscape layout.
+const portrait = !!image?.width && !!image.height && image.height > image.width
 const description = post.body.replace(/\s+/g, ' ').trim().slice(0, 160)
 ---
 
 <SiteLayout
   title={`${post.title} | ${site.name}`}
   description={description}
-  image={image}
+  image={image?.src}
   imageAlt={post.title}
 >
   <main>
@@ -47,9 +43,8 @@ const description = post.body.replace(/\s+/g, ' ').trim().slice(0, 160)
           <figure>
             <ContentImage
               class="cover"
-              src={image}
+              image={image}
               alt={post.title}
-              width={size?.width}
               sizes={
                 portrait
                   ? '(max-width: 47.999rem) calc(100vw - 32px), 320px'

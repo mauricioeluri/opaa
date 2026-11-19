@@ -1,9 +1,10 @@
 ---
 import ContentImage from './ContentImage.astro'
+import type { Photo } from '../lib/api'
 import { getLocalImage } from '../lib/content-image'
 
 interface Props {
-  images: { id?: string; src: string; alt: string; caption?: string }[]
+  images: (Photo & { id?: string; alt: string; caption?: string })[]
   label: string
   variant?: 'hero' | 'animal' | 'product'
   autoplay?: boolean
@@ -64,9 +65,9 @@ const slides = await Promise.all(
     {slides.map((image, index) => (
       <figure data-image-id={image.id}>
         <ContentImage
-          src={image.src}
+          image={image}
           alt={image.alt}
-          width={variant === 'hero' ? 2400 : 1200}
+          maxWidth={variant === 'hero' ? 2400 : 1200}
           quality={variant === 'hero' ? 'high' : undefined}
           sizes={image.sizes}
           loading="eager"
@@ -92,7 +93,7 @@ const slides = await Promise.all(
           aria-current={index === 0 ? 'true' : 'false'}
         >
           {thumbnails && (
-            <ContentImage src={image.src} alt="" width={64} loading="eager" />
+            <ContentImage image={image} alt="" maxWidth={64} loading="eager" />
           )}
         </button>
       ))}

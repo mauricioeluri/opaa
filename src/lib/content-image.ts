@@ -1,4 +1,3 @@
-import { inferRemoteSize } from 'astro:assets'
 import type { ImageMetadata } from 'astro'
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
@@ -14,18 +13,4 @@ export async function getLocalImage(src: string): Promise<ImageMetadata> {
   if (!loadImage) throw new Error(`Imagem local não encontrada: ${src}`)
 
   return (await loadImage()).default
-}
-
-/**
- * Width and height of any content image. The API sends no dimensions, so a
- * remote photo is measured by reading the start of the file: use it only when
- * the layout depends on the orientation of one image, never for lists.
- */
-export async function getImageSize(
-  src: string
-): Promise<{ width: number; height: number }> {
-  if (isRemoteImage(src)) return inferRemoteSize(src)
-
-  const { width, height } = await getLocalImage(src)
-  return { width, height }
 }

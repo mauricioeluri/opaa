@@ -1,26 +1,32 @@
 ---
 import { Image } from 'astro:assets'
 import type { HTMLAttributes } from 'astro/types'
+import type { Photo } from '../lib/api'
 import { getLocalImage, isRemoteImage } from '../lib/content-image'
 
 interface Props extends Omit<
   HTMLAttributes<'img'>,
   'src' | 'width' | 'height'
 > {
-  src: string
+  /** A photo from the API, or the path of one of the site's own images. */
+  image: Photo | string
   alt: string
-  /** Largest width rendered; local images only. */
-  width?: number
+  /** Largest width rendered; the site's own images only. */
+  maxWidth?: number
   sizes?: string
   quality?: 'low' | 'mid' | 'high' | 'max' | number
 }
 
-const { src, width, sizes, quality, ...attributes } = Astro.props
+const { image, maxWidth, sizes, quality, ...attributes } = Astro.props
+const photo: Photo = typeof image === 'string' ? { src: image } : image
 
-// The API's photos are served as they are: the Todapata panel already resizes
-// them (WebP, up to 1600px) and their frames are sized by CSS.
-const local = isRemoteImage(src) ? undefined : await getLocalImage(src)
-const imageWidth = local && Math.min(width ?? local.width, local.width)
+// The API's photos are served as they are: the Todapata API already stores
+// them ready for the web (WebP, up to 1600 px) and sends their size, which
+// reserves their space before they load. Their frames are sized by CSS.
+const local = isRemoteImage(photo.src)
+  ? undefined
+  : await getLocalImage(photo.src)
+const imageWidth = local && Math.min(maxWidth ?? local.width, local.width)
 const widths =
   imageWidth &&
   [96, 160, 240, 320, 480, 640, 768, 960, 1200, 1600, 2000]
@@ -39,5 +45,10 @@ const widths =
     quality={quality}
   />
 ) : (
-  <img {...attributes} src={src} />
+  <img
+    {...attributes}
+    src={photo.src}
+    width={photo.width}
+    height={photo.height}
+  />
 )}

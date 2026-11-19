@@ -52,9 +52,9 @@ const contactUrl = getWhatsAppUrl(
                     <span class="photo-label">Antes</span>
                     <span class="photo-mount">
                       <ContentImage
-                        src={story.beforeImage}
+                        image={story.beforeImage}
                         alt={`Foto anterior de ${story.name}`}
-                        width={960}
+                        maxWidth={960}
                         loading={index < 2 ? 'eager' : 'lazy'}
                         decoding="async"
                       />
@@ -65,9 +65,9 @@ const contactUrl = getWhatsAppUrl(
                   {story.beforeImage && <span class="photo-label">Hoje</span>}
                   <span class="photo-mount">
                     <ContentImage
-                      src={story.afterImage}
+                      image={story.afterImage}
                       alt={`Foto atual de ${story.name}`}
-                      width={960}
+                      maxWidth={960}
                       loading={index < 2 ? 'eager' : 'lazy'}
                       decoding="async"
                     />
